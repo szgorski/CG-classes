@@ -32,41 +32,41 @@ namespace CGPart1
             this.groupFilters = new System.Windows.Forms.GroupBox();
             this.labelConvolutionFilters = new System.Windows.Forms.Label();
             this.labelFunctionalFilters = new System.Windows.Forms.Label();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.buttonEmboss = new System.Windows.Forms.Button();
+            this.buttonDetectEdges = new System.Windows.Forms.Button();
+            this.buttonSharpen = new System.Windows.Forms.Button();
+            this.buttonGaussianBlur = new System.Windows.Forms.Button();
+            this.buttonBlur = new System.Windows.Forms.Button();
+            this.buttonCorrectGamma = new System.Windows.Forms.Button();
+            this.buttonEnhanceContrast = new System.Windows.Forms.Button();
+            this.buttonCorrectBrightness = new System.Windows.Forms.Button();
+            this.buttonInvert = new System.Windows.Forms.Button();
             this.groupConvolution = new System.Windows.Forms.GroupBox();
             this.labelAnchorRow = new System.Windows.Forms.Label();
             this.labelAnchorColumn = new System.Windows.Forms.Label();
             this.labelSizeColumns = new System.Windows.Forms.Label();
-            this.labelSizeRow = new System.Windows.Forms.Label();
+            this.labelSizeRows = new System.Windows.Forms.Label();
             this.labelAnchor = new System.Windows.Forms.Label();
             this.labelSize = new System.Windows.Forms.Label();
-            this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.numericAnchorColumn = new System.Windows.Forms.NumericUpDown();
+            this.numericAnchorRow = new System.Windows.Forms.NumericUpDown();
+            this.numericSizeColumns = new System.Windows.Forms.NumericUpDown();
+            this.numericSizeRows = new System.Windows.Forms.NumericUpDown();
+            this.dataGrid = new System.Windows.Forms.DataGridView();
             this.groupOriginal = new System.Windows.Forms.GroupBox();
             this.pictureOriginal = new System.Windows.Forms.PictureBox();
             this.groupModified = new System.Windows.Forms.GroupBox();
+            this.buttonLoad = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonReset = new System.Windows.Forms.Button();
             this.pictureModified = new System.Windows.Forms.PictureBox();
-            this.buttonLoad = new System.Windows.Forms.Button();
             this.groupFilters.SuspendLayout();
             this.groupConvolution.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericAnchorColumn)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericAnchorRow)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericSizeColumns)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericSizeRows)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
             this.groupOriginal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureOriginal)).BeginInit();
             this.groupModified.SuspendLayout();
@@ -77,15 +77,15 @@ namespace CGPart1
             // 
             this.groupFilters.Controls.Add(this.labelConvolutionFilters);
             this.groupFilters.Controls.Add(this.labelFunctionalFilters);
-            this.groupFilters.Controls.Add(this.button9);
-            this.groupFilters.Controls.Add(this.button8);
-            this.groupFilters.Controls.Add(this.button7);
-            this.groupFilters.Controls.Add(this.button6);
-            this.groupFilters.Controls.Add(this.button5);
-            this.groupFilters.Controls.Add(this.button4);
-            this.groupFilters.Controls.Add(this.button2);
-            this.groupFilters.Controls.Add(this.button1);
-            this.groupFilters.Controls.Add(this.button3);
+            this.groupFilters.Controls.Add(this.buttonEmboss);
+            this.groupFilters.Controls.Add(this.buttonDetectEdges);
+            this.groupFilters.Controls.Add(this.buttonSharpen);
+            this.groupFilters.Controls.Add(this.buttonGaussianBlur);
+            this.groupFilters.Controls.Add(this.buttonBlur);
+            this.groupFilters.Controls.Add(this.buttonCorrectGamma);
+            this.groupFilters.Controls.Add(this.buttonEnhanceContrast);
+            this.groupFilters.Controls.Add(this.buttonCorrectBrightness);
+            this.groupFilters.Controls.Add(this.buttonInvert);
             this.groupFilters.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.groupFilters.Location = new System.Drawing.Point(13, 13);
             this.groupFilters.Name = "groupFilters";
@@ -114,113 +114,122 @@ namespace CGPart1
             this.labelFunctionalFilters.TabIndex = 9;
             this.labelFunctionalFilters.Text = "Functional Filters";
             // 
-            // button9
+            // buttonEmboss
             // 
-            this.button9.Location = new System.Drawing.Point(307, 218);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(178, 32);
-            this.button9.TabIndex = 8;
-            this.button9.Text = "Emboss (type)";
-            this.button9.UseVisualStyleBackColor = true;
+            this.buttonEmboss.Location = new System.Drawing.Point(307, 218);
+            this.buttonEmboss.Name = "buttonEmboss";
+            this.buttonEmboss.Size = new System.Drawing.Size(178, 32);
+            this.buttonEmboss.TabIndex = 8;
+            this.buttonEmboss.Text = "Emboss (type)";
+            this.buttonEmboss.UseVisualStyleBackColor = true;
+            this.buttonEmboss.Click += new System.EventHandler(this.buttonEmboss_Click);
             // 
-            // button8
+            // buttonDetectEdges
             // 
-            this.button8.Location = new System.Drawing.Point(307, 180);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(178, 32);
-            this.button8.TabIndex = 7;
-            this.button8.Text = "Detect Edges (type)";
-            this.button8.UseVisualStyleBackColor = true;
+            this.buttonDetectEdges.Location = new System.Drawing.Point(307, 180);
+            this.buttonDetectEdges.Name = "buttonDetectEdges";
+            this.buttonDetectEdges.Size = new System.Drawing.Size(178, 32);
+            this.buttonDetectEdges.TabIndex = 7;
+            this.buttonDetectEdges.Text = "Detect Edges (type)";
+            this.buttonDetectEdges.UseVisualStyleBackColor = true;
+            this.buttonDetectEdges.Click += new System.EventHandler(this.buttonDetectEdges_Click);
             // 
-            // button7
+            // buttonSharpen
             // 
-            this.button7.Location = new System.Drawing.Point(307, 142);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(178, 32);
-            this.button7.TabIndex = 6;
-            this.button7.Text = "Sharpen";
-            this.button7.UseVisualStyleBackColor = true;
+            this.buttonSharpen.Location = new System.Drawing.Point(307, 142);
+            this.buttonSharpen.Name = "buttonSharpen";
+            this.buttonSharpen.Size = new System.Drawing.Size(178, 32);
+            this.buttonSharpen.TabIndex = 6;
+            this.buttonSharpen.Text = "Sharpen";
+            this.buttonSharpen.UseVisualStyleBackColor = true;
+            this.buttonSharpen.Click += new System.EventHandler(this.buttonSharpen_Click);
             // 
-            // button6
+            // buttonGaussianBlur
             // 
-            this.button6.Location = new System.Drawing.Point(307, 104);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(178, 32);
-            this.button6.TabIndex = 5;
-            this.button6.Text = "Gaussian Blur";
-            this.button6.UseVisualStyleBackColor = true;
+            this.buttonGaussianBlur.Location = new System.Drawing.Point(307, 104);
+            this.buttonGaussianBlur.Name = "buttonGaussianBlur";
+            this.buttonGaussianBlur.Size = new System.Drawing.Size(178, 32);
+            this.buttonGaussianBlur.TabIndex = 5;
+            this.buttonGaussianBlur.Text = "Gaussian Blur";
+            this.buttonGaussianBlur.UseVisualStyleBackColor = true;
+            this.buttonGaussianBlur.Click += new System.EventHandler(this.buttonGaussianBlur_Click);
             // 
-            // button5
+            // buttonBlur
             // 
-            this.button5.Location = new System.Drawing.Point(307, 66);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(178, 32);
-            this.button5.TabIndex = 4;
-            this.button5.Text = "Blur";
-            this.button5.UseVisualStyleBackColor = true;
+            this.buttonBlur.Location = new System.Drawing.Point(307, 66);
+            this.buttonBlur.Name = "buttonBlur";
+            this.buttonBlur.Size = new System.Drawing.Size(178, 32);
+            this.buttonBlur.TabIndex = 4;
+            this.buttonBlur.Text = "Blur";
+            this.buttonBlur.UseVisualStyleBackColor = true;
+            this.buttonBlur.Click += new System.EventHandler(this.buttonBlur_Click);
             // 
-            // button4
+            // buttonCorrectGamma
             // 
-            this.button4.Location = new System.Drawing.Point(63, 180);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(178, 32);
-            this.button4.TabIndex = 3;
-            this.button4.Text = "Correct gamma";
-            this.button4.UseVisualStyleBackColor = true;
+            this.buttonCorrectGamma.Location = new System.Drawing.Point(63, 180);
+            this.buttonCorrectGamma.Name = "buttonCorrectGamma";
+            this.buttonCorrectGamma.Size = new System.Drawing.Size(178, 32);
+            this.buttonCorrectGamma.TabIndex = 3;
+            this.buttonCorrectGamma.Text = "Correct gamma";
+            this.buttonCorrectGamma.UseVisualStyleBackColor = true;
+            this.buttonCorrectGamma.Click += new System.EventHandler(this.buttonCorrectGamma_Click);
             // 
-            // button2
+            // buttonEnhanceContrast
             // 
-            this.button2.Location = new System.Drawing.Point(63, 142);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(178, 32);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Enhance contrast";
-            this.button2.UseVisualStyleBackColor = true;
+            this.buttonEnhanceContrast.Location = new System.Drawing.Point(63, 142);
+            this.buttonEnhanceContrast.Name = "buttonEnhanceContrast";
+            this.buttonEnhanceContrast.Size = new System.Drawing.Size(178, 32);
+            this.buttonEnhanceContrast.TabIndex = 2;
+            this.buttonEnhanceContrast.Text = "Enhance contrast";
+            this.buttonEnhanceContrast.UseVisualStyleBackColor = true;
+            this.buttonEnhanceContrast.Click += new System.EventHandler(this.buttonEnhanceContrast_Click);
             // 
-            // button1
+            // buttonCorrectBrightness
             // 
-            this.button1.Location = new System.Drawing.Point(63, 104);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(178, 32);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Correct Brightness";
-            this.button1.UseVisualStyleBackColor = true;
+            this.buttonCorrectBrightness.Location = new System.Drawing.Point(63, 104);
+            this.buttonCorrectBrightness.Name = "buttonCorrectBrightness";
+            this.buttonCorrectBrightness.Size = new System.Drawing.Size(178, 32);
+            this.buttonCorrectBrightness.TabIndex = 1;
+            this.buttonCorrectBrightness.Text = "Correct Brightness";
+            this.buttonCorrectBrightness.UseVisualStyleBackColor = true;
+            this.buttonCorrectBrightness.Click += new System.EventHandler(this.buttonCorrectBrightness_Click);
             // 
-            // button3
+            // buttonInvert
             // 
-            this.button3.Location = new System.Drawing.Point(63, 66);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(178, 32);
-            this.button3.TabIndex = 0;
-            this.button3.Text = "Invert";
-            this.button3.UseVisualStyleBackColor = true;
+            this.buttonInvert.Location = new System.Drawing.Point(63, 66);
+            this.buttonInvert.Name = "buttonInvert";
+            this.buttonInvert.Size = new System.Drawing.Size(178, 32);
+            this.buttonInvert.TabIndex = 0;
+            this.buttonInvert.Text = "Invert";
+            this.buttonInvert.UseVisualStyleBackColor = true;
+            this.buttonInvert.Click += new System.EventHandler(this.buttonInvert_Click);
             // 
             // groupConvolution
             // 
             this.groupConvolution.Controls.Add(this.labelAnchorRow);
             this.groupConvolution.Controls.Add(this.labelAnchorColumn);
             this.groupConvolution.Controls.Add(this.labelSizeColumns);
-            this.groupConvolution.Controls.Add(this.labelSizeRow);
+            this.groupConvolution.Controls.Add(this.labelSizeRows);
             this.groupConvolution.Controls.Add(this.labelAnchor);
             this.groupConvolution.Controls.Add(this.labelSize);
-            this.groupConvolution.Controls.Add(this.numericUpDown4);
-            this.groupConvolution.Controls.Add(this.numericUpDown3);
-            this.groupConvolution.Controls.Add(this.numericUpDown2);
-            this.groupConvolution.Controls.Add(this.numericUpDown1);
-            this.groupConvolution.Controls.Add(this.dataGridView1);
+            this.groupConvolution.Controls.Add(this.numericAnchorColumn);
+            this.groupConvolution.Controls.Add(this.numericAnchorRow);
+            this.groupConvolution.Controls.Add(this.numericSizeColumns);
+            this.groupConvolution.Controls.Add(this.numericSizeRows);
+            this.groupConvolution.Controls.Add(this.dataGrid);
             this.groupConvolution.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.groupConvolution.Location = new System.Drawing.Point(13, 299);
             this.groupConvolution.Name = "groupConvolution";
             this.groupConvolution.Size = new System.Drawing.Size(581, 550);
             this.groupConvolution.TabIndex = 1;
             this.groupConvolution.TabStop = false;
-            this.groupConvolution.Text = "Convolution Filter Editing";
+            this.groupConvolution.Text = "Convolution Filter Settings";
             // 
             // labelAnchorRow
             // 
             this.labelAnchorRow.AutoSize = true;
             this.labelAnchorRow.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelAnchorRow.Location = new System.Drawing.Point(202, 76);
+            this.labelAnchorRow.Location = new System.Drawing.Point(298, 73);
             this.labelAnchorRow.Name = "labelAnchorRow";
             this.labelAnchorRow.Size = new System.Drawing.Size(30, 15);
             this.labelAnchorRow.TabIndex = 10;
@@ -230,7 +239,7 @@ namespace CGPart1
             // 
             this.labelAnchorColumn.AutoSize = true;
             this.labelAnchorColumn.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelAnchorColumn.Location = new System.Drawing.Point(202, 127);
+            this.labelAnchorColumn.Location = new System.Drawing.Point(298, 124);
             this.labelAnchorColumn.Name = "labelAnchorColumn";
             this.labelAnchorColumn.Size = new System.Drawing.Size(50, 15);
             this.labelAnchorColumn.TabIndex = 9;
@@ -240,27 +249,27 @@ namespace CGPart1
             // 
             this.labelSizeColumns.AutoSize = true;
             this.labelSizeColumns.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelSizeColumns.Location = new System.Drawing.Point(43, 128);
+            this.labelSizeColumns.Location = new System.Drawing.Point(139, 125);
             this.labelSizeColumns.Name = "labelSizeColumns";
             this.labelSizeColumns.Size = new System.Drawing.Size(91, 15);
             this.labelSizeColumns.TabIndex = 8;
             this.labelSizeColumns.Text = "No. of Columns";
             // 
-            // labelSizeRow
+            // labelSizeRows
             // 
-            this.labelSizeRow.AutoSize = true;
-            this.labelSizeRow.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelSizeRow.Location = new System.Drawing.Point(43, 77);
-            this.labelSizeRow.Name = "labelSizeRow";
-            this.labelSizeRow.Size = new System.Drawing.Size(71, 15);
-            this.labelSizeRow.TabIndex = 7;
-            this.labelSizeRow.Text = "No. of Rows";
+            this.labelSizeRows.AutoSize = true;
+            this.labelSizeRows.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelSizeRows.Location = new System.Drawing.Point(139, 74);
+            this.labelSizeRows.Name = "labelSizeRows";
+            this.labelSizeRows.Size = new System.Drawing.Size(71, 15);
+            this.labelSizeRows.TabIndex = 7;
+            this.labelSizeRows.Text = "No. of Rows";
             // 
             // labelAnchor
             // 
             this.labelAnchor.AutoSize = true;
             this.labelAnchor.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelAnchor.Location = new System.Drawing.Point(202, 56);
+            this.labelAnchor.Location = new System.Drawing.Point(298, 53);
             this.labelAnchor.Name = "labelAnchor";
             this.labelAnchor.Size = new System.Drawing.Size(79, 15);
             this.labelAnchor.TabIndex = 6;
@@ -270,49 +279,111 @@ namespace CGPart1
             // 
             this.labelSize.AutoSize = true;
             this.labelSize.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelSize.Location = new System.Drawing.Point(43, 56);
+            this.labelSize.Location = new System.Drawing.Point(139, 53);
             this.labelSize.Name = "labelSize";
             this.labelSize.Size = new System.Drawing.Size(30, 15);
             this.labelSize.TabIndex = 5;
             this.labelSize.Text = "Size";
             // 
-            // numericUpDown4
+            // numericAnchorColumn
             // 
-            this.numericUpDown4.Location = new System.Drawing.Point(202, 146);
-            this.numericUpDown4.Name = "numericUpDown4";
-            this.numericUpDown4.Size = new System.Drawing.Size(120, 29);
-            this.numericUpDown4.TabIndex = 4;
+            this.numericAnchorColumn.Location = new System.Drawing.Point(298, 143);
+            this.numericAnchorColumn.Maximum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.numericAnchorColumn.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericAnchorColumn.Name = "numericAnchorColumn";
+            this.numericAnchorColumn.Size = new System.Drawing.Size(120, 29);
+            this.numericAnchorColumn.TabIndex = 4;
+            this.numericAnchorColumn.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
             // 
-            // numericUpDown3
+            // numericAnchorRow
             // 
-            this.numericUpDown3.Location = new System.Drawing.Point(202, 95);
-            this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(120, 29);
-            this.numericUpDown3.TabIndex = 3;
+            this.numericAnchorRow.Location = new System.Drawing.Point(298, 92);
+            this.numericAnchorRow.Maximum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.numericAnchorRow.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericAnchorRow.Name = "numericAnchorRow";
+            this.numericAnchorRow.Size = new System.Drawing.Size(120, 29);
+            this.numericAnchorRow.TabIndex = 3;
+            this.numericAnchorRow.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
             // 
-            // numericUpDown2
+            // numericSizeColumns
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(43, 146);
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(120, 29);
-            this.numericUpDown2.TabIndex = 2;
+            this.numericSizeColumns.Location = new System.Drawing.Point(139, 143);
+            this.numericSizeColumns.Maximum = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
+            this.numericSizeColumns.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericSizeColumns.Name = "numericSizeColumns";
+            this.numericSizeColumns.Size = new System.Drawing.Size(120, 29);
+            this.numericSizeColumns.TabIndex = 2;
+            this.numericSizeColumns.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.numericSizeColumns.ValueChanged += new System.EventHandler(this.numericSizeColumns_ValueChanged);
             // 
-            // numericUpDown1
+            // numericSizeRows
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(43, 95);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 29);
-            this.numericUpDown1.TabIndex = 1;
+            this.numericSizeRows.Location = new System.Drawing.Point(139, 92);
+            this.numericSizeRows.Maximum = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
+            this.numericSizeRows.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericSizeRows.Name = "numericSizeRows";
+            this.numericSizeRows.Size = new System.Drawing.Size(120, 29);
+            this.numericSizeRows.TabIndex = 1;
+            this.numericSizeRows.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.numericSizeRows.ValueChanged += new System.EventHandler(this.numericSizeRows_ValueChanged);
             // 
-            // dataGridView1
+            // dataGrid
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(43, 190);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(240, 150);
-            this.dataGridView1.TabIndex = 0;
+            this.dataGrid.AllowUserToAddRows = false;
+            this.dataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGrid.Location = new System.Drawing.Point(43, 190);
+            this.dataGrid.Name = "dataGrid";
+            this.dataGrid.RowTemplate.Height = 25;
+            this.dataGrid.Size = new System.Drawing.Size(240, 150);
+            this.dataGrid.TabIndex = 0;
             // 
             // groupOriginal
             // 
@@ -347,40 +418,43 @@ namespace CGPart1
             this.groupModified.TabStop = false;
             this.groupModified.Text = "Modified Picture";
             // 
+            // buttonLoad
+            // 
+            this.buttonLoad.Location = new System.Drawing.Point(124, 395);
+            this.buttonLoad.Name = "buttonLoad";
+            this.buttonLoad.Size = new System.Drawing.Size(97, 29);
+            this.buttonLoad.TabIndex = 4;
+            this.buttonLoad.Text = "Load";
+            this.buttonLoad.UseVisualStyleBackColor = true;
+            this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
+            // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(333, 386);
+            this.buttonSave.Location = new System.Drawing.Point(330, 395);
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(97, 37);
+            this.buttonSave.Size = new System.Drawing.Size(97, 29);
             this.buttonSave.TabIndex = 3;
             this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
             // buttonReset
             // 
-            this.buttonReset.Location = new System.Drawing.Point(230, 386);
+            this.buttonReset.Location = new System.Drawing.Point(227, 395);
             this.buttonReset.Name = "buttonReset";
-            this.buttonReset.Size = new System.Drawing.Size(97, 37);
+            this.buttonReset.Size = new System.Drawing.Size(97, 29);
             this.buttonReset.TabIndex = 2;
             this.buttonReset.Text = "Reset";
             this.buttonReset.UseVisualStyleBackColor = true;
+            this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
             // 
             // pictureModified
             // 
-            this.pictureModified.Location = new System.Drawing.Point(6, 22);
+            this.pictureModified.Location = new System.Drawing.Point(6, 23);
             this.pictureModified.Name = "pictureModified";
             this.pictureModified.Size = new System.Drawing.Size(560, 358);
             this.pictureModified.TabIndex = 1;
             this.pictureModified.TabStop = false;
-            // 
-            // buttonLoad
-            // 
-            this.buttonLoad.Location = new System.Drawing.Point(127, 386);
-            this.buttonLoad.Name = "buttonLoad";
-            this.buttonLoad.Size = new System.Drawing.Size(97, 37);
-            this.buttonLoad.TabIndex = 4;
-            this.buttonLoad.Text = "Load";
-            this.buttonLoad.UseVisualStyleBackColor = true;
             // 
             // CGPart1
             // 
@@ -397,11 +471,11 @@ namespace CGPart1
             this.groupFilters.PerformLayout();
             this.groupConvolution.ResumeLayout(false);
             this.groupConvolution.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericAnchorColumn)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericAnchorRow)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericSizeColumns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericSizeRows)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).EndInit();
             this.groupOriginal.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureOriginal)).EndInit();
             this.groupModified.ResumeLayout(false);
@@ -416,22 +490,22 @@ namespace CGPart1
         private System.Windows.Forms.GroupBox groupConvolution;
         private System.Windows.Forms.GroupBox groupOriginal;
         private System.Windows.Forms.GroupBox groupModified;
-        private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button buttonEmboss;
+        private System.Windows.Forms.Button buttonDetectEdges;
+        private System.Windows.Forms.Button buttonSharpen;
+        private System.Windows.Forms.Button buttonGaussianBlur;
+        private System.Windows.Forms.Button buttonBlur;
+        private System.Windows.Forms.Button buttonCorrectGamma;
+        private System.Windows.Forms.Button buttonEnhanceContrast;
+        private System.Windows.Forms.Button buttonCorrectBrightness;
+        private System.Windows.Forms.Button buttonInvert;
         private System.Windows.Forms.Label labelAnchor;
         private System.Windows.Forms.Label labelSize;
-        private System.Windows.Forms.NumericUpDown numericUpDown4;
-        private System.Windows.Forms.NumericUpDown numericUpDown3;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.NumericUpDown numericAnchorColumn;
+        private System.Windows.Forms.NumericUpDown numericAnchorRow;
+        private System.Windows.Forms.NumericUpDown numericSizeColumns;
+        private System.Windows.Forms.NumericUpDown numericSizeRows;
+        private System.Windows.Forms.DataGridView dataGrid;
         private System.Windows.Forms.PictureBox pictureOriginal;
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.Button buttonReset;
@@ -439,7 +513,7 @@ namespace CGPart1
         private System.Windows.Forms.Label labelAnchorRow;
         private System.Windows.Forms.Label labelAnchorColumn;
         private System.Windows.Forms.Label labelSizeColumns;
-        private System.Windows.Forms.Label labelSizeRow;
+        private System.Windows.Forms.Label labelSizeRows;
         private System.Windows.Forms.Label labelConvolutionFilters;
         private System.Windows.Forms.Label labelFunctionalFilters;
         private System.Windows.Forms.Button buttonLoad;
