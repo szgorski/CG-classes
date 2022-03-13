@@ -30,6 +30,8 @@ namespace CGPart1
         private void InitializeComponent()
         {
             this.groupFilters = new System.Windows.Forms.GroupBox();
+            this.buttonCorrectGammaDown = new System.Windows.Forms.Button();
+            this.buttonCorrectBrightnessDown = new System.Windows.Forms.Button();
             this.labelConvolutionFilters = new System.Windows.Forms.Label();
             this.labelFunctionalFilters = new System.Windows.Forms.Label();
             this.buttonEmboss = new System.Windows.Forms.Button();
@@ -37,9 +39,9 @@ namespace CGPart1
             this.buttonSharpen = new System.Windows.Forms.Button();
             this.buttonGaussianBlur = new System.Windows.Forms.Button();
             this.buttonBlur = new System.Windows.Forms.Button();
-            this.buttonCorrectGamma = new System.Windows.Forms.Button();
+            this.buttonCorrectGammaUp = new System.Windows.Forms.Button();
             this.buttonEnhanceContrast = new System.Windows.Forms.Button();
-            this.buttonCorrectBrightness = new System.Windows.Forms.Button();
+            this.buttonCorrectBrightnessUp = new System.Windows.Forms.Button();
             this.buttonInvert = new System.Windows.Forms.Button();
             this.groupConvolution = new System.Windows.Forms.GroupBox();
             this.labelAnchorRow = new System.Windows.Forms.Label();
@@ -56,10 +58,12 @@ namespace CGPart1
             this.groupOriginal = new System.Windows.Forms.GroupBox();
             this.pictureOriginal = new System.Windows.Forms.PictureBox();
             this.groupModified = new System.Windows.Forms.GroupBox();
-            this.buttonLoad = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
-            this.buttonReset = new System.Windows.Forms.Button();
             this.pictureModified = new System.Windows.Forms.PictureBox();
+            this.buttonReset = new System.Windows.Forms.Button();
+            this.buttonLoad = new System.Windows.Forms.Button();
+            this.savePicture = new System.Windows.Forms.SaveFileDialog();
+            this.openPicture = new System.Windows.Forms.OpenFileDialog();
             this.groupFilters.SuspendLayout();
             this.groupConvolution.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericAnchorColumn)).BeginInit();
@@ -75,6 +79,8 @@ namespace CGPart1
             // 
             // groupFilters
             // 
+            this.groupFilters.Controls.Add(this.buttonCorrectGammaDown);
+            this.groupFilters.Controls.Add(this.buttonCorrectBrightnessDown);
             this.groupFilters.Controls.Add(this.labelConvolutionFilters);
             this.groupFilters.Controls.Add(this.labelFunctionalFilters);
             this.groupFilters.Controls.Add(this.buttonEmboss);
@@ -82,9 +88,9 @@ namespace CGPart1
             this.groupFilters.Controls.Add(this.buttonSharpen);
             this.groupFilters.Controls.Add(this.buttonGaussianBlur);
             this.groupFilters.Controls.Add(this.buttonBlur);
-            this.groupFilters.Controls.Add(this.buttonCorrectGamma);
+            this.groupFilters.Controls.Add(this.buttonCorrectGammaUp);
             this.groupFilters.Controls.Add(this.buttonEnhanceContrast);
-            this.groupFilters.Controls.Add(this.buttonCorrectBrightness);
+            this.groupFilters.Controls.Add(this.buttonCorrectBrightnessUp);
             this.groupFilters.Controls.Add(this.buttonInvert);
             this.groupFilters.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.groupFilters.Location = new System.Drawing.Point(13, 13);
@@ -94,21 +100,43 @@ namespace CGPart1
             this.groupFilters.TabStop = false;
             this.groupFilters.Text = "Filters";
             // 
+            // buttonCorrectGammaDown
+            // 
+            this.buttonCorrectGammaDown.Enabled = false;
+            this.buttonCorrectGammaDown.Location = new System.Drawing.Point(60, 235);
+            this.buttonCorrectGammaDown.Name = "buttonCorrectGammaDown";
+            this.buttonCorrectGammaDown.Size = new System.Drawing.Size(212, 32);
+            this.buttonCorrectGammaDown.TabIndex = 12;
+            this.buttonCorrectGammaDown.Text = "Correct gamma (down)";
+            this.buttonCorrectGammaDown.UseVisualStyleBackColor = true;
+            this.buttonCorrectGammaDown.Click += new System.EventHandler(this.buttonCorrectGammaDown_Click);
+            // 
+            // buttonCorrectBrightnessDown
+            // 
+            this.buttonCorrectBrightnessDown.Enabled = false;
+            this.buttonCorrectBrightnessDown.Location = new System.Drawing.Point(60, 121);
+            this.buttonCorrectBrightnessDown.Name = "buttonCorrectBrightnessDown";
+            this.buttonCorrectBrightnessDown.Size = new System.Drawing.Size(212, 32);
+            this.buttonCorrectBrightnessDown.TabIndex = 11;
+            this.buttonCorrectBrightnessDown.Text = "Correct Brightness (down)";
+            this.buttonCorrectBrightnessDown.UseVisualStyleBackColor = true;
+            this.buttonCorrectBrightnessDown.Click += new System.EventHandler(this.buttonCorrectBrightnessDown_Click);
+            // 
             // labelConvolutionFilters
             // 
             this.labelConvolutionFilters.AutoSize = true;
             this.labelConvolutionFilters.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelConvolutionFilters.Location = new System.Drawing.Point(307, 44);
+            this.labelConvolutionFilters.Location = new System.Drawing.Point(311, 24);
             this.labelConvolutionFilters.Name = "labelConvolutionFilters";
-            this.labelConvolutionFilters.Size = new System.Drawing.Size(111, 15);
+            this.labelConvolutionFilters.Size = new System.Drawing.Size(182, 15);
             this.labelConvolutionFilters.TabIndex = 10;
-            this.labelConvolutionFilters.Text = "Convolution Filters";
+            this.labelConvolutionFilters.Text = "Convolution Filters (3x3 kernel)";
             // 
             // labelFunctionalFilters
             // 
             this.labelFunctionalFilters.AutoSize = true;
             this.labelFunctionalFilters.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelFunctionalFilters.Location = new System.Drawing.Point(63, 45);
+            this.labelFunctionalFilters.Location = new System.Drawing.Point(60, 24);
             this.labelFunctionalFilters.Name = "labelFunctionalFilters";
             this.labelFunctionalFilters.Size = new System.Drawing.Size(101, 15);
             this.labelFunctionalFilters.TabIndex = 9;
@@ -116,29 +144,32 @@ namespace CGPart1
             // 
             // buttonEmboss
             // 
-            this.buttonEmboss.Location = new System.Drawing.Point(307, 218);
+            this.buttonEmboss.Enabled = false;
+            this.buttonEmboss.Location = new System.Drawing.Point(311, 198);
             this.buttonEmboss.Name = "buttonEmboss";
-            this.buttonEmboss.Size = new System.Drawing.Size(178, 32);
+            this.buttonEmboss.Size = new System.Drawing.Size(212, 32);
             this.buttonEmboss.TabIndex = 8;
-            this.buttonEmboss.Text = "Emboss (type)";
+            this.buttonEmboss.Text = "Emboss (south-east type)";
             this.buttonEmboss.UseVisualStyleBackColor = true;
             this.buttonEmboss.Click += new System.EventHandler(this.buttonEmboss_Click);
             // 
             // buttonDetectEdges
             // 
-            this.buttonDetectEdges.Location = new System.Drawing.Point(307, 180);
+            this.buttonDetectEdges.Enabled = false;
+            this.buttonDetectEdges.Location = new System.Drawing.Point(311, 160);
             this.buttonDetectEdges.Name = "buttonDetectEdges";
-            this.buttonDetectEdges.Size = new System.Drawing.Size(178, 32);
+            this.buttonDetectEdges.Size = new System.Drawing.Size(212, 32);
             this.buttonDetectEdges.TabIndex = 7;
-            this.buttonDetectEdges.Text = "Detect Edges (type)";
+            this.buttonDetectEdges.Text = "Detect Edges (diagonal)";
             this.buttonDetectEdges.UseVisualStyleBackColor = true;
             this.buttonDetectEdges.Click += new System.EventHandler(this.buttonDetectEdges_Click);
             // 
             // buttonSharpen
             // 
-            this.buttonSharpen.Location = new System.Drawing.Point(307, 142);
+            this.buttonSharpen.Enabled = false;
+            this.buttonSharpen.Location = new System.Drawing.Point(311, 122);
             this.buttonSharpen.Name = "buttonSharpen";
-            this.buttonSharpen.Size = new System.Drawing.Size(178, 32);
+            this.buttonSharpen.Size = new System.Drawing.Size(212, 32);
             this.buttonSharpen.TabIndex = 6;
             this.buttonSharpen.Text = "Sharpen";
             this.buttonSharpen.UseVisualStyleBackColor = true;
@@ -146,9 +177,10 @@ namespace CGPart1
             // 
             // buttonGaussianBlur
             // 
-            this.buttonGaussianBlur.Location = new System.Drawing.Point(307, 104);
+            this.buttonGaussianBlur.Enabled = false;
+            this.buttonGaussianBlur.Location = new System.Drawing.Point(311, 84);
             this.buttonGaussianBlur.Name = "buttonGaussianBlur";
-            this.buttonGaussianBlur.Size = new System.Drawing.Size(178, 32);
+            this.buttonGaussianBlur.Size = new System.Drawing.Size(212, 32);
             this.buttonGaussianBlur.TabIndex = 5;
             this.buttonGaussianBlur.Text = "Gaussian Blur";
             this.buttonGaussianBlur.UseVisualStyleBackColor = true;
@@ -156,49 +188,54 @@ namespace CGPart1
             // 
             // buttonBlur
             // 
-            this.buttonBlur.Location = new System.Drawing.Point(307, 66);
+            this.buttonBlur.Enabled = false;
+            this.buttonBlur.Location = new System.Drawing.Point(311, 46);
             this.buttonBlur.Name = "buttonBlur";
-            this.buttonBlur.Size = new System.Drawing.Size(178, 32);
+            this.buttonBlur.Size = new System.Drawing.Size(212, 32);
             this.buttonBlur.TabIndex = 4;
             this.buttonBlur.Text = "Blur";
             this.buttonBlur.UseVisualStyleBackColor = true;
             this.buttonBlur.Click += new System.EventHandler(this.buttonBlur_Click);
             // 
-            // buttonCorrectGamma
+            // buttonCorrectGammaUp
             // 
-            this.buttonCorrectGamma.Location = new System.Drawing.Point(63, 180);
-            this.buttonCorrectGamma.Name = "buttonCorrectGamma";
-            this.buttonCorrectGamma.Size = new System.Drawing.Size(178, 32);
-            this.buttonCorrectGamma.TabIndex = 3;
-            this.buttonCorrectGamma.Text = "Correct gamma";
-            this.buttonCorrectGamma.UseVisualStyleBackColor = true;
-            this.buttonCorrectGamma.Click += new System.EventHandler(this.buttonCorrectGamma_Click);
+            this.buttonCorrectGammaUp.Enabled = false;
+            this.buttonCorrectGammaUp.Location = new System.Drawing.Point(60, 198);
+            this.buttonCorrectGammaUp.Name = "buttonCorrectGammaUp";
+            this.buttonCorrectGammaUp.Size = new System.Drawing.Size(212, 32);
+            this.buttonCorrectGammaUp.TabIndex = 3;
+            this.buttonCorrectGammaUp.Text = "Correct gamma (up)";
+            this.buttonCorrectGammaUp.UseVisualStyleBackColor = true;
+            this.buttonCorrectGammaUp.Click += new System.EventHandler(this.buttonCorrectGammaUp_Click);
             // 
             // buttonEnhanceContrast
             // 
-            this.buttonEnhanceContrast.Location = new System.Drawing.Point(63, 142);
+            this.buttonEnhanceContrast.Enabled = false;
+            this.buttonEnhanceContrast.Location = new System.Drawing.Point(60, 160);
             this.buttonEnhanceContrast.Name = "buttonEnhanceContrast";
-            this.buttonEnhanceContrast.Size = new System.Drawing.Size(178, 32);
+            this.buttonEnhanceContrast.Size = new System.Drawing.Size(212, 32);
             this.buttonEnhanceContrast.TabIndex = 2;
             this.buttonEnhanceContrast.Text = "Enhance contrast";
             this.buttonEnhanceContrast.UseVisualStyleBackColor = true;
             this.buttonEnhanceContrast.Click += new System.EventHandler(this.buttonEnhanceContrast_Click);
             // 
-            // buttonCorrectBrightness
+            // buttonCorrectBrightnessUp
             // 
-            this.buttonCorrectBrightness.Location = new System.Drawing.Point(63, 104);
-            this.buttonCorrectBrightness.Name = "buttonCorrectBrightness";
-            this.buttonCorrectBrightness.Size = new System.Drawing.Size(178, 32);
-            this.buttonCorrectBrightness.TabIndex = 1;
-            this.buttonCorrectBrightness.Text = "Correct Brightness";
-            this.buttonCorrectBrightness.UseVisualStyleBackColor = true;
-            this.buttonCorrectBrightness.Click += new System.EventHandler(this.buttonCorrectBrightness_Click);
+            this.buttonCorrectBrightnessUp.Enabled = false;
+            this.buttonCorrectBrightnessUp.Location = new System.Drawing.Point(60, 83);
+            this.buttonCorrectBrightnessUp.Name = "buttonCorrectBrightnessUp";
+            this.buttonCorrectBrightnessUp.Size = new System.Drawing.Size(212, 32);
+            this.buttonCorrectBrightnessUp.TabIndex = 1;
+            this.buttonCorrectBrightnessUp.Text = "Correct Brightness (up)";
+            this.buttonCorrectBrightnessUp.UseVisualStyleBackColor = true;
+            this.buttonCorrectBrightnessUp.Click += new System.EventHandler(this.buttonCorrectBrightnessUp_Click);
             // 
             // buttonInvert
             // 
-            this.buttonInvert.Location = new System.Drawing.Point(63, 66);
+            this.buttonInvert.Enabled = false;
+            this.buttonInvert.Location = new System.Drawing.Point(60, 45);
             this.buttonInvert.Name = "buttonInvert";
-            this.buttonInvert.Size = new System.Drawing.Size(178, 32);
+            this.buttonInvert.Size = new System.Drawing.Size(212, 32);
             this.buttonInvert.TabIndex = 0;
             this.buttonInvert.Text = "Invert";
             this.buttonInvert.UseVisualStyleBackColor = true;
@@ -223,13 +260,13 @@ namespace CGPart1
             this.groupConvolution.Size = new System.Drawing.Size(581, 550);
             this.groupConvolution.TabIndex = 1;
             this.groupConvolution.TabStop = false;
-            this.groupConvolution.Text = "Convolution Filter Settings";
+            this.groupConvolution.Text = "Custom Convolution Filter";
             // 
             // labelAnchorRow
             // 
             this.labelAnchorRow.AutoSize = true;
             this.labelAnchorRow.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelAnchorRow.Location = new System.Drawing.Point(298, 73);
+            this.labelAnchorRow.Location = new System.Drawing.Point(311, 70);
             this.labelAnchorRow.Name = "labelAnchorRow";
             this.labelAnchorRow.Size = new System.Drawing.Size(30, 15);
             this.labelAnchorRow.TabIndex = 10;
@@ -239,7 +276,7 @@ namespace CGPart1
             // 
             this.labelAnchorColumn.AutoSize = true;
             this.labelAnchorColumn.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelAnchorColumn.Location = new System.Drawing.Point(298, 124);
+            this.labelAnchorColumn.Location = new System.Drawing.Point(311, 121);
             this.labelAnchorColumn.Name = "labelAnchorColumn";
             this.labelAnchorColumn.Size = new System.Drawing.Size(50, 15);
             this.labelAnchorColumn.TabIndex = 9;
@@ -249,7 +286,7 @@ namespace CGPart1
             // 
             this.labelSizeColumns.AutoSize = true;
             this.labelSizeColumns.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelSizeColumns.Location = new System.Drawing.Point(139, 125);
+            this.labelSizeColumns.Location = new System.Drawing.Point(152, 122);
             this.labelSizeColumns.Name = "labelSizeColumns";
             this.labelSizeColumns.Size = new System.Drawing.Size(91, 15);
             this.labelSizeColumns.TabIndex = 8;
@@ -259,7 +296,7 @@ namespace CGPart1
             // 
             this.labelSizeRows.AutoSize = true;
             this.labelSizeRows.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelSizeRows.Location = new System.Drawing.Point(139, 74);
+            this.labelSizeRows.Location = new System.Drawing.Point(152, 71);
             this.labelSizeRows.Name = "labelSizeRows";
             this.labelSizeRows.Size = new System.Drawing.Size(71, 15);
             this.labelSizeRows.TabIndex = 7;
@@ -269,7 +306,7 @@ namespace CGPart1
             // 
             this.labelAnchor.AutoSize = true;
             this.labelAnchor.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelAnchor.Location = new System.Drawing.Point(298, 53);
+            this.labelAnchor.Location = new System.Drawing.Point(311, 50);
             this.labelAnchor.Name = "labelAnchor";
             this.labelAnchor.Size = new System.Drawing.Size(79, 15);
             this.labelAnchor.TabIndex = 6;
@@ -279,7 +316,7 @@ namespace CGPart1
             // 
             this.labelSize.AutoSize = true;
             this.labelSize.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelSize.Location = new System.Drawing.Point(139, 53);
+            this.labelSize.Location = new System.Drawing.Point(152, 50);
             this.labelSize.Name = "labelSize";
             this.labelSize.Size = new System.Drawing.Size(30, 15);
             this.labelSize.TabIndex = 5;
@@ -287,7 +324,7 @@ namespace CGPart1
             // 
             // numericAnchorColumn
             // 
-            this.numericAnchorColumn.Location = new System.Drawing.Point(298, 143);
+            this.numericAnchorColumn.Location = new System.Drawing.Point(311, 140);
             this.numericAnchorColumn.Maximum = new decimal(new int[] {
             3,
             0,
@@ -309,7 +346,7 @@ namespace CGPart1
             // 
             // numericAnchorRow
             // 
-            this.numericAnchorRow.Location = new System.Drawing.Point(298, 92);
+            this.numericAnchorRow.Location = new System.Drawing.Point(311, 89);
             this.numericAnchorRow.Maximum = new decimal(new int[] {
             3,
             0,
@@ -331,7 +368,7 @@ namespace CGPart1
             // 
             // numericSizeColumns
             // 
-            this.numericSizeColumns.Location = new System.Drawing.Point(139, 143);
+            this.numericSizeColumns.Location = new System.Drawing.Point(152, 140);
             this.numericSizeColumns.Maximum = new decimal(new int[] {
             9,
             0,
@@ -354,7 +391,7 @@ namespace CGPart1
             // 
             // numericSizeRows
             // 
-            this.numericSizeRows.Location = new System.Drawing.Point(139, 92);
+            this.numericSizeRows.Location = new System.Drawing.Point(152, 89);
             this.numericSizeRows.Maximum = new decimal(new int[] {
             9,
             0,
@@ -379,10 +416,10 @@ namespace CGPart1
             // 
             this.dataGrid.AllowUserToAddRows = false;
             this.dataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGrid.Location = new System.Drawing.Point(43, 190);
+            this.dataGrid.Location = new System.Drawing.Point(76, 202);
             this.dataGrid.Name = "dataGrid";
             this.dataGrid.RowTemplate.Height = 25;
-            this.dataGrid.Size = new System.Drawing.Size(240, 150);
+            this.dataGrid.Size = new System.Drawing.Size(447, 272);
             this.dataGrid.TabIndex = 0;
             // 
             // groupOriginal
@@ -401,15 +438,16 @@ namespace CGPart1
             this.pictureOriginal.Location = new System.Drawing.Point(6, 22);
             this.pictureOriginal.Name = "pictureOriginal";
             this.pictureOriginal.Size = new System.Drawing.Size(560, 358);
+            this.pictureOriginal.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureOriginal.TabIndex = 0;
             this.pictureOriginal.TabStop = false;
             // 
             // groupModified
             // 
-            this.groupModified.Controls.Add(this.buttonLoad);
             this.groupModified.Controls.Add(this.buttonSave);
-            this.groupModified.Controls.Add(this.buttonReset);
             this.groupModified.Controls.Add(this.pictureModified);
+            this.groupModified.Controls.Add(this.buttonReset);
+            this.groupModified.Controls.Add(this.buttonLoad);
             this.groupModified.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.groupModified.Location = new System.Drawing.Point(600, 405);
             this.groupModified.Name = "groupModified";
@@ -418,43 +456,46 @@ namespace CGPart1
             this.groupModified.TabStop = false;
             this.groupModified.Text = "Modified Picture";
             // 
-            // buttonLoad
-            // 
-            this.buttonLoad.Location = new System.Drawing.Point(124, 395);
-            this.buttonLoad.Name = "buttonLoad";
-            this.buttonLoad.Size = new System.Drawing.Size(97, 29);
-            this.buttonLoad.TabIndex = 4;
-            this.buttonLoad.Text = "Load";
-            this.buttonLoad.UseVisualStyleBackColor = true;
-            this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
-            // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(330, 395);
+            this.buttonSave.Enabled = false;
+            this.buttonSave.Location = new System.Drawing.Point(361, 399);
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(97, 29);
+            this.buttonSave.Size = new System.Drawing.Size(143, 29);
             this.buttonSave.TabIndex = 3;
             this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
-            // 
-            // buttonReset
-            // 
-            this.buttonReset.Location = new System.Drawing.Point(227, 395);
-            this.buttonReset.Name = "buttonReset";
-            this.buttonReset.Size = new System.Drawing.Size(97, 29);
-            this.buttonReset.TabIndex = 2;
-            this.buttonReset.Text = "Reset";
-            this.buttonReset.UseVisualStyleBackColor = true;
-            this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
             // 
             // pictureModified
             // 
             this.pictureModified.Location = new System.Drawing.Point(6, 23);
             this.pictureModified.Name = "pictureModified";
             this.pictureModified.Size = new System.Drawing.Size(560, 358);
+            this.pictureModified.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureModified.TabIndex = 1;
             this.pictureModified.TabStop = false;
+            // 
+            // buttonReset
+            // 
+            this.buttonReset.Enabled = false;
+            this.buttonReset.Location = new System.Drawing.Point(212, 399);
+            this.buttonReset.Name = "buttonReset";
+            this.buttonReset.Size = new System.Drawing.Size(143, 29);
+            this.buttonReset.TabIndex = 2;
+            this.buttonReset.Text = "Reset";
+            this.buttonReset.UseVisualStyleBackColor = true;
+            this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
+            // 
+            // buttonLoad
+            // 
+            this.buttonLoad.Location = new System.Drawing.Point(63, 399);
+            this.buttonLoad.Name = "buttonLoad";
+            this.buttonLoad.Size = new System.Drawing.Size(143, 29);
+            this.buttonLoad.TabIndex = 4;
+            this.buttonLoad.Text = "Load";
+            this.buttonLoad.UseVisualStyleBackColor = true;
+            this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
             // 
             // CGPart1
             // 
@@ -495,9 +536,9 @@ namespace CGPart1
         private System.Windows.Forms.Button buttonSharpen;
         private System.Windows.Forms.Button buttonGaussianBlur;
         private System.Windows.Forms.Button buttonBlur;
-        private System.Windows.Forms.Button buttonCorrectGamma;
+        private System.Windows.Forms.Button buttonCorrectGammaUp;
         private System.Windows.Forms.Button buttonEnhanceContrast;
-        private System.Windows.Forms.Button buttonCorrectBrightness;
+        private System.Windows.Forms.Button buttonCorrectBrightnessUp;
         private System.Windows.Forms.Button buttonInvert;
         private System.Windows.Forms.Label labelAnchor;
         private System.Windows.Forms.Label labelSize;
@@ -517,6 +558,10 @@ namespace CGPart1
         private System.Windows.Forms.Label labelConvolutionFilters;
         private System.Windows.Forms.Label labelFunctionalFilters;
         private System.Windows.Forms.Button buttonLoad;
+        private System.Windows.Forms.SaveFileDialog savePicture;
+        private System.Windows.Forms.OpenFileDialog openPicture;
+        private System.Windows.Forms.Button buttonCorrectGammaDown;
+        private System.Windows.Forms.Button buttonCorrectBrightnessDown;
     }
 }
 
