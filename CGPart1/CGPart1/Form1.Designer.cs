@@ -54,7 +54,6 @@ namespace CGPart1
             this.numericAnchorRow = new System.Windows.Forms.NumericUpDown();
             this.numericSizeColumns = new System.Windows.Forms.NumericUpDown();
             this.numericSizeRows = new System.Windows.Forms.NumericUpDown();
-            this.dataGrid = new System.Windows.Forms.DataGridView();
             this.groupOriginal = new System.Windows.Forms.GroupBox();
             this.pictureOriginal = new System.Windows.Forms.PictureBox();
             this.groupModified = new System.Windows.Forms.GroupBox();
@@ -70,7 +69,6 @@ namespace CGPart1
             ((System.ComponentModel.ISupportInitialize)(this.numericAnchorRow)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericSizeColumns)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericSizeRows)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
             this.groupOriginal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureOriginal)).BeginInit();
             this.groupModified.SuspendLayout();
@@ -253,7 +251,6 @@ namespace CGPart1
             this.groupConvolution.Controls.Add(this.numericAnchorRow);
             this.groupConvolution.Controls.Add(this.numericSizeColumns);
             this.groupConvolution.Controls.Add(this.numericSizeRows);
-            this.groupConvolution.Controls.Add(this.dataGrid);
             this.groupConvolution.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.groupConvolution.Location = new System.Drawing.Point(13, 299);
             this.groupConvolution.Name = "groupConvolution";
@@ -412,16 +409,6 @@ namespace CGPart1
             0});
             this.numericSizeRows.ValueChanged += new System.EventHandler(this.numericSizeRows_ValueChanged);
             // 
-            // dataGrid
-            // 
-            this.dataGrid.AllowUserToAddRows = false;
-            this.dataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGrid.Location = new System.Drawing.Point(76, 202);
-            this.dataGrid.Name = "dataGrid";
-            this.dataGrid.RowTemplate.Height = 25;
-            this.dataGrid.Size = new System.Drawing.Size(447, 272);
-            this.dataGrid.TabIndex = 0;
-            // 
             // groupOriginal
             // 
             this.groupOriginal.Controls.Add(this.pictureOriginal);
@@ -516,7 +503,6 @@ namespace CGPart1
             ((System.ComponentModel.ISupportInitialize)(this.numericAnchorRow)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericSizeColumns)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericSizeRows)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).EndInit();
             this.groupOriginal.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureOriginal)).EndInit();
             this.groupModified.ResumeLayout(false);
@@ -546,7 +532,6 @@ namespace CGPart1
         private System.Windows.Forms.NumericUpDown numericAnchorRow;
         private System.Windows.Forms.NumericUpDown numericSizeColumns;
         private System.Windows.Forms.NumericUpDown numericSizeRows;
-        private System.Windows.Forms.DataGridView dataGrid;
         private System.Windows.Forms.PictureBox pictureOriginal;
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.Button buttonReset;

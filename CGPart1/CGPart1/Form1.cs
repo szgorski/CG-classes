@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 // Szymon Górski, 298796
+// Only Task 1 is implemented.
 
 namespace CGPart1
 {
@@ -19,15 +20,6 @@ namespace CGPart1
     {
         public CGPart1()
         {
-            //for (int i = 0; i < 9; i++)
-            //{
-            //    for (int j = 0; j < 9; j++)
-            //    {
-            //        if (i <= 2 && j <= 2) Variables.kernel[i, j] = 1;
-            //        else Variables.kernel[i, j] = 0;
-            //    }
-            //}
-
             InitializeComponent();
             savePicture.DefaultExt = "png";
             savePicture.Filter =
@@ -35,16 +27,6 @@ namespace CGPart1
             openPicture.Filter =
                 "PNG files (*.png)|*.png|JPG files (*.jpg)|*.jpg|All files (*.*)|*.*";
         }
-
-        //public void createTable()
-        //{
-        //    DataTable table = new DataTable;
-        //    table.Columns.Add
-        //    BindingSource bindingSource1 = new BindingSource();
-        //    bindingSource1.DataSource = Variables.kernel;
-        //    dataGrid.DataSource = bindingSource1;
-        //    dataGrid.Refresh();
-        //}
 
         public void lockFn()
         {
@@ -66,7 +48,6 @@ namespace CGPart1
             numericAnchorRow.Enabled = false;
             numericSizeColumns.Enabled = false;
             numericSizeRows.Enabled = false;
-            dataGrid.Enabled = false;
         }
 
         public void unlockFn()
@@ -89,7 +70,6 @@ namespace CGPart1
             numericAnchorRow.Enabled = true;
             numericSizeColumns.Enabled = true;
             numericSizeRows.Enabled = true;
-            dataGrid.Enabled = true;
         }
 
         public int fastMin(int a, int b)
@@ -442,41 +422,6 @@ namespace CGPart1
             emboss();
         }
 
-        // values outside of edges are ignored to obtain better performance
-        //public void custom(int height, int width, byte[][] red, byte[][] green, byte[][] blue)
-        //{
-        //    unsafe
-        //    {
-        //        double result;
-        //        int kiStart, kiEnd, kjStart, kjEnd;
-        //        // byte newRed[][];
-        //        for (int i = 0; i < height; i++)
-        //        {
-        //            for (int j = 0; j < width; i++)
-        //            {
-        //                result = 0;
-
-        //                if (i + 1 - (int)numericAnchorRow.Value >= 0) kiStart = 0;
-        //                else kiStart = (int)numericAnchorRow.Value - i - 1;
-        //                if (j + 1 - (int)numericAnchorColumn.Value >= 0) kjStart = 0;
-        //                else kjStart = (int)numericAnchorColumn.Value - j - 1;
-        //                if (i + (int)numericSizeRows.Value - (int)numericAnchorRow.Value < height) kiEnd = (int)numericSizeRows.Value;
-        //                else kiEnd = (int)numericAnchorRow.Value + height - i - 1;
-        //                if (j + (int)numericSizeColumns.Value - (int)numericAnchorColumn.Value < width) kjEnd = (int)numericSizeColumns.Value;
-        //                else kjEnd = (int)numericAnchorColumn.Value + width - j - 1;
-
-        //                for (int ki = kiStart; ki < kiEnd; ki++)
-        //                {
-        //                    for (int kj = kjStart; kj < kjEnd; kj++)
-        //                    {
-        //                        result += red[i + ki + 1 - (int)numericAnchorRow.Value][j + kj + 1 - (int)numericAnchorColumn.Value]; // * sth
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
         public void loadOriginal()
         {
             Bitmap bmp = new Bitmap(Variables.P_Width, Variables.P_Height, Variables.pixelFormat);
@@ -573,7 +518,6 @@ namespace CGPart1
                         int* row = (int*)((byte*)bits.Scan0 + (i * bits.Stride));
                         for (int j = 0; j < img.Width; j++)
                         {
-                            // row[x] = data[y * width + x];
                             conv = (uint)row[j];
                             Variables.colorsSave[0, i, j] = (byte)(conv - ((conv >> 8) << 8)); conv >>= 8;
                             Variables.colorsSave[1, i, j] = (byte)(conv - ((conv >> 8) << 8)); conv >>= 8;
