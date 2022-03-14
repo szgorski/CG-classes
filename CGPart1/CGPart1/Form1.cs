@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 // Szymon Górski, 298796
-// Only Task 1 is implemented.
+
+// It turned out that bounding the values to [0, 255] in conv. filter was enough to fix the problem.
 
 namespace CGPart1
 {
@@ -21,6 +22,10 @@ namespace CGPart1
         public CGPart1()
         {
             InitializeComponent();
+
+            Variables.customKernel = new int[9, 9];
+            setKernel();
+
             savePicture.DefaultExt = "png";
             savePicture.Filter =
                 "PNG files (*.png)|*.png|All files (*.*)|*.*";
@@ -45,6 +50,7 @@ namespace CGPart1
             buttonCorrectBrightnessDown.Enabled = false;
             buttonInvert.Enabled = false;
             buttonMedianFilter.Enabled = false;
+            buttonApply.Enabled = false;
             numericAnchorColumn.Enabled = false;
             numericAnchorRow.Enabled = false;
             numericSizeColumns.Enabled = false;
@@ -68,6 +74,7 @@ namespace CGPart1
             buttonCorrectBrightnessDown.Enabled = true;
             buttonInvert.Enabled = true;
             buttonMedianFilter.Enabled = true;
+            buttonApply.Enabled = true;
             numericAnchorColumn.Enabled = true;
             numericAnchorRow.Enabled = true;
             numericSizeColumns.Enabled = true;
@@ -248,11 +255,11 @@ namespace CGPart1
             correctGammaDown(Variables.P_Height, Variables.P_Width);
         }
 
-        public void convolutionFn(int height, int width, int[,] kernel, int kHeight, int kWidth, int aRow, int aColumn, int customWeight)
+        public void convolutionFn(int height, int width, int[,] kernel, int kHeight, int kWidth, int aRow, int aColumn, int customWeight, int offset)
         {                                                                // kHeight - kernel height, aRow - anchor's row
             unsafe
             {
-                int[,,] colorsCopy = new int[3, height, width]; // declare zeros?
+                int[,,] colorsCopy = new int[3, height, width];
                 int weight;
 
                 if (customWeight != 0)
@@ -295,9 +302,9 @@ namespace CGPart1
                                 }
                             }
                             if (weight == 0) weight = 1;
-                            colorsCopy[0, i, j] /= weight; // edge detection
-                            colorsCopy[1, i, j] /= weight;
-                            colorsCopy[2, i, j] /= weight;
+                            colorsCopy[0, i, j] = offset + colorsCopy[0, i, j] / weight;
+                            colorsCopy[1, i, j] = offset + colorsCopy[1, i, j] / weight;
+                            colorsCopy[2, i, j] = offset + colorsCopy[2, i, j] / weight;
                         }
                     }
                 }
@@ -306,9 +313,9 @@ namespace CGPart1
                 {
                     for (int j = 0; j < width; j++)
                     {
-                        Variables.colors[0, i, j] = (byte)colorsCopy[0, i, j]; // minmax
-                        Variables.colors[1, i, j] = (byte)colorsCopy[1, i, j];
-                        Variables.colors[2, i, j] = (byte)colorsCopy[2, i, j];
+                        Variables.colors[0, i, j] = (byte)fastMin(255, fastMax(0, colorsCopy[0, i, j]));
+                        Variables.colors[1, i, j] = (byte)fastMin(255, fastMax(0, colorsCopy[1, i, j]));
+                        Variables.colors[2, i, j] = (byte)fastMin(255, fastMax(0, colorsCopy[2, i, j]));
                     }
                 }
             }
@@ -324,7 +331,7 @@ namespace CGPart1
                 };
 
             lockFn();
-            convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0);
+            convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0, 0);
             Variables.bitmap.Dispose();
             loadModification();
             pictureModified.Image = Variables.bitmap;
@@ -346,7 +353,7 @@ namespace CGPart1
                 };
 
             lockFn();
-            convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0);
+            convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0, 0);
             Variables.bitmap.Dispose();
             loadModification();
             pictureModified.Image = Variables.bitmap;
@@ -368,7 +375,7 @@ namespace CGPart1
                 };
 
             lockFn();
-            convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0);
+            convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0, 0);
             Variables.bitmap.Dispose();
             loadModification();
             pictureModified.Image = Variables.bitmap;
@@ -390,7 +397,7 @@ namespace CGPart1
                 };
 
             lockFn();
-            convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0);
+            convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0, 127);
             Variables.bitmap.Dispose();
             loadModification();
             pictureModified.Image = Variables.bitmap;
@@ -412,7 +419,7 @@ namespace CGPart1
                 };
 
             lockFn();
-            convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0);
+            convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0, 0);
             Variables.bitmap.Dispose();
             loadModification();
             pictureModified.Image = Variables.bitmap;
@@ -620,6 +627,49 @@ namespace CGPart1
             }
         }
 
+        public void setKernel()
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    NumericUpDown c = (NumericUpDown)tableLayoutPanel.GetControlFromPosition(j, i);
+                    Variables.customKernel[i, j] = (int)c.Value;
+                }
+            }
+        }
+
+        public void updateTable()
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    NumericUpDown c = (NumericUpDown)tableLayoutPanel.GetControlFromPosition(j, i);
+                    if (i < numericSizeRows.Value && j < numericSizeColumns.Value) c.Enabled = true;
+                    else
+                    {
+                        c.Enabled = false;
+                        c.Value = 0;
+                    }
+                }
+            }
+        }
+
+        public void updateDivisor()
+        {
+            int divisor = 0;
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    divisor += Variables.customKernel[i, j];
+                }
+            }
+            if (divisor <= 0) numericUpDownDivisor.Value = 1;
+            else numericUpDownDivisor.Value = divisor;
+        }
+
         private void numericSizeRows_ValueChanged(object sender, EventArgs e)
         {
             if (numericSizeRows.Value < numericAnchorRow.Value)
@@ -627,6 +677,7 @@ namespace CGPart1
                 numericAnchorRow.Value = numericSizeRows.Value;
             }
             numericAnchorRow.Maximum = numericSizeRows.Value;
+            updateTable();
         }
 
         private void numericSizeColumns_ValueChanged(object sender, EventArgs e)
@@ -636,6 +687,39 @@ namespace CGPart1
                 numericAnchorColumn.Value = numericSizeColumns.Value;
             }
             numericAnchorColumn.Maximum = numericSizeColumns.Value;
+            updateTable();
+        }
+
+        private void checkBoxAutoDivisor_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxAutoDivisor.Checked == true)
+            {
+                numericUpDownDivisor.Enabled = false;
+            }
+            else numericUpDownDivisor.Enabled = true;
+        }
+
+        private void buttonApply_Click(object sender, EventArgs e)
+        {
+            lockFn();
+            setKernel();
+            updateDivisor();
+
+            int[,] copyKernel = new int[(int)numericSizeRows.Value, (int)numericSizeColumns.Value];
+            for (int i = 0; i < (int)numericSizeRows.Value; i++)
+            {
+                for (int j = 0; j < (int)numericSizeColumns.Value; j++)
+                {
+                    copyKernel[i, j] = Variables.customKernel[i, j];
+                }
+            }
+
+            convolutionFn(Variables.P_Height, Variables.P_Width, copyKernel, (int)numericSizeRows.Value, (int)numericSizeColumns.Value,
+                (int)numericAnchorRow.Value, (int)numericAnchorColumn.Value, (int)numericUpDownDivisor.Value, (int)numericUpDownOffset.Value);
+            Variables.bitmap.Dispose();
+            loadModification();
+            pictureModified.Image = Variables.bitmap;
+            unlockFn();
         }
     }
 
@@ -651,5 +735,6 @@ namespace CGPart1
         public static byte[,,] colorsSave;
         public static Bitmap bitmap;
         public static PixelFormat pixelFormat;
+        public static int[,] customKernel;
     }
 }
