@@ -44,6 +44,7 @@ namespace CGPart1
             buttonCorrectBrightnessUp.Enabled = false;
             buttonCorrectBrightnessDown.Enabled = false;
             buttonInvert.Enabled = false;
+            buttonMedianFilter.Enabled = false;
             numericAnchorColumn.Enabled = false;
             numericAnchorRow.Enabled = false;
             numericSizeColumns.Enabled = false;
@@ -66,6 +67,7 @@ namespace CGPart1
             buttonCorrectBrightnessUp.Enabled = true;
             buttonCorrectBrightnessDown.Enabled = true;
             buttonInvert.Enabled = true;
+            buttonMedianFilter.Enabled = true;
             numericAnchorColumn.Enabled = true;
             numericAnchorRow.Enabled = true;
             numericSizeColumns.Enabled = true;
@@ -293,7 +295,7 @@ namespace CGPart1
                                 }
                             }
                             if (weight == 0) weight = 1;
-                            colorsCopy[0, i, j] /= weight;
+                            colorsCopy[0, i, j] /= weight; // edge detection
                             colorsCopy[1, i, j] /= weight;
                             colorsCopy[2, i, j] /= weight;
                         }
@@ -304,7 +306,7 @@ namespace CGPart1
                 {
                     for (int j = 0; j < width; j++)
                     {
-                        Variables.colors[0, i, j] = (byte)colorsCopy[0, i, j];
+                        Variables.colors[0, i, j] = (byte)colorsCopy[0, i, j]; // minmax
                         Variables.colors[1, i, j] = (byte)colorsCopy[1, i, j];
                         Variables.colors[2, i, j] = (byte)colorsCopy[2, i, j];
                     }
@@ -420,6 +422,65 @@ namespace CGPart1
         private void buttonEmboss_Click(object sender, EventArgs e)
         {
             emboss();
+        }
+
+        public void medianFilter(int height, int width, int kHeight, int kWidth, int aRow, int aColumn)
+        {                                                // kHeight - kernel height, aRow - anchor's row
+            lockFn();
+            unsafe
+            {
+                int counter;
+                byte[][] medianTable = new byte[3][];
+                medianTable[0] = new byte[kHeight * kWidth];
+                medianTable[1] = new byte[kHeight * kWidth];
+                medianTable[2] = new byte[kHeight * kWidth];
+                byte[,,] colorsCopy = new byte[3, height, width];
+
+                for (int i = 0; i < height; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        counter = 0;
+                        for (int ki = fastMax(0, aRow - 1 - i); ki < fastMin(kHeight, height - i + aRow - 1); ki++)
+                        {
+                            for (int kj = fastMax(0, aColumn - 1 - j); kj < fastMin(kWidth, width - j + aColumn - 1); kj++)
+                            {
+                                medianTable[0][counter] = Variables.colors[0, i + ki - aRow + 1, j + kj - aColumn + 1];
+                                medianTable[1][counter] = Variables.colors[1, i + ki - aRow + 1, j + kj - aColumn + 1];
+                                medianTable[2][counter] = Variables.colors[2, i + ki - aRow + 1, j + kj - aColumn + 1];
+                                counter++;
+                            }
+                        }
+                        Array.Sort(medianTable[0], 0, counter);
+                        Array.Sort(medianTable[1], 0, counter);
+                        Array.Sort(medianTable[2], 0, counter);
+
+                        colorsCopy[0, i, j] = medianTable[0][counter / 2];
+                        colorsCopy[1, i, j] = medianTable[1][counter / 2];
+                        colorsCopy[2, i, j] = medianTable[2][counter / 2];
+                    }
+                }
+
+                for (int i = 0; i < height; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        Variables.colors[0, i, j] = colorsCopy[0, i, j];
+                        Variables.colors[1, i, j] = colorsCopy[1, i, j];
+                        Variables.colors[2, i, j] = colorsCopy[2, i, j];
+                    }
+                }
+            }
+
+            Variables.bitmap.Dispose();
+            loadModification();
+            pictureModified.Image = Variables.bitmap;
+            unlockFn();
+        }
+
+        private void buttonMedianFilter_Click(object sender, EventArgs e)
+        {
+            medianFilter(Variables.P_Height, Variables.P_Width, 3, 3, 2, 2);
         }
 
         public void loadOriginal()

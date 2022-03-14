@@ -30,6 +30,7 @@ namespace CGPart1
         private void InitializeComponent()
         {
             this.groupFilters = new System.Windows.Forms.GroupBox();
+            this.buttonMedianFilter = new System.Windows.Forms.Button();
             this.buttonCorrectGammaDown = new System.Windows.Forms.Button();
             this.buttonCorrectBrightnessDown = new System.Windows.Forms.Button();
             this.labelConvolutionFilters = new System.Windows.Forms.Label();
@@ -77,6 +78,7 @@ namespace CGPart1
             // 
             // groupFilters
             // 
+            this.groupFilters.Controls.Add(this.buttonMedianFilter);
             this.groupFilters.Controls.Add(this.buttonCorrectGammaDown);
             this.groupFilters.Controls.Add(this.buttonCorrectBrightnessDown);
             this.groupFilters.Controls.Add(this.labelConvolutionFilters);
@@ -93,10 +95,21 @@ namespace CGPart1
             this.groupFilters.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.groupFilters.Location = new System.Drawing.Point(13, 13);
             this.groupFilters.Name = "groupFilters";
-            this.groupFilters.Size = new System.Drawing.Size(581, 280);
+            this.groupFilters.Size = new System.Drawing.Size(581, 338);
             this.groupFilters.TabIndex = 0;
             this.groupFilters.TabStop = false;
             this.groupFilters.Text = "Filters";
+            // 
+            // buttonMedianFilter
+            // 
+            this.buttonMedianFilter.Enabled = false;
+            this.buttonMedianFilter.Location = new System.Drawing.Point(60, 284);
+            this.buttonMedianFilter.Name = "buttonMedianFilter";
+            this.buttonMedianFilter.Size = new System.Drawing.Size(212, 31);
+            this.buttonMedianFilter.TabIndex = 13;
+            this.buttonMedianFilter.Text = "Median filter";
+            this.buttonMedianFilter.UseVisualStyleBackColor = true;
+            this.buttonMedianFilter.Click += new System.EventHandler(this.buttonMedianFilter_Click);
             // 
             // buttonCorrectGammaDown
             // 
@@ -252,9 +265,9 @@ namespace CGPart1
             this.groupConvolution.Controls.Add(this.numericSizeColumns);
             this.groupConvolution.Controls.Add(this.numericSizeRows);
             this.groupConvolution.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.groupConvolution.Location = new System.Drawing.Point(13, 299);
+            this.groupConvolution.Location = new System.Drawing.Point(13, 357);
             this.groupConvolution.Name = "groupConvolution";
-            this.groupConvolution.Size = new System.Drawing.Size(581, 550);
+            this.groupConvolution.Size = new System.Drawing.Size(581, 492);
             this.groupConvolution.TabIndex = 1;
             this.groupConvolution.TabStop = false;
             this.groupConvolution.Text = "Custom Convolution Filter";
@@ -425,7 +438,6 @@ namespace CGPart1
             this.pictureOriginal.Location = new System.Drawing.Point(6, 22);
             this.pictureOriginal.Name = "pictureOriginal";
             this.pictureOriginal.Size = new System.Drawing.Size(560, 358);
-            this.pictureOriginal.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureOriginal.TabIndex = 0;
             this.pictureOriginal.TabStop = false;
             // 
@@ -459,7 +471,6 @@ namespace CGPart1
             this.pictureModified.Location = new System.Drawing.Point(6, 23);
             this.pictureModified.Name = "pictureModified";
             this.pictureModified.Size = new System.Drawing.Size(560, 358);
-            this.pictureModified.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureModified.TabIndex = 1;
             this.pictureModified.TabStop = false;
             // 
@@ -547,6 +558,7 @@ namespace CGPart1
         private System.Windows.Forms.OpenFileDialog openPicture;
         private System.Windows.Forms.Button buttonCorrectGammaDown;
         private System.Windows.Forms.Button buttonCorrectBrightnessDown;
+        private System.Windows.Forms.Button buttonMedianFilter;
     }
 }
 
