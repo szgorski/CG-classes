@@ -724,29 +724,152 @@ namespace CGPart2
 
         // Part 2
 
+        public void errorDiffusionFn(int height, int width, int[,] kernel, int kHeight, int kWidth, int aRow, int aColumn, int customWeight)
+        {                                                                // kHeight - kernel height, aRow - anchor's row
+            unsafe
+            {
+                int[,,] colorsCopy = new int[3, height, width];
+                for (int i = 0; i < height; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        colorsCopy[0, i, j] = Variables.colors[0, i, j];
+                        colorsCopy[1, i, j] = Variables.colors[1, i, j];
+                        colorsCopy[2, i, j] = Variables.colors[2, i, j];
+                    }
+                }
+
+                int error;
+                for (int i = 0; i < height; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        error = 0;
+
+                        
+                        for (int ki = fastMax(0, aRow - 1 - i); ki < fastMin(kHeight, height - i + aRow - 1); ki++)
+                        {
+                            for (int kj = fastMax(0, aColumn - 1 - j); kj < fastMin(kWidth, width - j + aColumn - 1); kj++)
+                            {
+                                colorsCopy[0, i, j] += Variables.colors[0, i + ki - aRow + 1, j + kj - aColumn + 1] * kernel[ki, kj];
+                                colorsCopy[1, i, j] += Variables.colors[1, i + ki - aRow + 1, j + kj - aColumn + 1] * kernel[ki, kj];
+                                colorsCopy[2, i, j] += Variables.colors[2, i + ki - aRow + 1, j + kj - aColumn + 1] * kernel[ki, kj];
+                                weight += kernel[ki, kj];
+                            }
+                        }
+                        if (weight == 0) weight = 1;
+                        colorsCopy[0, i, j] = colorsCopy[0, i, j] / weight;
+                        colorsCopy[1, i, j] = colorsCopy[1, i, j] / weight;
+                        colorsCopy[2, i, j] = colorsCopy[2, i, j] / weight;
+                    }
+                }
+                
+                for (int i = 0; i < height; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        Variables.colors[0, i, j] = (byte)fastMin(255, fastMax(0, colorsCopy[0, i, j]));
+                        Variables.colors[1, i, j] = (byte)fastMin(255, fastMax(0, colorsCopy[1, i, j]));
+                        Variables.colors[2, i, j] = (byte)fastMin(255, fastMax(0, colorsCopy[2, i, j]));
+                    }
+                }
+            }
+        }
+
         private void buttonAtkinson_Click(object sender, EventArgs e)
         {
+            int[,] kernel = new int[5, 5]
+            {
+                    {0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0},
+                    {0, 0, 0, 1, 1},
+                    {0, 1, 1, 1, 0},
+                    {0, 0, 1, 0, 0}
+            };
 
+            lockFn();
+            //convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0, 0);
+
+            Variables.bitmap.Dispose();
+            loadModification();
+            pictureModified.Image = Variables.bitmap;
+            unlockFn();
         }
 
         private void buttonBurkes_Click(object sender, EventArgs e)
         {
+            int[,] kernel = new int[3, 5]
+            {
+                    {0, 0, 0, 0, 0},
+                    {0, 0, 0, 8, 4},
+                    {2, 4, 8, 4, 2}
+            };
 
+            lockFn();
+            //convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0, 0);
+
+            Variables.bitmap.Dispose();
+            loadModification();
+            pictureModified.Image = Variables.bitmap;
+            unlockFn();
         }
 
         private void buttonFloydAndSteinberg_Click(object sender, EventArgs e)
         {
+            int[,] kernel = new int[3, 3]
+            {
+                    {0, 0, 0},
+                    {0, 0, 7},
+                    {3, 5, 1}
+            };
 
+            lockFn();
+            //convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0, 0);
+
+            Variables.bitmap.Dispose();
+            loadModification();
+            pictureModified.Image = Variables.bitmap;
+            unlockFn();
         }
 
         private void buttonSierra_Click(object sender, EventArgs e)
         {
+            int[,] kernel = new int[5, 5]
+            {
+                    {0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0},
+                    {0, 0, 0, 5, 3},
+                    {2, 4, 5, 4, 2},
+                    {0, 2, 3, 2, 0}
+            };
 
+            lockFn();
+            //convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0, 0);
+
+            Variables.bitmap.Dispose();
+            loadModification();
+            pictureModified.Image = Variables.bitmap;
+            unlockFn();
         }
 
         private void buttonStucky_Click(object sender, EventArgs e)
         {
+            int[,] kernel = new int[5, 5]
+            {
+                    {0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0},
+                    {0, 0, 0, 8, 4},
+                    {2, 4, 8, 4, 2},
+                    {1, 2, 4, 2, 1}
+            };
 
+            lockFn();
+            //convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0, 0);
+
+            Variables.bitmap.Dispose();
+            loadModification();
+            pictureModified.Image = Variables.bitmap;
+            unlockFn();
         }
 
         private void buttonApplyQuantization_Click(object sender, EventArgs e)

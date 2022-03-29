@@ -154,7 +154,7 @@ namespace CGPart2
             this.flowLayoutPanelColors = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonApplyQuantization = new System.Windows.Forms.Button();
             this.numericUpDownQuantization = new System.Windows.Forms.NumericUpDown();
-            this.labelQuantization = new System.Windows.Forms.Label();
+            this.labelQuantizationNumber = new System.Windows.Forms.Label();
             this.groupErrorDiffusion = new System.Windows.Forms.GroupBox();
             this.buttonAtkinson = new System.Windows.Forms.Button();
             this.buttonSierra = new System.Windows.Forms.Button();
@@ -167,6 +167,13 @@ namespace CGPart2
             this.pictureModified = new System.Windows.Forms.PictureBox();
             this.buttonSave = new System.Windows.Forms.Button();
             this.groupModified = new System.Windows.Forms.GroupBox();
+            this.labelDiffusionNumber = new System.Windows.Forms.Label();
+            this.labelDiffusionRed = new System.Windows.Forms.Label();
+            this.labelDiffusionGreen = new System.Windows.Forms.Label();
+            this.labelDiffusionBlue = new System.Windows.Forms.Label();
+            this.numericUpDownDiffusionRed = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownDiffusionGreen = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownDiffusionBlue = new System.Windows.Forms.NumericUpDown();
             this.groupFilters.SuspendLayout();
             this.groupConvolution.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
@@ -267,6 +274,9 @@ namespace CGPart2
             this.tabPart1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureModified)).BeginInit();
             this.groupModified.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDiffusionRed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDiffusionGreen)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDiffusionBlue)).BeginInit();
             this.SuspendLayout();
             // 
             // groupFilters
@@ -2331,10 +2341,10 @@ namespace CGPart2
             this.groupQuantization.Controls.Add(this.flowLayoutPanelColors);
             this.groupQuantization.Controls.Add(this.buttonApplyQuantization);
             this.groupQuantization.Controls.Add(this.numericUpDownQuantization);
-            this.groupQuantization.Controls.Add(this.labelQuantization);
-            this.groupQuantization.Location = new System.Drawing.Point(7, 249);
+            this.groupQuantization.Controls.Add(this.labelQuantizationNumber);
+            this.groupQuantization.Location = new System.Drawing.Point(7, 338);
             this.groupQuantization.Name = "groupQuantization";
-            this.groupQuantization.Size = new System.Drawing.Size(599, 662);
+            this.groupQuantization.Size = new System.Drawing.Size(599, 573);
             this.groupQuantization.TabIndex = 1;
             this.groupQuantization.TabStop = false;
             this.groupQuantization.Text = "\'Popularity Algorithm\' Color Quantization";
@@ -2354,7 +2364,7 @@ namespace CGPart2
             this.flowLayoutPanelColors.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.flowLayoutPanelColors.Location = new System.Drawing.Point(7, 123);
             this.flowLayoutPanelColors.Name = "flowLayoutPanelColors";
-            this.flowLayoutPanelColors.Size = new System.Drawing.Size(586, 533);
+            this.flowLayoutPanelColors.Size = new System.Drawing.Size(586, 444);
             this.flowLayoutPanelColors.TabIndex = 18;
             // 
             // buttonApplyQuantization
@@ -2374,18 +2384,25 @@ namespace CGPart2
             this.numericUpDownQuantization.Size = new System.Drawing.Size(120, 29);
             this.numericUpDownQuantization.TabIndex = 17;
             // 
-            // labelQuantization
+            // labelQuantizationNumber
             // 
-            this.labelQuantization.AutoSize = true;
-            this.labelQuantization.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelQuantization.Location = new System.Drawing.Point(101, 59);
-            this.labelQuantization.Name = "labelQuantization";
-            this.labelQuantization.Size = new System.Drawing.Size(77, 15);
-            this.labelQuantization.TabIndex = 0;
-            this.labelQuantization.Text = "No. of Colors";
+            this.labelQuantizationNumber.AutoSize = true;
+            this.labelQuantizationNumber.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelQuantizationNumber.Location = new System.Drawing.Point(101, 59);
+            this.labelQuantizationNumber.Name = "labelQuantizationNumber";
+            this.labelQuantizationNumber.Size = new System.Drawing.Size(77, 15);
+            this.labelQuantizationNumber.TabIndex = 0;
+            this.labelQuantizationNumber.Text = "No. of Colors";
             // 
             // groupErrorDiffusion
             // 
+            this.groupErrorDiffusion.Controls.Add(this.numericUpDownDiffusionBlue);
+            this.groupErrorDiffusion.Controls.Add(this.numericUpDownDiffusionGreen);
+            this.groupErrorDiffusion.Controls.Add(this.numericUpDownDiffusionRed);
+            this.groupErrorDiffusion.Controls.Add(this.labelDiffusionBlue);
+            this.groupErrorDiffusion.Controls.Add(this.labelDiffusionGreen);
+            this.groupErrorDiffusion.Controls.Add(this.labelDiffusionRed);
+            this.groupErrorDiffusion.Controls.Add(this.labelDiffusionNumber);
             this.groupErrorDiffusion.Controls.Add(this.buttonAtkinson);
             this.groupErrorDiffusion.Controls.Add(this.buttonSierra);
             this.groupErrorDiffusion.Controls.Add(this.buttonStucky);
@@ -2393,7 +2410,7 @@ namespace CGPart2
             this.groupErrorDiffusion.Controls.Add(this.buttonFloydAndSteinberg);
             this.groupErrorDiffusion.Location = new System.Drawing.Point(7, 7);
             this.groupErrorDiffusion.Name = "groupErrorDiffusion";
-            this.groupErrorDiffusion.Size = new System.Drawing.Size(599, 236);
+            this.groupErrorDiffusion.Size = new System.Drawing.Size(599, 325);
             this.groupErrorDiffusion.TabIndex = 0;
             this.groupErrorDiffusion.TabStop = false;
             this.groupErrorDiffusion.Text = "Error Diffusion Filters";
@@ -2401,7 +2418,7 @@ namespace CGPart2
             // buttonAtkinson
             // 
             this.buttonAtkinson.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonAtkinson.Location = new System.Drawing.Point(193, 37);
+            this.buttonAtkinson.Location = new System.Drawing.Point(193, 126);
             this.buttonAtkinson.Name = "buttonAtkinson";
             this.buttonAtkinson.Size = new System.Drawing.Size(212, 29);
             this.buttonAtkinson.TabIndex = 4;
@@ -2412,7 +2429,7 @@ namespace CGPart2
             // buttonSierra
             // 
             this.buttonSierra.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonSierra.Location = new System.Drawing.Point(193, 142);
+            this.buttonSierra.Location = new System.Drawing.Point(193, 231);
             this.buttonSierra.Name = "buttonSierra";
             this.buttonSierra.Size = new System.Drawing.Size(212, 29);
             this.buttonSierra.TabIndex = 3;
@@ -2423,7 +2440,7 @@ namespace CGPart2
             // buttonStucky
             // 
             this.buttonStucky.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonStucky.Location = new System.Drawing.Point(193, 177);
+            this.buttonStucky.Location = new System.Drawing.Point(193, 266);
             this.buttonStucky.Name = "buttonStucky";
             this.buttonStucky.Size = new System.Drawing.Size(212, 29);
             this.buttonStucky.TabIndex = 2;
@@ -2434,7 +2451,7 @@ namespace CGPart2
             // buttonBurkes
             // 
             this.buttonBurkes.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonBurkes.Location = new System.Drawing.Point(193, 72);
+            this.buttonBurkes.Location = new System.Drawing.Point(193, 161);
             this.buttonBurkes.Name = "buttonBurkes";
             this.buttonBurkes.Size = new System.Drawing.Size(212, 29);
             this.buttonBurkes.TabIndex = 1;
@@ -2445,7 +2462,7 @@ namespace CGPart2
             // buttonFloydAndSteinberg
             // 
             this.buttonFloydAndSteinberg.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonFloydAndSteinberg.Location = new System.Drawing.Point(193, 107);
+            this.buttonFloydAndSteinberg.Location = new System.Drawing.Point(193, 196);
             this.buttonFloydAndSteinberg.Name = "buttonFloydAndSteinberg";
             this.buttonFloydAndSteinberg.Size = new System.Drawing.Size(212, 29);
             this.buttonFloydAndSteinberg.TabIndex = 0;
@@ -2518,6 +2535,112 @@ namespace CGPart2
             this.groupModified.TabIndex = 3;
             this.groupModified.TabStop = false;
             this.groupModified.Text = "Modified Picture";
+            // 
+            // labelDiffusionNumber
+            // 
+            this.labelDiffusionNumber.AutoSize = true;
+            this.labelDiffusionNumber.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelDiffusionNumber.Location = new System.Drawing.Point(53, 71);
+            this.labelDiffusionNumber.Name = "labelDiffusionNumber";
+            this.labelDiffusionNumber.Size = new System.Drawing.Size(77, 15);
+            this.labelDiffusionNumber.TabIndex = 5;
+            this.labelDiffusionNumber.Text = "No. of Colors";
+            // 
+            // labelDiffusionRed
+            // 
+            this.labelDiffusionRed.AutoSize = true;
+            this.labelDiffusionRed.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelDiffusionRed.Location = new System.Drawing.Point(145, 46);
+            this.labelDiffusionRed.Name = "labelDiffusionRed";
+            this.labelDiffusionRed.Size = new System.Drawing.Size(27, 15);
+            this.labelDiffusionRed.TabIndex = 6;
+            this.labelDiffusionRed.Text = "Red";
+            // 
+            // labelDiffusionGreen
+            // 
+            this.labelDiffusionGreen.AutoSize = true;
+            this.labelDiffusionGreen.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelDiffusionGreen.Location = new System.Drawing.Point(271, 46);
+            this.labelDiffusionGreen.Name = "labelDiffusionGreen";
+            this.labelDiffusionGreen.Size = new System.Drawing.Size(38, 15);
+            this.labelDiffusionGreen.TabIndex = 7;
+            this.labelDiffusionGreen.Text = "Green";
+            // 
+            // labelDiffusionBlue
+            // 
+            this.labelDiffusionBlue.AutoSize = true;
+            this.labelDiffusionBlue.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelDiffusionBlue.Location = new System.Drawing.Point(397, 46);
+            this.labelDiffusionBlue.Name = "labelDiffusionBlue";
+            this.labelDiffusionBlue.Size = new System.Drawing.Size(30, 15);
+            this.labelDiffusionBlue.TabIndex = 8;
+            this.labelDiffusionBlue.Text = "Blue";
+            // 
+            // numericUpDownDiffusionRed
+            // 
+            this.numericUpDownDiffusionRed.Location = new System.Drawing.Point(145, 64);
+            this.numericUpDownDiffusionRed.Maximum = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            this.numericUpDownDiffusionRed.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericUpDownDiffusionRed.Name = "numericUpDownDiffusionRed";
+            this.numericUpDownDiffusionRed.Size = new System.Drawing.Size(120, 29);
+            this.numericUpDownDiffusionRed.TabIndex = 9;
+            this.numericUpDownDiffusionRed.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            // 
+            // numericUpDownDiffusionGreen
+            // 
+            this.numericUpDownDiffusionGreen.Location = new System.Drawing.Point(271, 64);
+            this.numericUpDownDiffusionGreen.Maximum = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            this.numericUpDownDiffusionGreen.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericUpDownDiffusionGreen.Name = "numericUpDownDiffusionGreen";
+            this.numericUpDownDiffusionGreen.Size = new System.Drawing.Size(120, 29);
+            this.numericUpDownDiffusionGreen.TabIndex = 10;
+            this.numericUpDownDiffusionGreen.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            // 
+            // numericUpDownDiffusionBlue
+            // 
+            this.numericUpDownDiffusionBlue.Location = new System.Drawing.Point(397, 64);
+            this.numericUpDownDiffusionBlue.Maximum = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            this.numericUpDownDiffusionBlue.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericUpDownDiffusionBlue.Name = "numericUpDownDiffusionBlue";
+            this.numericUpDownDiffusionBlue.Size = new System.Drawing.Size(120, 29);
+            this.numericUpDownDiffusionBlue.TabIndex = 11;
+            this.numericUpDownDiffusionBlue.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
             // 
             // CGPart2
             // 
@@ -2631,9 +2754,13 @@ namespace CGPart2
             this.groupQuantization.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownQuantization)).EndInit();
             this.groupErrorDiffusion.ResumeLayout(false);
+            this.groupErrorDiffusion.PerformLayout();
             this.tabPart1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureModified)).EndInit();
             this.groupModified.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDiffusionRed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDiffusionGreen)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDiffusionBlue)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2771,13 +2898,20 @@ namespace CGPart2
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelColors;
         private System.Windows.Forms.Button buttonApplyQuantization;
         private System.Windows.Forms.NumericUpDown numericUpDownQuantization;
-        private System.Windows.Forms.Label labelQuantization;
+        private System.Windows.Forms.Label labelQuantizationNumber;
         private System.Windows.Forms.GroupBox groupErrorDiffusion;
         private System.Windows.Forms.Button buttonAtkinson;
         private System.Windows.Forms.Button buttonSierra;
         private System.Windows.Forms.Button buttonStucky;
         private System.Windows.Forms.Button buttonBurkes;
         private System.Windows.Forms.Button buttonFloydAndSteinberg;
+        private System.Windows.Forms.NumericUpDown numericUpDownDiffusionBlue;
+        private System.Windows.Forms.NumericUpDown numericUpDownDiffusionGreen;
+        private System.Windows.Forms.NumericUpDown numericUpDownDiffusionRed;
+        private System.Windows.Forms.Label labelDiffusionBlue;
+        private System.Windows.Forms.Label labelDiffusionGreen;
+        private System.Windows.Forms.Label labelDiffusionRed;
+        private System.Windows.Forms.Label labelDiffusionNumber;
     }
 }
 
