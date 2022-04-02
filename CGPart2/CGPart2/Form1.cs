@@ -505,14 +505,14 @@ namespace CGPart2
                     {
                         for (int j = 0; j < Variables.P_Width; j++)
                         {
-                            row[j] = 0xFF << 24 | (Variables.colorsSave[2, i, j] << 16) | (Variables.colorsSave[1, i, j] << 8) | Variables.colorsSave[0, i, j];
+                            row[j] = 0xFF << 24 | (Variables.colorsSave[0, i, j] << 16) | (Variables.colorsSave[1, i, j] << 8) | Variables.colorsSave[2, i, j];
                         }
                     }
                     else if (bmp.PixelFormat == PixelFormat.Format32bppRgb || bmp.PixelFormat == PixelFormat.Format24bppRgb)
                     {
                         for (int j = 0; j < Variables.P_Width; j++)
                         {
-                            row[j] = (Variables.colorsSave[2, i, j] << 16) | (Variables.colorsSave[1, i, j] << 8) | Variables.colorsSave[0, i, j];
+                            row[j] = (Variables.colorsSave[0, i, j] << 16) | (Variables.colorsSave[1, i, j] << 8) | Variables.colorsSave[2, i, j];
                         }
                     }
                 }
@@ -549,14 +549,14 @@ namespace CGPart2
                     {
                         for (int j = 0; j < Variables.P_Width; j++)
                         {
-                            row[j] = 0xFF << 24 | (Variables.colors[2, i, j] << 16) | (Variables.colors[1, i, j] << 8) | Variables.colors[0, i, j];
+                            row[j] = 0xFF << 24 | (Variables.colors[0, i, j] << 16) | (Variables.colors[1, i, j] << 8) | Variables.colors[2, i, j];
                         }
                     }
                     else if (bmp.PixelFormat == PixelFormat.Format32bppRgb || bmp.PixelFormat == PixelFormat.Format24bppRgb)
                     {
                         for (int j = 0; j < Variables.P_Width; j++)
                         {
-                            row[j] = (Variables.colors[2, i, j] << 16) | (Variables.colors[1, i, j] << 8) | Variables.colors[0, i, j];
+                            row[j] = (Variables.colors[0, i, j] << 16) | (Variables.colors[1, i, j] << 8) | Variables.colors[2, i, j];
                         }
                     }
                 }
@@ -587,9 +587,9 @@ namespace CGPart2
                         for (int j = 0; j < img.Width; j++)
                         {
                             conv = (uint)row[j];
-                            Variables.colorsSave[0, i, j] = (byte)(conv - ((conv >> 8) << 8)); conv >>= 8;
-                            Variables.colorsSave[1, i, j] = (byte)(conv - ((conv >> 8) << 8)); conv >>= 8;
                             Variables.colorsSave[2, i, j] = (byte)(conv - ((conv >> 8) << 8)); conv >>= 8;
+                            Variables.colorsSave[1, i, j] = (byte)(conv - ((conv >> 8) << 8)); conv >>= 8;
+                            Variables.colorsSave[0, i, j] = (byte)(conv - ((conv >> 8) << 8)); conv >>= 8;
                         }
                     }
                 }
@@ -724,8 +724,232 @@ namespace CGPart2
 
         // Part 2
 
+        public void quickSort(int[] cubeCount, int[] positions, int left, int right)
+        {
+            unsafe
+            {
+                int i = left;
+                int j = right;
+                int pivot = cubeCount[positions[(left + right) / 2]];
+                while (i < j)
+                {
+                    while (cubeCount[positions[i]] < pivot) i++;
+                    while (cubeCount[positions[j]] > pivot) j--;
+                    if (i <= j)
+                    {
+                        int tmp = positions[i];
+                        positions[i++] = positions[j];
+                        positions[j--] = tmp;
+                    }
+                }
+                if (left < j) quickSort(cubeCount, positions, left, j);
+                if (i < right) quickSort(cubeCount, positions, i, right);
+            }
+        }
+
+        public void reverseArray(int[] array)
+        {
+            unsafe
+            {
+                for (int i = 0; i < array.Length / 2; i++)
+                {
+                    int tmp = array[i];
+                    array[i] = array[array.Length - i - 1];
+                    array[array.Length - i - 1] = tmp;
+                }
+            }
+        }
+
+        public byte[,] countSmallCubes(int height, int width, int noCubes)
+        {
+            unsafe
+            {
+                int index;
+                int[] cubeCount = new int[512];
+                List<int>[] subcubeLists = new List<int>[512];
+                for (int i = 0; i < 512; i++)
+                    subcubeLists[i] = new List<int>();
+
+                for (int i = 0; i < height; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        index = ((Variables.colors[0, i, j] >> 5) << 6) 
+                            + ((Variables.colors[1, i, j] >> 5) << 3) 
+                            + (Variables.colors[2, i, j] >> 5);
+                        subcubeLists[index].Add(((Variables.colors[0, i, j] - ((Variables.colors[0, i, j] >> 5) << 5)) << 10)
+                            + ((Variables.colors[1, i, j] - ((Variables.colors[1, i, j] >> 5) << 5)) << 5)
+                            + (Variables.colors[2, i, j] - ((Variables.colors[2, i, j] >> 5) << 5)));
+                        cubeCount[index]++;
+                    }
+                }
+
+                int[] positions = new int[512];
+                for (int i = 0; i < 512; i++)
+                    positions[i] = i;
+
+                quickSort(cubeCount, positions, 0, 511);
+                reverseArray(positions);
+
+                int[,] colors = new int[3, noCubes];
+                int[] subpositions = new int[32768];
+                int maxOccurence;
+                for (int i = 0; i < noCubes; i++)
+                {
+                    maxOccurence = 16192;
+                    for (int k = 0; k < 32768; k++)
+                        subpositions[k] = 0;
+
+                    for (int j = 0; j < subcubeLists[positions[i]].Count; j++)
+                        subpositions[subcubeLists[positions[i]][j]]++;
+
+                    for (int k = 0; k < 32768; k++)
+                    {
+                        if (subpositions[k] > subpositions[maxOccurence])
+                            maxOccurence = k;
+                    }
+
+                    colors[0, i] = ((positions[i] >> 6) << 5) + (maxOccurence >> 10);
+                    colors[1, i] = (((positions[i] >> 3) % 8) << 5) + ((maxOccurence >> 5) % 32);
+                    colors[2, i] = ((positions[i] % 8) << 5) + (maxOccurence % 32);
+                }
+
+                byte[,] byteColors = new byte[3, noCubes];
+                for (int i = 0; i < noCubes; i++)
+                {
+                    byteColors[0, i] = (byte)colors[0, i];
+                    byteColors[1, i] = (byte)colors[1, i];
+                    byteColors[2, i] = (byte)colors[2, i];
+                }
+                return byteColors;
+            }
+        }
+
+        public byte[,] countBigCubes(int height, int width, int noCubes)
+        {
+            unsafe
+            {
+                int index;
+                int[] cubeCount = new int[64];
+                List<int>[] subcubeLists = new List<int>[64];
+                for (int i = 0; i < 64; i++)
+                    subcubeLists[i] = new List<int>();
+
+                for (int i = 0; i < height; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        index = ((Variables.colors[0, i, j] >> 6) << 4)
+                            + ((Variables.colors[1, i, j] >> 6) << 2) 
+                            + (Variables.colors[2, i, j] >> 6);
+                        subcubeLists[index].Add(((Variables.colors[0, i, j] - ((Variables.colors[0, i, j] >> 6) << 6)) << 12)
+                            + ((Variables.colors[1, i, j] - ((Variables.colors[1, i, j] >> 6) << 6)) << 6)
+                            + (Variables.colors[2, i, j] - ((Variables.colors[2, i, j] >> 6) << 6)));
+                        cubeCount[index]++;
+                    }
+                }
+
+                int[] positions = new int[64];
+                for (int i = 0; i < 64; i++)
+                    positions[i] = i;
+
+                quickSort(cubeCount, positions, 0, 63);
+                reverseArray(positions);
+
+                int[,] colors = new int[3, noCubes];
+                int[] subpositions = new int[262144];
+                int maxOccurence;
+                for (int i = 0; i < noCubes; i++)
+                {
+                    maxOccurence = 133152;
+                    for (int k = 0; k < 262144; k++)
+                        subpositions[k] = 0;
+
+                    for (int j = 0; j < subcubeLists[positions[i]].Count; j++)
+                        subpositions[subcubeLists[positions[i]][j]]++;
+
+                    for (int k = 0; k < 262144; k++)
+                    {
+                        if (subpositions[k] > subpositions[maxOccurence])
+                            maxOccurence = k;
+                    }
+
+                    colors[0, i] = ((positions[i] >> 4) << 6) + (maxOccurence >> 12);
+                    colors[1, i] = (((positions[i] >> 2) % 4) << 6) + ((maxOccurence >> 6) % 64);
+                    colors[2, i] = ((positions[i] % 4) << 6) + (maxOccurence % 64);
+                }
+
+                byte[,] byteColors = new byte[3, noCubes];
+                for (int i = 0; i < noCubes; i++)
+                {
+                    byteColors[0, i] = (byte)colors[0, i];
+                    byteColors[1, i] = (byte)colors[1, i];
+                    byteColors[2, i] = (byte)colors[2, i];
+                }
+                return byteColors;
+            }
+        }
+
+        public void quantizeColors(int height, int width, int noCubes)
+        {
+            unsafe
+            {
+                byte[,] colors;
+                if (noCubes <= 32)
+                    colors = countBigCubes(height, width, noCubes);
+                else 
+                    colors = countSmallCubes(height, width, noCubes);
+
+                listViewColors.BeginUpdate();
+                listViewColors.Items.Clear();
+                for (int i = 0; i < colors.Length / 3; i++)
+                {
+                    ListViewItem item = new ListViewItem();
+                    item.BackColor = Color.FromArgb(colors[0, i], colors[1, i], colors[2, i]);
+                    item.Text = "⠀⠀⠀⠀⠀";
+                    listViewColors.Items.Add(item);
+                }
+                listViewColors.EndUpdate();
+
+                int errorMinPosition, errorMinValue, errorValue;
+                for (int i = 0; i < height; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        errorMinPosition = 0;
+                        errorMinValue = 2147483647;
+                        for (int k = 0; k < noCubes; k++)
+                        {
+                            errorValue = 0;
+                            if (Variables.colors[0, i, j] > colors[0, k])                 // alternative - squared distances from the Manhattan norm
+                                errorValue += (Variables.colors[0, i, j] - colors[0, k]); // * (Variables.colors[0, i, j] - colors[0, k]);
+                            else
+                                errorValue += (colors[0, k] - Variables.colors[0, i, j]); // * (colors[0, k] - Variables.colors[0, i, j]);
+                            if (Variables.colors[1, i, j] > colors[1, k])
+                                errorValue += (Variables.colors[1, i, j] - colors[1, k]); // * (Variables.colors[1, i, j] - colors[1, k]);
+                            else
+                                errorValue += (colors[1, k] - Variables.colors[1, i, j]); // * (colors[1, k] - Variables.colors[1, i, j]);
+                            if (Variables.colors[2, i, j] > colors[2, k])
+                                errorValue += (Variables.colors[2, i, j] - colors[2, k]); // * (Variables.colors[2, i, j] - colors[2, k]);
+                            else
+                                errorValue += (colors[2, k] - Variables.colors[2, i, j]); // * (colors[2, k] - Variables.colors[2, i, j]);
+                
+                            if (errorValue < errorMinValue)
+                            {
+                                errorMinPosition = k;
+                                errorMinValue = errorValue;
+                            }
+                        }
+                        Variables.colors[0, i, j] = colors[0, errorMinPosition];
+                        Variables.colors[1, i, j] = colors[1, errorMinPosition];
+                        Variables.colors[2, i, j] = colors[2, errorMinPosition];
+                    }
+                }
+            }
+        }
+
         public void errorDiffusionFn(int height, int width, int[,] kernel, int kHeight, int kWidth, int aRow, int aColumn, int customWeight)
-        {                                                                // kHeight - kernel height, aRow - anchor's row
+        {                                                                   // kHeight - kernel height, aRow - anchor's row
             unsafe
             {
                 int[,,] colorsCopy = new int[3, height, width];
@@ -754,13 +978,13 @@ namespace CGPart2
                                 colorsCopy[0, i, j] += Variables.colors[0, i + ki - aRow + 1, j + kj - aColumn + 1] * kernel[ki, kj];
                                 colorsCopy[1, i, j] += Variables.colors[1, i + ki - aRow + 1, j + kj - aColumn + 1] * kernel[ki, kj];
                                 colorsCopy[2, i, j] += Variables.colors[2, i + ki - aRow + 1, j + kj - aColumn + 1] * kernel[ki, kj];
-                                weight += kernel[ki, kj];
+                                //weight += kernel[ki, kj];
                             }
                         }
-                        if (weight == 0) weight = 1;
-                        colorsCopy[0, i, j] = colorsCopy[0, i, j] / weight;
-                        colorsCopy[1, i, j] = colorsCopy[1, i, j] / weight;
-                        colorsCopy[2, i, j] = colorsCopy[2, i, j] / weight;
+                        //if (weight == 0) weight = 1;
+                        //colorsCopy[0, i, j] = colorsCopy[0, i, j] / weight;
+                        //colorsCopy[1, i, j] = colorsCopy[1, i, j] / weight;
+                        //colorsCopy[2, i, j] = colorsCopy[2, i, j] / weight;
                     }
                 }
                 
@@ -874,7 +1098,12 @@ namespace CGPart2
 
         private void buttonApplyQuantization_Click(object sender, EventArgs e)
         {
-
+            lockFn();
+            quantizeColors(Variables.P_Height, Variables.P_Width, (int)numericUpDownQuantization.Value);
+            Variables.bitmap.Dispose();
+            loadModification();
+            pictureModified.Image = Variables.bitmap;
+            unlockFn();
         }
 
     }
@@ -882,10 +1111,10 @@ namespace CGPart2
     static class Variables
     {
         // Part 1 variables
-        public static byte BC_Constant = 5;             // brightness correction constant (>=1)
-        public static double GCDown_Constant = 1.05;    // decoding gamma correction contrast (>1.0)
-        public static double GCUp_Constant = 0.95;      // encoding gamma correction contrast (<1.0)
-        public static double CE_Constant = 1.1;         // contrast enhancement slope (>1.0)
+        public static byte BC_Constant = 5;             // brightness correction constant (>= 1)
+        public static double GCDown_Constant = 1.05;    // decoding gamma correction contrast (> 1.0)
+        public static double GCUp_Constant = 0.95;      // encoding gamma correction contrast (< 1.0)
+        public static double CE_Constant = 1.1;         // contrast enhancement slope (> 1.0)
         public static int P_Height;                     // picture height
         public static int P_Width;                      // picture width
         public static byte[,,] colors;

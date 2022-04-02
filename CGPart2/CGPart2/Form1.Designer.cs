@@ -150,12 +150,19 @@ namespace CGPart2
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPart2 = new System.Windows.Forms.TabPage();
             this.groupQuantization = new System.Windows.Forms.GroupBox();
+            this.listViewColors = new System.Windows.Forms.ListView();
             this.labelChosenColors = new System.Windows.Forms.Label();
-            this.flowLayoutPanelColors = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonApplyQuantization = new System.Windows.Forms.Button();
             this.numericUpDownQuantization = new System.Windows.Forms.NumericUpDown();
             this.labelQuantizationNumber = new System.Windows.Forms.Label();
             this.groupErrorDiffusion = new System.Windows.Forms.GroupBox();
+            this.numericUpDownDiffusionBlue = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownDiffusionGreen = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownDiffusionRed = new System.Windows.Forms.NumericUpDown();
+            this.labelDiffusionBlue = new System.Windows.Forms.Label();
+            this.labelDiffusionGreen = new System.Windows.Forms.Label();
+            this.labelDiffusionRed = new System.Windows.Forms.Label();
+            this.labelDiffusionNumber = new System.Windows.Forms.Label();
             this.buttonAtkinson = new System.Windows.Forms.Button();
             this.buttonSierra = new System.Windows.Forms.Button();
             this.buttonStucky = new System.Windows.Forms.Button();
@@ -167,13 +174,6 @@ namespace CGPart2
             this.pictureModified = new System.Windows.Forms.PictureBox();
             this.buttonSave = new System.Windows.Forms.Button();
             this.groupModified = new System.Windows.Forms.GroupBox();
-            this.labelDiffusionNumber = new System.Windows.Forms.Label();
-            this.labelDiffusionRed = new System.Windows.Forms.Label();
-            this.labelDiffusionGreen = new System.Windows.Forms.Label();
-            this.labelDiffusionBlue = new System.Windows.Forms.Label();
-            this.numericUpDownDiffusionRed = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDownDiffusionGreen = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDownDiffusionBlue = new System.Windows.Forms.NumericUpDown();
             this.groupFilters.SuspendLayout();
             this.groupConvolution.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
@@ -271,12 +271,12 @@ namespace CGPart2
             this.groupQuantization.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownQuantization)).BeginInit();
             this.groupErrorDiffusion.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDiffusionBlue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDiffusionGreen)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDiffusionRed)).BeginInit();
             this.tabPart1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureModified)).BeginInit();
             this.groupModified.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDiffusionRed)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDiffusionGreen)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDiffusionBlue)).BeginInit();
             this.SuspendLayout();
             // 
             // groupFilters
@@ -2337,8 +2337,8 @@ namespace CGPart2
             // 
             // groupQuantization
             // 
+            this.groupQuantization.Controls.Add(this.listViewColors);
             this.groupQuantization.Controls.Add(this.labelChosenColors);
-            this.groupQuantization.Controls.Add(this.flowLayoutPanelColors);
             this.groupQuantization.Controls.Add(this.buttonApplyQuantization);
             this.groupQuantization.Controls.Add(this.numericUpDownQuantization);
             this.groupQuantization.Controls.Add(this.labelQuantizationNumber);
@@ -2349,23 +2349,26 @@ namespace CGPart2
             this.groupQuantization.TabStop = false;
             this.groupQuantization.Text = "\'Popularity Algorithm\' Color Quantization";
             // 
+            // listViewColors
+            // 
+            this.listViewColors.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.listViewColors.HideSelection = false;
+            this.listViewColors.Location = new System.Drawing.Point(15, 127);
+            this.listViewColors.MultiSelect = false;
+            this.listViewColors.Name = "listViewColors";
+            this.listViewColors.Size = new System.Drawing.Size(570, 432);
+            this.listViewColors.TabIndex = 20;
+            this.listViewColors.UseCompatibleStateImageBehavior = false;
+            // 
             // labelChosenColors
             // 
             this.labelChosenColors.AutoSize = true;
             this.labelChosenColors.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelChosenColors.Location = new System.Drawing.Point(7, 105);
+            this.labelChosenColors.Location = new System.Drawing.Point(15, 109);
             this.labelChosenColors.Name = "labelChosenColors";
             this.labelChosenColors.Size = new System.Drawing.Size(84, 15);
             this.labelChosenColors.TabIndex = 19;
             this.labelChosenColors.Text = "Chosen Colors";
-            // 
-            // flowLayoutPanelColors
-            // 
-            this.flowLayoutPanelColors.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.flowLayoutPanelColors.Location = new System.Drawing.Point(7, 123);
-            this.flowLayoutPanelColors.Name = "flowLayoutPanelColors";
-            this.flowLayoutPanelColors.Size = new System.Drawing.Size(586, 444);
-            this.flowLayoutPanelColors.TabIndex = 18;
             // 
             // buttonApplyQuantization
             // 
@@ -2380,9 +2383,24 @@ namespace CGPart2
             // numericUpDownQuantization
             // 
             this.numericUpDownQuantization.Location = new System.Drawing.Point(193, 52);
+            this.numericUpDownQuantization.Maximum = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            this.numericUpDownQuantization.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
             this.numericUpDownQuantization.Name = "numericUpDownQuantization";
             this.numericUpDownQuantization.Size = new System.Drawing.Size(120, 29);
             this.numericUpDownQuantization.TabIndex = 17;
+            this.numericUpDownQuantization.Value = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
             // 
             // labelQuantizationNumber
             // 
@@ -2414,6 +2432,112 @@ namespace CGPart2
             this.groupErrorDiffusion.TabIndex = 0;
             this.groupErrorDiffusion.TabStop = false;
             this.groupErrorDiffusion.Text = "Error Diffusion Filters";
+            // 
+            // numericUpDownDiffusionBlue
+            // 
+            this.numericUpDownDiffusionBlue.Location = new System.Drawing.Point(397, 64);
+            this.numericUpDownDiffusionBlue.Maximum = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            this.numericUpDownDiffusionBlue.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericUpDownDiffusionBlue.Name = "numericUpDownDiffusionBlue";
+            this.numericUpDownDiffusionBlue.Size = new System.Drawing.Size(120, 29);
+            this.numericUpDownDiffusionBlue.TabIndex = 11;
+            this.numericUpDownDiffusionBlue.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            // 
+            // numericUpDownDiffusionGreen
+            // 
+            this.numericUpDownDiffusionGreen.Location = new System.Drawing.Point(271, 64);
+            this.numericUpDownDiffusionGreen.Maximum = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            this.numericUpDownDiffusionGreen.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericUpDownDiffusionGreen.Name = "numericUpDownDiffusionGreen";
+            this.numericUpDownDiffusionGreen.Size = new System.Drawing.Size(120, 29);
+            this.numericUpDownDiffusionGreen.TabIndex = 10;
+            this.numericUpDownDiffusionGreen.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            // 
+            // numericUpDownDiffusionRed
+            // 
+            this.numericUpDownDiffusionRed.Location = new System.Drawing.Point(145, 64);
+            this.numericUpDownDiffusionRed.Maximum = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            this.numericUpDownDiffusionRed.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericUpDownDiffusionRed.Name = "numericUpDownDiffusionRed";
+            this.numericUpDownDiffusionRed.Size = new System.Drawing.Size(120, 29);
+            this.numericUpDownDiffusionRed.TabIndex = 9;
+            this.numericUpDownDiffusionRed.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            // 
+            // labelDiffusionBlue
+            // 
+            this.labelDiffusionBlue.AutoSize = true;
+            this.labelDiffusionBlue.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelDiffusionBlue.Location = new System.Drawing.Point(397, 46);
+            this.labelDiffusionBlue.Name = "labelDiffusionBlue";
+            this.labelDiffusionBlue.Size = new System.Drawing.Size(30, 15);
+            this.labelDiffusionBlue.TabIndex = 8;
+            this.labelDiffusionBlue.Text = "Blue";
+            // 
+            // labelDiffusionGreen
+            // 
+            this.labelDiffusionGreen.AutoSize = true;
+            this.labelDiffusionGreen.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelDiffusionGreen.Location = new System.Drawing.Point(271, 46);
+            this.labelDiffusionGreen.Name = "labelDiffusionGreen";
+            this.labelDiffusionGreen.Size = new System.Drawing.Size(38, 15);
+            this.labelDiffusionGreen.TabIndex = 7;
+            this.labelDiffusionGreen.Text = "Green";
+            // 
+            // labelDiffusionRed
+            // 
+            this.labelDiffusionRed.AutoSize = true;
+            this.labelDiffusionRed.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelDiffusionRed.Location = new System.Drawing.Point(145, 46);
+            this.labelDiffusionRed.Name = "labelDiffusionRed";
+            this.labelDiffusionRed.Size = new System.Drawing.Size(27, 15);
+            this.labelDiffusionRed.TabIndex = 6;
+            this.labelDiffusionRed.Text = "Red";
+            // 
+            // labelDiffusionNumber
+            // 
+            this.labelDiffusionNumber.AutoSize = true;
+            this.labelDiffusionNumber.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelDiffusionNumber.Location = new System.Drawing.Point(53, 71);
+            this.labelDiffusionNumber.Name = "labelDiffusionNumber";
+            this.labelDiffusionNumber.Size = new System.Drawing.Size(77, 15);
+            this.labelDiffusionNumber.TabIndex = 5;
+            this.labelDiffusionNumber.Text = "No. of Colors";
             // 
             // buttonAtkinson
             // 
@@ -2536,112 +2660,6 @@ namespace CGPart2
             this.groupModified.TabStop = false;
             this.groupModified.Text = "Modified Picture";
             // 
-            // labelDiffusionNumber
-            // 
-            this.labelDiffusionNumber.AutoSize = true;
-            this.labelDiffusionNumber.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelDiffusionNumber.Location = new System.Drawing.Point(53, 71);
-            this.labelDiffusionNumber.Name = "labelDiffusionNumber";
-            this.labelDiffusionNumber.Size = new System.Drawing.Size(77, 15);
-            this.labelDiffusionNumber.TabIndex = 5;
-            this.labelDiffusionNumber.Text = "No. of Colors";
-            // 
-            // labelDiffusionRed
-            // 
-            this.labelDiffusionRed.AutoSize = true;
-            this.labelDiffusionRed.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelDiffusionRed.Location = new System.Drawing.Point(145, 46);
-            this.labelDiffusionRed.Name = "labelDiffusionRed";
-            this.labelDiffusionRed.Size = new System.Drawing.Size(27, 15);
-            this.labelDiffusionRed.TabIndex = 6;
-            this.labelDiffusionRed.Text = "Red";
-            // 
-            // labelDiffusionGreen
-            // 
-            this.labelDiffusionGreen.AutoSize = true;
-            this.labelDiffusionGreen.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelDiffusionGreen.Location = new System.Drawing.Point(271, 46);
-            this.labelDiffusionGreen.Name = "labelDiffusionGreen";
-            this.labelDiffusionGreen.Size = new System.Drawing.Size(38, 15);
-            this.labelDiffusionGreen.TabIndex = 7;
-            this.labelDiffusionGreen.Text = "Green";
-            // 
-            // labelDiffusionBlue
-            // 
-            this.labelDiffusionBlue.AutoSize = true;
-            this.labelDiffusionBlue.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelDiffusionBlue.Location = new System.Drawing.Point(397, 46);
-            this.labelDiffusionBlue.Name = "labelDiffusionBlue";
-            this.labelDiffusionBlue.Size = new System.Drawing.Size(30, 15);
-            this.labelDiffusionBlue.TabIndex = 8;
-            this.labelDiffusionBlue.Text = "Blue";
-            // 
-            // numericUpDownDiffusionRed
-            // 
-            this.numericUpDownDiffusionRed.Location = new System.Drawing.Point(145, 64);
-            this.numericUpDownDiffusionRed.Maximum = new decimal(new int[] {
-            256,
-            0,
-            0,
-            0});
-            this.numericUpDownDiffusionRed.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.numericUpDownDiffusionRed.Name = "numericUpDownDiffusionRed";
-            this.numericUpDownDiffusionRed.Size = new System.Drawing.Size(120, 29);
-            this.numericUpDownDiffusionRed.TabIndex = 9;
-            this.numericUpDownDiffusionRed.Value = new decimal(new int[] {
-            8,
-            0,
-            0,
-            0});
-            // 
-            // numericUpDownDiffusionGreen
-            // 
-            this.numericUpDownDiffusionGreen.Location = new System.Drawing.Point(271, 64);
-            this.numericUpDownDiffusionGreen.Maximum = new decimal(new int[] {
-            256,
-            0,
-            0,
-            0});
-            this.numericUpDownDiffusionGreen.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.numericUpDownDiffusionGreen.Name = "numericUpDownDiffusionGreen";
-            this.numericUpDownDiffusionGreen.Size = new System.Drawing.Size(120, 29);
-            this.numericUpDownDiffusionGreen.TabIndex = 10;
-            this.numericUpDownDiffusionGreen.Value = new decimal(new int[] {
-            8,
-            0,
-            0,
-            0});
-            // 
-            // numericUpDownDiffusionBlue
-            // 
-            this.numericUpDownDiffusionBlue.Location = new System.Drawing.Point(397, 64);
-            this.numericUpDownDiffusionBlue.Maximum = new decimal(new int[] {
-            256,
-            0,
-            0,
-            0});
-            this.numericUpDownDiffusionBlue.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.numericUpDownDiffusionBlue.Name = "numericUpDownDiffusionBlue";
-            this.numericUpDownDiffusionBlue.Size = new System.Drawing.Size(120, 29);
-            this.numericUpDownDiffusionBlue.TabIndex = 11;
-            this.numericUpDownDiffusionBlue.Value = new decimal(new int[] {
-            8,
-            0,
-            0,
-            0});
-            // 
             // CGPart2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -2755,12 +2773,12 @@ namespace CGPart2
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownQuantization)).EndInit();
             this.groupErrorDiffusion.ResumeLayout(false);
             this.groupErrorDiffusion.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDiffusionBlue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDiffusionGreen)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDiffusionRed)).EndInit();
             this.tabPart1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureModified)).EndInit();
             this.groupModified.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDiffusionRed)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDiffusionGreen)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDiffusionBlue)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2895,7 +2913,6 @@ namespace CGPart2
         private System.Windows.Forms.GroupBox groupModified;
         private System.Windows.Forms.GroupBox groupQuantization;
         private System.Windows.Forms.Label labelChosenColors;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelColors;
         private System.Windows.Forms.Button buttonApplyQuantization;
         private System.Windows.Forms.NumericUpDown numericUpDownQuantization;
         private System.Windows.Forms.Label labelQuantizationNumber;
@@ -2912,6 +2929,7 @@ namespace CGPart2
         private System.Windows.Forms.Label labelDiffusionGreen;
         private System.Windows.Forms.Label labelDiffusionRed;
         private System.Windows.Forms.Label labelDiffusionNumber;
+        private System.Windows.Forms.ListView listViewColors;
     }
 }
 
