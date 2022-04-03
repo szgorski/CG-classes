@@ -49,6 +49,13 @@ namespace CGPart2
             buttonInvert.Enabled = false;
             buttonMedianFilter.Enabled = false;
             buttonApplyConvolution.Enabled = false;
+            buttonAtkinson.Enabled = false;
+            buttonBurkes.Enabled = false;
+            buttonFloydAndSteinberg.Enabled = false;
+            buttonSierra.Enabled = false;
+            buttonStucky.Enabled = false;
+            buttonApplyQuantization.Enabled = false;
+            buttonGreyscale.Enabled = false;
             numericAnchorColumn.Enabled = false;
             numericAnchorRow.Enabled = false;
             numericSizeColumns.Enabled = false;
@@ -73,6 +80,13 @@ namespace CGPart2
             buttonInvert.Enabled = true;
             buttonMedianFilter.Enabled = true;
             buttonApplyConvolution.Enabled = true;
+            buttonAtkinson.Enabled = true;
+            buttonBurkes.Enabled = true;
+            buttonFloydAndSteinberg.Enabled = true;
+            buttonSierra.Enabled = true;
+            buttonStucky.Enabled = true;
+            buttonApplyQuantization.Enabled = true;
+            buttonGreyscale.Enabled = true;
             numericAnchorColumn.Enabled = true;
             numericAnchorRow.Enabled = true;
             numericSizeColumns.Enabled = true;
@@ -255,7 +269,8 @@ namespace CGPart2
             correctGammaDown(Variables.P_Height, Variables.P_Width);
         }
 
-        public void convolutionFn(int height, int width, int[,] kernel, int kHeight, int kWidth, int aRow, int aColumn, int customWeight, int offset)
+        public void convolutionFn(int height, int width, int[,] kernel, 
+            int kHeight, int kWidth, int aRow, int aColumn, int customWeight, int offset)
         {                                                                // kHeight - kernel height, aRow - anchor's row
             unsafe
             {
@@ -321,6 +336,7 @@ namespace CGPart2
             }
         }
 
+        // might be merged into one function
         public void blur()
         {
             int[,] kernel = new int[3, 3]
@@ -565,7 +581,7 @@ namespace CGPart2
             Variables.bitmap = bmp;
         }
 
-        private void buttonLoad_Click(object sender, EventArgs e)
+        public void loadPicture()
         {
             if (openPicture.ShowDialog() == DialogResult.OK)
             {
@@ -608,7 +624,7 @@ namespace CGPart2
             }
         }
 
-        private void buttonReset_Click(object sender, EventArgs e)
+        public void resetBitmap()
         {
             lockFn();
             Variables.bitmap.Dispose();
@@ -617,7 +633,7 @@ namespace CGPart2
             unlockFn();
         }
 
-        private void buttonSave_Click(object sender, EventArgs e)
+        public void saveBitmap()
         {
             if (savePicture.ShowDialog() == DialogResult.OK)
             {
@@ -625,6 +641,21 @@ namespace CGPart2
                 pictureModified.Image.Save(savePicture.FileName);
                 unlockFn();
             }
+        }
+
+        private void buttonLoad_Click(object sender, EventArgs e)
+        {
+            loadPicture();
+        }
+
+        private void buttonReset_Click(object sender, EventArgs e)
+        {
+            resetBitmap();
+        }
+
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            saveBitmap();
         }
 
         public void setKernel()
@@ -699,7 +730,7 @@ namespace CGPart2
             else numericUpDownDivisor.Enabled = true;
         }
 
-        private void buttonApplyConvolution_Click(object sender, EventArgs e)
+        public void applyConvolution(int height, int width, int kHeight, int kWidth, int aRow, int aColumn, int customWeight, int offset)
         {
             lockFn();
             setKernel();
@@ -714,12 +745,17 @@ namespace CGPart2
                 }
             }
 
-            convolutionFn(Variables.P_Height, Variables.P_Width, copyKernel, (int)numericSizeRows.Value, (int)numericSizeColumns.Value,
-                (int)numericAnchorRow.Value, (int)numericAnchorColumn.Value, (int)numericUpDownDivisor.Value, (int)numericUpDownOffset.Value);
+            convolutionFn(height, width, copyKernel, kHeight, kWidth, aRow, aColumn, customWeight, offset);
             Variables.bitmap.Dispose();
             loadModification();
             pictureModified.Image = Variables.bitmap;
             unlockFn();
+        }
+
+        private void buttonApplyConvolution_Click(object sender, EventArgs e)
+        {
+            applyConvolution(Variables.P_Height, Variables.P_Width, (int)numericSizeRows.Value, (int)numericSizeColumns.Value,
+                (int)numericAnchorRow.Value, (int)numericAnchorColumn.Value, (int)numericUpDownDivisor.Value, (int)numericUpDownOffset.Value);
         }
 
         // Part 2
@@ -948,11 +984,36 @@ namespace CGPart2
             }
         }
 
-        public void errorDiffusionFn(int height, int width, int[,] kernel, int kHeight, int kWidth, int aRow, int aColumn, int customWeight)
-        {                                                                   // kHeight - kernel height, aRow - anchor's row
+        public void applyQuantization(int height, int width, int noCubes)
+        {
+            lockFn();
+            quantizeColors(height, width, noCubes);
+            Variables.bitmap.Dispose();
+            loadModification();
+            pictureModified.Image = Variables.bitmap;
+            unlockFn();
+        }
+
+        private void buttonApplyQuantization_Click(object sender, EventArgs e)
+        {
+            applyQuantization(Variables.P_Height, Variables.P_Width, (int)numericUpDownQuantization.Value);
+        }
+
+        public int fastRound(float number)
+        {
+            int floor = (int)number;
+            if (number - floor > 0.5)
+                return floor;
+            else 
+                return floor + 1;
+        }
+
+        public void errorDiffusionFn(int height, int width, float[,] kernel, int kHeight, int kWidth, 
+            int aRow, int aColumn, int noRed, int noGreen, int noBlue)        // kHeight - kernel height
+        {    // aRow - anchor's row                                                                
             unsafe
             {
-                int[,,] colorsCopy = new int[3, height, width];
+                float[,,] colorsCopy = new float[3, height, width];
                 for (int i = 0; i < height; i++)
                 {
                     for (int j = 0; j < width; j++)
@@ -963,28 +1024,39 @@ namespace CGPart2
                     }
                 }
 
-                int error;
+                float[] approximation = new float[3];
+                float[] error = new float[3];
+                float[] errorBase = new float[3] { 256F / (noRed - 1), 256F / (noGreen - 1), 256F / (noBlue - 1) };
                 for (int i = 0; i < height; i++)
                 {
                     for (int j = 0; j < width; j++)
                     {
-                        error = 0;
+                        // quantization
+                        approximation[0] = errorBase[0] * fastRound(colorsCopy[0, i, j] / errorBase[0]);
+                        approximation[1] = errorBase[1] * fastRound(colorsCopy[1, i, j] / errorBase[1]);
+                        approximation[2] = errorBase[2] * fastRound(colorsCopy[2, i, j] / errorBase[2]);
 
-                        
-                        for (int ki = fastMax(0, aRow - 1 - i); ki < fastMin(kHeight, height - i + aRow - 1); ki++)
-                        {
-                            for (int kj = fastMax(0, aColumn - 1 - j); kj < fastMin(kWidth, width - j + aColumn - 1); kj++)
+                        error[0] = colorsCopy[0, i, j] - approximation[0];
+                        error[1] = colorsCopy[1, i, j] - approximation[1];
+                        error[2] = colorsCopy[2, i, j] - approximation[2];
+
+                        colorsCopy[0, i, j] = approximation[0];
+                        colorsCopy[1, i, j] = approximation[1];
+                        colorsCopy[2, i, j] = approximation[2];
+
+                        // adding error
+                        for (int ki = 0; ki < fastMin(height - i, kHeight - aRow + 1); ki++)
+                        {     // assuming non-zero values olny after the anchor
+                            for (int kj = fastMax(1 - aColumn, - j); kj < fastMin(kWidth - aColumn + 1, width - j); kj++)
                             {
-                                colorsCopy[0, i, j] += Variables.colors[0, i + ki - aRow + 1, j + kj - aColumn + 1] * kernel[ki, kj];
-                                colorsCopy[1, i, j] += Variables.colors[1, i + ki - aRow + 1, j + kj - aColumn + 1] * kernel[ki, kj];
-                                colorsCopy[2, i, j] += Variables.colors[2, i + ki - aRow + 1, j + kj - aColumn + 1] * kernel[ki, kj];
-                                //weight += kernel[ki, kj];
+                                if (kernel[aRow + ki - 1, aColumn + kj - 1] != 0) // assuming no rounding error 
+                                {                                                 // (in future modifications)
+                                    colorsCopy[0, i + ki, j + kj] += error[0] * kernel[aRow + ki - 1, aColumn + kj - 1];
+                                    colorsCopy[1, i + ki, j + kj] += error[1] * kernel[aRow + ki - 1, aColumn + kj - 1];
+                                    colorsCopy[2, i + ki, j + kj] += error[2] * kernel[aRow + ki - 1, aColumn + kj - 1];
+                                }
                             }
                         }
-                        //if (weight == 0) weight = 1;
-                        //colorsCopy[0, i, j] = colorsCopy[0, i, j] / weight;
-                        //colorsCopy[1, i, j] = colorsCopy[1, i, j] / weight;
-                        //colorsCopy[2, i, j] = colorsCopy[2, i, j] / weight;
                     }
                 }
                 
@@ -992,28 +1064,29 @@ namespace CGPart2
                 {
                     for (int j = 0; j < width; j++)
                     {
-                        Variables.colors[0, i, j] = (byte)fastMin(255, fastMax(0, colorsCopy[0, i, j]));
-                        Variables.colors[1, i, j] = (byte)fastMin(255, fastMax(0, colorsCopy[1, i, j]));
-                        Variables.colors[2, i, j] = (byte)fastMin(255, fastMax(0, colorsCopy[2, i, j]));
+                        Variables.colors[0, i, j] = (byte)fastMin(255, fastMax(0, fastRound(colorsCopy[0, i, j])));
+                        Variables.colors[1, i, j] = (byte)fastMin(255, fastMax(0, fastRound(colorsCopy[1, i, j])));
+                        Variables.colors[2, i, j] = (byte)fastMin(255, fastMax(0, fastRound(colorsCopy[2, i, j])));
                     }
                 }
             }
         }
 
+        // might be merged into one function
         private void buttonAtkinson_Click(object sender, EventArgs e)
         {
-            int[,] kernel = new int[5, 5]
+            float[,] kernel = new float[5, 5]
             {
                     {0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0},
-                    {0, 0, 0, 1, 1},
-                    {0, 1, 1, 1, 0},
-                    {0, 0, 1, 0, 0}
+                    {0, 0, 0, 0.125F, 0.125F},
+                    {0, 0.125F, 0.125F, 0.125F, 0},
+                    {0, 0, 0.125F, 0, 0}
             };
 
             lockFn();
-            //convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0, 0);
-
+            errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 5, 5, 3, 3, (int)numericUpDownDiffusionRed.Value, 
+                (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
             Variables.bitmap.Dispose();
             loadModification();
             pictureModified.Image = Variables.bitmap;
@@ -1022,16 +1095,16 @@ namespace CGPart2
 
         private void buttonBurkes_Click(object sender, EventArgs e)
         {
-            int[,] kernel = new int[3, 5]
+            float[,] kernel = new float[3, 5]
             {
                     {0, 0, 0, 0, 0},
-                    {0, 0, 0, 8, 4},
-                    {2, 4, 8, 4, 2}
+                    {0, 0, 0, 0.25F, 0.125F},
+                    {0.0625F, 0.125F, 0.25F, 0.125F, 0.0625F}
             };
 
             lockFn();
-            //convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0, 0);
-
+            errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 5, 2, 3, (int)numericUpDownDiffusionRed.Value,
+                (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
             Variables.bitmap.Dispose();
             loadModification();
             pictureModified.Image = Variables.bitmap;
@@ -1040,16 +1113,16 @@ namespace CGPart2
 
         private void buttonFloydAndSteinberg_Click(object sender, EventArgs e)
         {
-            int[,] kernel = new int[3, 3]
+            float[,] kernel = new float[3, 3]
             {
                     {0, 0, 0},
-                    {0, 0, 7},
-                    {3, 5, 1}
+                    {0, 0, 0.4375F},
+                    {0.1875F, 0.3125F, 0.0625F}
             };
 
             lockFn();
-            //convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0, 0);
-
+            errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, (int)numericUpDownDiffusionRed.Value,
+                (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
             Variables.bitmap.Dispose();
             loadModification();
             pictureModified.Image = Variables.bitmap;
@@ -1058,18 +1131,18 @@ namespace CGPart2
 
         private void buttonSierra_Click(object sender, EventArgs e)
         {
-            int[,] kernel = new int[5, 5]
+            float[,] kernel = new float[5, 5]
             {
                     {0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0},
-                    {0, 0, 0, 5, 3},
-                    {2, 4, 5, 4, 2},
-                    {0, 2, 3, 2, 0}
+                    {0, 0, 0, 0.15625F, 0.09375F},
+                    {0.0625F, 0.125F, 0.15625F, 0.125F, 0.0625F},
+                    {0, 0.0625F, 0.09375F, 0.0625F, 0}
             };
 
             lockFn();
-            //convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0, 0);
-
+            errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 5, 5, 3, 3, (int)numericUpDownDiffusionRed.Value,
+                (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
             Variables.bitmap.Dispose();
             loadModification();
             pictureModified.Image = Variables.bitmap;
@@ -1078,34 +1151,79 @@ namespace CGPart2
 
         private void buttonStucky_Click(object sender, EventArgs e)
         {
-            int[,] kernel = new int[5, 5]
+            float[,] kernel = new float[5, 5]
             {
                     {0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0},
-                    {0, 0, 0, 8, 4},
-                    {2, 4, 8, 4, 2},
-                    {1, 2, 4, 2, 1}
+                    {0, 0, 0, 8F / 42, 4F / 42},
+                    {2F / 42, 4F / 42, 8F / 42, 4F / 42, 2F / 42},
+                    {1F / 42, 2F / 42, 4F / 42, 2F / 42, 1F / 42}
             };
 
             lockFn();
-            //convolutionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, 0, 0);
-
+            errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 5, 5, 3, 3, (int)numericUpDownDiffusionRed.Value,
+                (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
             Variables.bitmap.Dispose();
             loadModification();
             pictureModified.Image = Variables.bitmap;
             unlockFn();
         }
 
-        private void buttonApplyQuantization_Click(object sender, EventArgs e)
+        public void transformToGreyscale(int height, int width)
         {
             lockFn();
-            quantizeColors(Variables.P_Height, Variables.P_Width, (int)numericUpDownQuantization.Value);
+            unsafe
+            {
+                for (int i = 0; i < height; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        // CIE 1931: Y = 0.2126 * R + 0.7152 * G + 0.0722 * B
+                        byte shade = (byte)(fastMin(255, fastRound(0.2126F * Variables.colors[0, i, j] 
+                            + 0.7152F * Variables.colors[1, i, j] + 0.0722F * Variables.colors[2, i, j])));
+                        Variables.colors[0, i, j] = shade;
+                        Variables.colors[1, i, j] = shade;
+                        Variables.colors[2, i, j] = shade;
+                    }
+                }
+            }
             Variables.bitmap.Dispose();
             loadModification();
             pictureModified.Image = Variables.bitmap;
             unlockFn();
         }
 
+        private void buttonGreyscale_Click(object sender, EventArgs e)
+        {
+            transformToGreyscale(Variables.P_Height, Variables.P_Width);
+        }
+
+        public void bindDiffusion(NumericUpDown numeric)
+        {
+            numericUpDownDiffusionRed.Value = numeric.Value;
+            numericUpDownDiffusionGreen.Value = numeric.Value;
+            numericUpDownDiffusionBlue.Value = numeric.Value;
+
+        }
+
+        // might be merged into one function (if possible)
+        private void numericUpDownDiffusionRed_ValueChanged(object sender, EventArgs e)
+        {
+            if (checkBoxGreyscale.Checked == true)
+                bindDiffusion(numericUpDownDiffusionRed);
+        }
+
+        private void numericUpDownDiffusionGreen_ValueChanged(object sender, EventArgs e)
+        {
+            if (checkBoxGreyscale.Checked == true)
+                bindDiffusion(numericUpDownDiffusionGreen);
+        }
+
+        private void numericUpDownDiffusionBlue_ValueChanged(object sender, EventArgs e)
+        {
+            if (checkBoxGreyscale.Checked == true)
+                bindDiffusion(numericUpDownDiffusionBlue);
+        }
     }
 
     static class Variables
