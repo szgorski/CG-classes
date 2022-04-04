@@ -156,6 +156,7 @@ namespace CGPart2
             this.numericUpDownQuantization = new System.Windows.Forms.NumericUpDown();
             this.labelQuantizationNumber = new System.Windows.Forms.Label();
             this.groupErrorDiffusion = new System.Windows.Forms.GroupBox();
+            this.checkBoxYcbCr = new System.Windows.Forms.CheckBox();
             this.buttonGreyscale = new System.Windows.Forms.Button();
             this.checkBoxGreyscale = new System.Windows.Forms.CheckBox();
             this.numericUpDownDiffusionBlue = new System.Windows.Forms.NumericUpDown();
@@ -2417,6 +2418,7 @@ namespace CGPart2
             // 
             // groupErrorDiffusion
             // 
+            this.groupErrorDiffusion.Controls.Add(this.checkBoxYcbCr);
             this.groupErrorDiffusion.Controls.Add(this.buttonGreyscale);
             this.groupErrorDiffusion.Controls.Add(this.checkBoxGreyscale);
             this.groupErrorDiffusion.Controls.Add(this.numericUpDownDiffusionBlue);
@@ -2438,10 +2440,22 @@ namespace CGPart2
             this.groupErrorDiffusion.TabStop = false;
             this.groupErrorDiffusion.Text = "Error Diffusion Filters";
             // 
+            // checkBoxYcbCr
+            // 
+            this.checkBoxYcbCr.AutoSize = true;
+            this.checkBoxYcbCr.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.checkBoxYcbCr.Location = new System.Drawing.Point(143, 152);
+            this.checkBoxYcbCr.Name = "checkBoxYcbCr";
+            this.checkBoxYcbCr.Size = new System.Drawing.Size(173, 19);
+            this.checkBoxYcbCr.TabIndex = 14;
+            this.checkBoxYcbCr.Text = "Use YCbCr model (Rec. 601)";
+            this.checkBoxYcbCr.UseVisualStyleBackColor = true;
+            this.checkBoxYcbCr.CheckedChanged += new System.EventHandler(this.checkBoxYcbCr_CheckedChanged);
+            // 
             // buttonGreyscale
             // 
             this.buttonGreyscale.Enabled = false;
-            this.buttonGreyscale.Location = new System.Drawing.Point(193, 37);
+            this.buttonGreyscale.Location = new System.Drawing.Point(193, 28);
             this.buttonGreyscale.Name = "buttonGreyscale";
             this.buttonGreyscale.Size = new System.Drawing.Size(212, 29);
             this.buttonGreyscale.TabIndex = 13;
@@ -2453,7 +2467,7 @@ namespace CGPart2
             // 
             this.checkBoxGreyscale.AutoSize = true;
             this.checkBoxGreyscale.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.checkBoxGreyscale.Location = new System.Drawing.Point(148, 142);
+            this.checkBoxGreyscale.Location = new System.Drawing.Point(143, 126);
             this.checkBoxGreyscale.Name = "checkBoxGreyscale";
             this.checkBoxGreyscale.Size = new System.Drawing.Size(160, 19);
             this.checkBoxGreyscale.TabIndex = 12;
@@ -2462,7 +2476,7 @@ namespace CGPart2
             // 
             // numericUpDownDiffusionBlue
             // 
-            this.numericUpDownDiffusionBlue.Location = new System.Drawing.Point(400, 106);
+            this.numericUpDownDiffusionBlue.Location = new System.Drawing.Point(395, 90);
             this.numericUpDownDiffusionBlue.Maximum = new decimal(new int[] {
             256,
             0,
@@ -2485,7 +2499,7 @@ namespace CGPart2
             // 
             // numericUpDownDiffusionGreen
             // 
-            this.numericUpDownDiffusionGreen.Location = new System.Drawing.Point(274, 106);
+            this.numericUpDownDiffusionGreen.Location = new System.Drawing.Point(269, 90);
             this.numericUpDownDiffusionGreen.Maximum = new decimal(new int[] {
             256,
             0,
@@ -2508,7 +2522,7 @@ namespace CGPart2
             // 
             // numericUpDownDiffusionRed
             // 
-            this.numericUpDownDiffusionRed.Location = new System.Drawing.Point(148, 106);
+            this.numericUpDownDiffusionRed.Location = new System.Drawing.Point(143, 90);
             this.numericUpDownDiffusionRed.Maximum = new decimal(new int[] {
             256,
             0,
@@ -2533,7 +2547,7 @@ namespace CGPart2
             // 
             this.labelDiffusionBlue.AutoSize = true;
             this.labelDiffusionBlue.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelDiffusionBlue.Location = new System.Drawing.Point(400, 88);
+            this.labelDiffusionBlue.Location = new System.Drawing.Point(395, 72);
             this.labelDiffusionBlue.Name = "labelDiffusionBlue";
             this.labelDiffusionBlue.Size = new System.Drawing.Size(30, 15);
             this.labelDiffusionBlue.TabIndex = 8;
@@ -2543,7 +2557,7 @@ namespace CGPart2
             // 
             this.labelDiffusionGreen.AutoSize = true;
             this.labelDiffusionGreen.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelDiffusionGreen.Location = new System.Drawing.Point(274, 88);
+            this.labelDiffusionGreen.Location = new System.Drawing.Point(269, 72);
             this.labelDiffusionGreen.Name = "labelDiffusionGreen";
             this.labelDiffusionGreen.Size = new System.Drawing.Size(38, 15);
             this.labelDiffusionGreen.TabIndex = 7;
@@ -2553,7 +2567,7 @@ namespace CGPart2
             // 
             this.labelDiffusionRed.AutoSize = true;
             this.labelDiffusionRed.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelDiffusionRed.Location = new System.Drawing.Point(148, 88);
+            this.labelDiffusionRed.Location = new System.Drawing.Point(143, 72);
             this.labelDiffusionRed.Name = "labelDiffusionRed";
             this.labelDiffusionRed.Size = new System.Drawing.Size(27, 15);
             this.labelDiffusionRed.TabIndex = 6;
@@ -2563,11 +2577,11 @@ namespace CGPart2
             // 
             this.labelDiffusionNumber.AutoSize = true;
             this.labelDiffusionNumber.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelDiffusionNumber.Location = new System.Drawing.Point(56, 113);
+            this.labelDiffusionNumber.Location = new System.Drawing.Point(51, 97);
             this.labelDiffusionNumber.Name = "labelDiffusionNumber";
-            this.labelDiffusionNumber.Size = new System.Drawing.Size(77, 15);
+            this.labelDiffusionNumber.Size = new System.Drawing.Size(75, 15);
             this.labelDiffusionNumber.TabIndex = 5;
-            this.labelDiffusionNumber.Text = "No. of Colors";
+            this.labelDiffusionNumber.Text = "No. of Levels";
             // 
             // buttonAtkinson
             // 
@@ -2967,6 +2981,6 @@ namespace CGPart2
         private System.Windows.Forms.ListView listViewColors;
         private System.Windows.Forms.Button buttonGreyscale;
         private System.Windows.Forms.CheckBox checkBoxGreyscale;
+        private System.Windows.Forms.CheckBox checkBoxYcbCr;
     }
 }
-

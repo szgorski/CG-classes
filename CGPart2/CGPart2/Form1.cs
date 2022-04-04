@@ -269,7 +269,7 @@ namespace CGPart2
             correctGammaDown(Variables.P_Height, Variables.P_Width);
         }
 
-        public void convolutionFn(int height, int width, int[,] kernel, 
+        public void convolutionFn(int height, int width, int[,] kernel,
             int kHeight, int kWidth, int aRow, int aColumn, int customWeight, int offset)
         {                                                                // kHeight - kernel height, aRow - anchor's row
             unsafe
@@ -810,8 +810,8 @@ namespace CGPart2
                 {
                     for (int j = 0; j < width; j++)
                     {
-                        index = ((Variables.colors[0, i, j] >> 5) << 6) 
-                            + ((Variables.colors[1, i, j] >> 5) << 3) 
+                        index = ((Variables.colors[0, i, j] >> 5) << 6)
+                            + ((Variables.colors[1, i, j] >> 5) << 3)
                             + (Variables.colors[2, i, j] >> 5);
                         subcubeLists[index].Add(((Variables.colors[0, i, j] - ((Variables.colors[0, i, j] >> 5) << 5)) << 10)
                             + ((Variables.colors[1, i, j] - ((Variables.colors[1, i, j] >> 5) << 5)) << 5)
@@ -876,7 +876,7 @@ namespace CGPart2
                     for (int j = 0; j < width; j++)
                     {
                         index = ((Variables.colors[0, i, j] >> 6) << 4)
-                            + ((Variables.colors[1, i, j] >> 6) << 2) 
+                            + ((Variables.colors[1, i, j] >> 6) << 2)
                             + (Variables.colors[2, i, j] >> 6);
                         subcubeLists[index].Add(((Variables.colors[0, i, j] - ((Variables.colors[0, i, j] >> 6) << 6)) << 12)
                             + ((Variables.colors[1, i, j] - ((Variables.colors[1, i, j] >> 6) << 6)) << 6)
@@ -933,7 +933,7 @@ namespace CGPart2
                 byte[,] colors;
                 if (noCubes <= 32)
                     colors = countBigCubes(height, width, noCubes);
-                else 
+                else
                     colors = countSmallCubes(height, width, noCubes);
 
                 listViewColors.BeginUpdate();
@@ -942,7 +942,7 @@ namespace CGPart2
                 {
                     ListViewItem item = new ListViewItem();
                     item.BackColor = Color.FromArgb(colors[0, i], colors[1, i], colors[2, i]);
-                    item.Text = "⠀⠀⠀⠀⠀";
+                    item.Text = "⠀⠀⠀"; //"⠀⠀⠀⠀⠀";
                     listViewColors.Items.Add(item);
                 }
                 listViewColors.EndUpdate();
@@ -969,7 +969,7 @@ namespace CGPart2
                                 errorValue += (Variables.colors[2, i, j] - colors[2, k]); // * (Variables.colors[2, i, j] - colors[2, k]);
                             else
                                 errorValue += (colors[2, k] - Variables.colors[2, i, j]); // * (colors[2, k] - Variables.colors[2, i, j]);
-                
+
                             if (errorValue < errorMinValue)
                             {
                                 errorMinPosition = k;
@@ -1004,11 +1004,11 @@ namespace CGPart2
             int floor = (int)number;
             if (number - floor > 0.5)
                 return floor;
-            else 
+            else
                 return floor + 1;
         }
 
-        public void errorDiffusionFn(int height, int width, float[,] kernel, int kHeight, int kWidth, 
+        public void errorDiffusionFn(int height, int width, float[,] kernel, int kHeight, int kWidth,
             int aRow, int aColumn, int noRed, int noGreen, int noBlue)        // kHeight - kernel height
         {    // aRow - anchor's row                                                                
             unsafe
@@ -1047,7 +1047,7 @@ namespace CGPart2
                         // adding error
                         for (int ki = 0; ki < fastMin(height - i, kHeight - aRow + 1); ki++)
                         {     // assuming non-zero values olny after the anchor
-                            for (int kj = fastMax(1 - aColumn, - j); kj < fastMin(kWidth - aColumn + 1, width - j); kj++)
+                            for (int kj = fastMax(1 - aColumn, -j); kj < fastMin(kWidth - aColumn + 1, width - j); kj++)
                             {
                                 if (kernel[aRow + ki - 1, aColumn + kj - 1] != 0) // assuming no rounding error 
                                 {                                                 // (in future modifications)
@@ -1059,7 +1059,7 @@ namespace CGPart2
                         }
                     }
                 }
-                
+
                 for (int i = 0; i < height; i++)
                 {
                     for (int j = 0; j < width; j++)
@@ -1069,6 +1069,71 @@ namespace CGPart2
                         Variables.colors[2, i, j] = (byte)fastMin(255, fastMax(0, fastRound(colorsCopy[2, i, j])));
                     }
                 }
+            }
+        }
+
+        public void transformRGBToYCbCr(int height, int width)
+        {
+            unsafe
+            {
+                byte Y, Cb, Cr;
+                for (int i = 0; i < height; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        Y = (byte)fastMin(255, fastMax(0, fastRound(0.299F * Variables.colors[0, i, j]
+                            + 0.587F * Variables.colors[1, i, j] + 0.114F * Variables.colors[2, i, j])));
+                        Cb = (byte)fastMin(255, fastMax(0, fastRound(128F - 0.168736F * Variables.colors[0, i, j]
+                            - 0.331264F * Variables.colors[1, i, j] + 0.5F * Variables.colors[2, i, j])));
+                        Cr = (byte)fastMin(255, fastMax(0, fastRound(128F + 0.5F * Variables.colors[0, i, j]
+                            - 0.418688F * Variables.colors[1, i, j] - 0.081312F * Variables.colors[2, i, j])));
+
+                        Variables.colors[0, i, j] = Y;
+                        Variables.colors[1, i, j] = Cb;
+                        Variables.colors[2, i, j] = Cr;
+                    }
+                }
+            }
+        }
+
+        public void transformYCbCrToRGB(int height, int width)
+        {
+            unsafe
+            {
+                byte R, G, B;
+                for (int i = 0; i < height; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        R = (byte)fastMin(255, fastMax(0, fastRound(1.402F * (Variables.colors[2, i, j] - 128)
+                            + Variables.colors[0, i, j])));
+                        G = (byte)fastMin(255, fastMax(0, fastRound(-0.34414F * (Variables.colors[1, i, j] - 128)
+                            - 0.71414F * (Variables.colors[2, i, j] - 128) + Variables.colors[0, i, j])));
+                        B = (byte)fastMin(255, fastMax(0, fastRound(1.772F * (Variables.colors[1, i, j] - 128)
+                            + Variables.colors[0, i, j])));
+
+                        Variables.colors[0, i, j] = R;
+                        Variables.colors[1, i, j] = G;
+                        Variables.colors[2, i, j] = B;
+                    }
+                }
+
+            }
+        }
+
+        private void checkBoxYcbCr_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxYcbCr.Checked == true)
+            {
+                labelDiffusionRed.Text = "Luma";
+                labelDiffusionGreen.Text = "Blue-difference";
+                labelDiffusionBlue.Text = "Red-difference";
+            }
+            else
+            {
+                labelDiffusionRed.Text = "Red";
+                labelDiffusionGreen.Text = "Green";
+                labelDiffusionBlue.Text = "Blue";
             }
         }
 
@@ -1085,8 +1150,17 @@ namespace CGPart2
             };
 
             lockFn();
-            errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 5, 5, 3, 3, (int)numericUpDownDiffusionRed.Value, 
-                (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
+            if (checkBoxYcbCr.Checked == true)
+            {
+                transformRGBToYCbCr(Variables.P_Height, Variables.P_Width);
+                errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 5, 5, 3, 3, (int)numericUpDownDiffusionRed.Value,
+                    (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
+                transformYCbCrToRGB(Variables.P_Height, Variables.P_Width);
+            }
+            else
+                errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 5, 5, 3, 3, (int)numericUpDownDiffusionRed.Value,
+                    (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
+
             Variables.bitmap.Dispose();
             loadModification();
             pictureModified.Image = Variables.bitmap;
@@ -1103,8 +1177,17 @@ namespace CGPart2
             };
 
             lockFn();
-            errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 5, 2, 3, (int)numericUpDownDiffusionRed.Value,
-                (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
+            if (checkBoxYcbCr.Checked == true)
+            {
+                transformRGBToYCbCr(Variables.P_Height, Variables.P_Width);
+                errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 5, 2, 3, (int)numericUpDownDiffusionRed.Value,
+                    (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
+                transformYCbCrToRGB(Variables.P_Height, Variables.P_Width);
+            }
+            else
+                errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 5, 2, 3, (int)numericUpDownDiffusionRed.Value,
+                    (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
+
             Variables.bitmap.Dispose();
             loadModification();
             pictureModified.Image = Variables.bitmap;
@@ -1121,8 +1204,17 @@ namespace CGPart2
             };
 
             lockFn();
-            errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, (int)numericUpDownDiffusionRed.Value,
-                (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
+            if (checkBoxYcbCr.Checked == true)
+            {
+                transformRGBToYCbCr(Variables.P_Height, Variables.P_Width);
+                errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, (int)numericUpDownDiffusionRed.Value,
+                    (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
+                transformYCbCrToRGB(Variables.P_Height, Variables.P_Width);
+            }
+            else
+                errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 3, 3, 2, 2, (int)numericUpDownDiffusionRed.Value,
+                    (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
+
             Variables.bitmap.Dispose();
             loadModification();
             pictureModified.Image = Variables.bitmap;
@@ -1141,8 +1233,17 @@ namespace CGPart2
             };
 
             lockFn();
-            errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 5, 5, 3, 3, (int)numericUpDownDiffusionRed.Value,
-                (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
+            if (checkBoxYcbCr.Checked == true)
+            {
+                transformRGBToYCbCr(Variables.P_Height, Variables.P_Width);
+                errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 5, 5, 3, 3, (int)numericUpDownDiffusionRed.Value,
+                    (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
+                transformYCbCrToRGB(Variables.P_Height, Variables.P_Width);
+            }
+            else
+                errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 5, 5, 3, 3, (int)numericUpDownDiffusionRed.Value,
+                    (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
+
             Variables.bitmap.Dispose();
             loadModification();
             pictureModified.Image = Variables.bitmap;
@@ -1161,8 +1262,17 @@ namespace CGPart2
             };
 
             lockFn();
-            errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 5, 5, 3, 3, (int)numericUpDownDiffusionRed.Value,
-                (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
+            if (checkBoxYcbCr.Checked == true)
+            {
+                transformRGBToYCbCr(Variables.P_Height, Variables.P_Width);
+                errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 5, 5, 3, 3, (int)numericUpDownDiffusionRed.Value,
+                    (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
+                transformYCbCrToRGB(Variables.P_Height, Variables.P_Width);
+            }
+            else
+                errorDiffusionFn(Variables.P_Height, Variables.P_Width, kernel, 5, 5, 3, 3, (int)numericUpDownDiffusionRed.Value,
+                    (int)numericUpDownDiffusionGreen.Value, (int)numericUpDownDiffusionBlue.Value);
+
             Variables.bitmap.Dispose();
             loadModification();
             pictureModified.Image = Variables.bitmap;
@@ -1179,7 +1289,7 @@ namespace CGPart2
                     for (int j = 0; j < width; j++)
                     {
                         // CIE 1931: Y = 0.2126 * R + 0.7152 * G + 0.0722 * B
-                        byte shade = (byte)(fastMin(255, fastRound(0.2126F * Variables.colors[0, i, j] 
+                        byte shade = (byte)(fastMin(255, fastRound(0.2126F * Variables.colors[0, i, j]
                             + 0.7152F * Variables.colors[1, i, j] + 0.0722F * Variables.colors[2, i, j])));
                         Variables.colors[0, i, j] = shade;
                         Variables.colors[1, i, j] = shade;
@@ -1240,7 +1350,5 @@ namespace CGPart2
         public static Bitmap bitmap;
         public static PixelFormat pixelFormat;
         public static int[,] customKernel;
-
-        // Part 2 variables
     }
 }
