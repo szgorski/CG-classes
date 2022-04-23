@@ -35,7 +35,7 @@ namespace CGPart3
             this.buttonClearAll = new System.Windows.Forms.Button();
             this.labelBrush = new System.Windows.Forms.Label();
             this.labelThickLine = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.labelBrushColor = new System.Windows.Forms.Label();
             this.buttonBrushColor = new System.Windows.Forms.Button();
             this.numericUpDownLineThickness = new System.Windows.Forms.NumericUpDown();
             this.labelLineThickness = new System.Windows.Forms.Label();
@@ -50,7 +50,7 @@ namespace CGPart3
             this.radioButtonAddCircle = new System.Windows.Forms.RadioButton();
             this.radioButtonAddThickLine = new System.Windows.Forms.RadioButton();
             this.radioButtonAddThinLine = new System.Windows.Forms.RadioButton();
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.colorDialog = new System.Windows.Forms.ColorDialog();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).BeginInit();
             this.groupBoxSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLineThickness)).BeginInit();
@@ -64,6 +64,11 @@ namespace CGPart3
             this.pictureBoxMain.Size = new System.Drawing.Size(600, 800);
             this.pictureBoxMain.TabIndex = 0;
             this.pictureBoxMain.TabStop = false;
+            this.pictureBoxMain.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBoxMain_MouseClick);
+            this.pictureBoxMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxMain_MouseDown);
+            this.pictureBoxMain.MouseLeave += new System.EventHandler(this.pictureBoxMain_MouseLeave);
+            this.pictureBoxMain.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBoxMain_MouseMove);
+            this.pictureBoxMain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBoxMain_MouseUp);
             // 
             // groupBoxSettings
             // 
@@ -71,7 +76,7 @@ namespace CGPart3
             this.groupBoxSettings.Controls.Add(this.buttonClearAll);
             this.groupBoxSettings.Controls.Add(this.labelBrush);
             this.groupBoxSettings.Controls.Add(this.labelThickLine);
-            this.groupBoxSettings.Controls.Add(this.label3);
+            this.groupBoxSettings.Controls.Add(this.labelBrushColor);
             this.groupBoxSettings.Controls.Add(this.buttonBrushColor);
             this.groupBoxSettings.Controls.Add(this.numericUpDownLineThickness);
             this.groupBoxSettings.Controls.Add(this.labelLineThickness);
@@ -125,17 +130,17 @@ namespace CGPart3
             this.labelThickLine.TabIndex = 7;
             this.labelThickLine.Text = "Thick line";
             // 
-            // label3
+            // labelBrushColor
             // 
-            this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.Color.Black;
-            this.label3.Location = new System.Drawing.Point(88, 315);
-            this.label3.MaximumSize = new System.Drawing.Size(30, 30);
-            this.label3.MinimumSize = new System.Drawing.Size(30, 30);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(30, 30);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "   ";
+            this.labelBrushColor.AutoSize = true;
+            this.labelBrushColor.BackColor = System.Drawing.Color.Black;
+            this.labelBrushColor.Location = new System.Drawing.Point(88, 315);
+            this.labelBrushColor.MaximumSize = new System.Drawing.Size(30, 30);
+            this.labelBrushColor.MinimumSize = new System.Drawing.Size(30, 30);
+            this.labelBrushColor.Name = "labelBrushColor";
+            this.labelBrushColor.Size = new System.Drawing.Size(30, 30);
+            this.labelBrushColor.TabIndex = 6;
+            this.labelBrushColor.Text = "   ";
             // 
             // buttonBrushColor
             // 
@@ -161,7 +166,7 @@ namespace CGPart3
             0,
             0});
             this.numericUpDownLineThickness.Minimum = new decimal(new int[] {
-            1,
+            3,
             0,
             0,
             0});
@@ -173,6 +178,7 @@ namespace CGPart3
             0,
             0,
             0});
+            this.numericUpDownLineThickness.ValueChanged += new System.EventHandler(this.numericUpDownLineThickness_ValueChanged);
             // 
             // labelLineThickness
             // 
@@ -359,11 +365,11 @@ namespace CGPart3
         private System.Windows.Forms.Label labelMode;
         private System.Windows.Forms.Label labelBrush;
         private System.Windows.Forms.Label labelThickLine;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label labelBrushColor;
         private System.Windows.Forms.Button buttonBrushColor;
         private System.Windows.Forms.NumericUpDown numericUpDownLineThickness;
         private System.Windows.Forms.Label labelLineThickness;
-        private System.Windows.Forms.ColorDialog colorDialog1;
+        private System.Windows.Forms.ColorDialog colorDialog;
     }
 }
 
