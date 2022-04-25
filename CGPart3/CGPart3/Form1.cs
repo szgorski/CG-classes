@@ -17,47 +17,77 @@ namespace CGPart3
         {
             InitializeComponent();
             initializeBitmap();
-            pictureBoxMain.Image = Variables.bitmap;
-            Variables.brushColor = labelBrushColor.BackColor;
         }
 
         public void initializeBitmap()
         {
-            Bitmap bmp = new Bitmap(600, 800, PixelFormat.Format32bppArgb);
+            Bitmap bmp = new Bitmap(Variables.bitmapWidth, Variables.bitmapHeight, PixelFormat.Format32bppArgb);
             BitmapData bits = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
                 ImageLockMode.ReadWrite, bmp.PixelFormat);
             unsafe
             {
-                for (int i = 0; i < 800; i++)
+                for (int i = 0; i < Variables.bitmapHeight; i++)
                 {
-                    uint* row = (uint*)((byte*)bits.Scan0 + (i * bits.Stride));
+                    int* row = (int*)((byte*)bits.Scan0 + (i * bits.Stride));
 
-                    for (int j = 0; j < 600; j++)
+                    for (int j = 0; j < Variables.bitmapWidth; j++)
                     {
-                        row[j] = 0xFFFFFFFF;
-                        Variables.bitmapArray[i, j] = 0xFFFFFFFF;
-                        Variables.shapesArray[i, j] = 0;
+                        row[j] = -1;
+                        Variables.bitmapArray[j, i] = -1;
+                        Variables.shapesArray[j, i] = 0;
+                        Variables.pointsArray[j, i] = 0;
                     }
                 }
             }
             bmp.UnlockBits(bits);
             Variables.bitmap = bmp;
+            pictureBoxMain.Image = Variables.bitmap;
         }
 
         public void updateBitmap()
         {
             Variables.bitmap.Dispose();
-            Bitmap bmp = new Bitmap(600, 800, PixelFormat.Format32bppArgb);
+            Bitmap bmp = new Bitmap(Variables.bitmapWidth, Variables.bitmapHeight, PixelFormat.Format32bppArgb);
             BitmapData bits = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
                 ImageLockMode.ReadWrite, bmp.PixelFormat);
             unsafe
             {
-                for (int i = 0; i < 800; i++)
+                for (int i = 0; i < Variables.bitmapHeight; i++)
                 {
-                    uint* row = (uint*)((byte*)bits.Scan0 + (i * bits.Stride));
+                    for (int j = 0; j < Variables.bitmapWidth; j++)
+                    {
+                        Variables.bitmapArray[j, i] = -1;
+                    }
+                }
+                for (int i = 0; i < Variables.shapes.Count; i++)
+                {
+                    if (Variables.shapes[i].GetType().Equals(typeof(Line)))
+                    {
+                        addPoint(((Line)Variables.shapes[i]).end1, Variables.shapes[i].ID);
+                        addPoint(((Line)Variables.shapes[i]).end2, Variables.shapes[i].ID);
+                        addLine((Line)Variables.shapes[i]);
+                    }
+                    else if (Variables.shapes[i].Equals(typeof(Circle)))
+                    {
 
-                    for (int j = 0; j < 600; j++)
-                        row[j] = Variables.bitmapArray[i, j];
+                    }
+                    else // Polygon
+                    {
+
+                    }
+                }
+                // active shape
+                if (Variables.isPointMode)
+                {
+
+                }
+
+                for (int i = 0; i < Variables.bitmapHeight; i++)
+                {
+                    int* row = (int*)((byte*)bits.Scan0 + (i * bits.Stride));
+
+                    for (int j = 0; j < Variables.bitmapWidth; j++)
+                        row[j] = Variables.bitmapArray[j, i];
                 }
             }
             bmp.UnlockBits(bits);
@@ -65,7 +95,7 @@ namespace CGPart3
             pictureBoxMain.Image = Variables.bitmap;
         }
 
-        public bool isClosePoint(Point mouse, Point point)
+        public unsafe bool isClosePoint(Point mouse, Point point)
         {
             int diffX, diffY;
             if (point.X > mouse.X)
@@ -83,10 +113,78 @@ namespace CGPart3
                 return false;
         }
 
+        public void addPoint(Point point, int ID)
+        {
+            for (int i = Math.Max(point.X - 3, 0); i <= Math.Min(point.X + 3, Variables.bitmapWidth - 1); i++)
+            {
+                for (int j = Math.Max(point.Y - 3, 0); j <= Math.Min(point.Y + 3, Variables.bitmapHeight - 1); j++)
+                {
+                    if (Variables.pointsKernel[i - point.X + 3, j - point.Y + 3])
+                    {
+                        Variables.pointsArray[i, j] = ID;
+                    }
+                }
+            }
+        }
+
+        public void drawPoint(Point point, int ID)
+        {
+            for (int i = Math.Max(point.X - 3, 0); i <= Math.Min(point.X + 3, Variables.bitmapWidth - 1); i++)
+            {
+                for (int j = Math.Max(point.Y - 3, 0); j <= Math.Min(point.Y + 3, Variables.bitmapHeight - 1); j++)
+                {
+                    if (Variables.pointsKernel[i - point.X + 3, j - point.Y + 3])
+                    {
+                        Variables.bitmapArray[i, j] = Color.Red.ToArgb();
+                        Variables.pointsArray[i, j] = ID;
+                    }
+                }
+            }
+        }
+
+        public void addLine(Line line)
+        {
+            for (int i = line.end1.X; i < line.end2.X; i++)
+            {
+                Variables.bitmapArray[i, line.end1.Y] = line.color;
+                Variables.shapesArray[i, line.end1.Y] = line.ID;
+            }
+        }
+
+        public void addCircle(Circle circle)
+        {
+
+        }
+
         private void mode_CheckedChanged(object sender, EventArgs e)
         {
             Variables.modeName = ((RadioButton)sender).Name;
             Variables.isActive = false;
+            switch (Variables.modeName)
+            {
+                case "radioButtonAddThinLine":
+                case "radioButtonAddThickLine":
+                case "radioButtonAddCircle":
+                case "radioButtonAddPolygon":
+                case "radioButtonResizeCircle":
+                case "radioButtonMovePolygon":
+                case "radioButtonMoveLine":
+                case "radioButtonBrush":
+                case "radioButtonErase":
+                    if (Variables.isPointMode)
+                    {
+                        Variables.isPointMode = false;
+                    }
+                    break;
+
+                case "radioButtonMovePoint":
+                    if (!Variables.isPointMode)
+                    {
+                        Variables.isPointMode = true;
+                    }
+                    break;
+            }
+            updateBitmap();
         }
 
         private void numericUpDownLineThickness_ValueChanged(object sender, EventArgs e)
@@ -100,13 +198,17 @@ namespace CGPart3
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
                 labelBrushColor.BackColor = colorDialog.Color;
-                Variables.brushColor = colorDialog.Color;
+                Variables.brushColor = colorDialog.Color.ToArgb();
             }
         }
 
         private void buttonClearAll_Click(object sender, EventArgs e)
         {
-
+            Variables.shapes.Clear();
+            Variables.isActive = false;
+            Variables.lastID = 0;
+            Variables.bitmap.Dispose();
+            initializeBitmap();
         }
 
         private void pictureBoxMain_MouseClick(object sender, MouseEventArgs e)
@@ -117,8 +219,12 @@ namespace CGPart3
                     if (Variables.isActive)
                     {
                         ((Line)Variables.activeShape).end2 = e.Location;
+                        addPoint(((Line)Variables.activeShape).end1, Variables.activeShape.ID);
+                        addPoint(((Line)Variables.activeShape).end1, Variables.activeShape.ID);
                         Variables.shapes.Add(Variables.activeShape);
+                        addLine((Line)Variables.activeShape);
                         Variables.isActive = false;
+                        updateBitmap();
                     }
                     else
                     {
@@ -130,15 +236,11 @@ namespace CGPart3
                 case "radioButtonAddThickLine":
                     if (Variables.isActive)
                     {
-                        ((Line)Variables.activeShape).end2 = e.Location;
-                        Variables.shapes.Add(Variables.activeShape);
-                        Variables.isActive = false;
+                        
                     }
                     else
                     {
-                        Variables.activeShape = new Line(e.Location, 
-                            (int)numericUpDownLineThickness.Value);
-                        Variables.isActive = true;
+                        
                     }
                     break;
 
@@ -146,8 +248,10 @@ namespace CGPart3
                     if (Variables.isActive)
                     {
                         ((Circle)Variables.activeShape).addRadius(e.Location);
+                        addPoint(((Circle)Variables.activeShape).center, Variables.activeShape.ID);
                         Variables.shapes.Add(Variables.activeShape);
                         Variables.isActive = false;
+                        updateBitmap();
                     }
                     else
                     {
@@ -175,15 +279,27 @@ namespace CGPart3
                     break;
 
                 case "radioButtonBrush":
-                    int brushShapeID = Variables.shapesArray[e.Location.X, e.Y];
+                    int brushShapeID = Variables.shapesArray[e.X, e.Y];
                     Shape brushShape = Variables.shapes.Find(x => x.ID == brushShapeID);
-                    brushShape.color = Variables.brushColor;
+                    if (brushShape is not null)
+                    {
+                        // labelMode.Text = $"{brushShape.ID}";
+                        brushShape.color = Variables.brushColor;
+                        // Variables.shapes.Remove(brushShape);
+                        // Variables.shapes.Add(brushShape);
+                        updateBitmap();
+                    }
                     break;
 
                 case "radioButtonErase":
                     int eraseShapeID = Variables.shapesArray[e.X, e.Y];
                     Shape eraseShape = Variables.shapes.Find(x => x.ID == eraseShapeID);
-                    Variables.shapes.Remove(eraseShape);
+                    if (eraseShape is not null)
+                    {
+                        // labelMode.Text = $"{eraseShape.ID}";
+                        Variables.shapes.Remove(eraseShape);
+                        updateBitmap();
+                    }
                     break;
 
                 default:
@@ -262,8 +378,17 @@ namespace CGPart3
 
                         if (shape.GetType().Equals(typeof(Polygon)))
                         {
-                            // line recognition - on shapesArray?
-                            // Variables.activeElement = i;
+                            for (int i = 0; i < ((Polygon)shape).vertices.Count; i++)
+                            {
+                                if (isClosePoint(e.Location, ((Polygon)shape).vertices[i]))
+                                {
+                                    Variables.activeShape = shape;
+                                    Variables.activeElement = i;
+                                    Variables.shapes.Remove(shape);
+                                    Variables.isActive = true;
+                                    break;
+                                }
+                            }
                         }
                         else if (shape.GetType().Equals(typeof(Line)))
                         {
@@ -281,12 +406,134 @@ namespace CGPart3
 
         private void pictureBoxMain_MouseLeave(object sender, EventArgs e)
         {
+            //switch (Variables.modeName)
+            //{
+            //    case "radioButtonAddThinLine":
 
+            //        break;
+
+            //    case "radioButtonAddThickLine":
+
+            //        break;
+
+            //    case "radioButtonAddCircle":
+
+            //        break;
+
+            //    case "radioButtonAddPolygon":
+
+            //        break;
+
+            //    case "radioButtonResizeCircle":
+
+            //        break;
+
+            //    case "radioButtonMovePoint":
+
+            //        break;
+
+            //    case "radioButtonMovePolygon":
+
+            //        break;
+
+            //    case "radioButtonMoveLine":
+
+            //        break;
+
+            //    case "radioButtonBrush":
+
+            //        break;
+
+            //    case "radioButtonErase":
+
+            //        break;
+            //}
         }
 
         private void pictureBoxMain_MouseMove(object sender, MouseEventArgs e)
         {
-            // labelBrush.Text = e.X + " " + e.Y;
+            if (Variables.isActive)
+            {
+                int xShift = e.X - Variables.downPosition.X;
+                int yShift = e.Y - Variables.downPosition.Y;
+                Shape shapeCopy = Variables.activeShape.Clone();
+                
+                switch (Variables.modeName)
+                {
+                    case "radioButtonAddThinLine":
+                        ((Line)shapeCopy).end2 = e.Location;
+                        // draw
+                        break;
+
+                    case "radioButtonAddThickLine":
+                        ((Line)shapeCopy).end2 = e.Location;
+                        ((Line)shapeCopy).thickness = (int)numericUpDownLineThickness.Value;
+                        // draw
+                        break;
+
+                    case "radioButtonAddCircle":
+                        ((Circle)shapeCopy).addRadius(e.Location);
+                        // draw
+                        break;
+
+                    case "radioButtonAddPolygon":
+                        ((Polygon)shapeCopy).vertices.Add(e.Location);
+                        // draw
+                        // check if open
+                        break;
+
+                    case "radioButtonResizeCircle":
+                        ((Circle)shapeCopy).addRadius(e.Location);
+                        // draw
+                        break;
+
+                    case "radioButtonMovePoint":
+                        if (shapeCopy.GetType().Equals(typeof(Line)))
+                        {
+
+                        }
+                        else if (shapeCopy.GetType().Equals(typeof(Circle)))
+                        {
+
+                        }
+                        else // Polygon
+                        {
+
+                        }
+                        break;
+
+                    case "radioButtonMovePolygon":
+
+                        break;
+
+                    case "radioButtonMoveLine":
+                        if (shapeCopy.GetType().Equals(typeof(Line)))
+                        {
+
+                        }
+                        else if (shapeCopy.GetType().Equals(typeof(Polygon)))
+                        {
+
+                        }
+                        break;
+
+                    case "radioButtonBrush":
+                        shapeCopy.color = Variables.brushColor;
+                        //draw
+                        break;
+
+                    case "radioButtonErase":
+
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                //labelMode.Text = $"{e.Location.X}, {e.Location.Y}";
+            }
         }
 
         private void pictureBoxMain_MouseUp(object sender, MouseEventArgs e)
@@ -295,11 +542,29 @@ namespace CGPart3
         }
     }
 
+    //public class CustomPoint
+    //{
+    //    public Point point;
+    //    public int ownerID;
+
+    //    public CustomPoint(Point newPoint, Shape shape)
+    //    {
+    //        point = new Point(newPoint.X, newPoint.Y);
+    //        ownerID = shape.ID;
+    //    }
+    //}
+
     public abstract class Shape
     {
         public int ID;
-        public Color color;
+        public int color;
+
+        public Shape Clone()
+        {
+            return (Shape)this.MemberwiseClone();
+        }
         // drawing?
+        public abstract void drawPoints();
     }
 
     public class Line : Shape
@@ -317,6 +582,11 @@ namespace CGPart3
             end1 = newEnd;
             end2 = new Point(-10000, -10000);
             thickness = newThickness;
+        }
+
+        public override void drawPoints()
+        {
+
         }
     }
 
@@ -351,17 +621,24 @@ namespace CGPart3
             radius = (int)Math.Sqrt((center.X - radiusPoint.X) * (center.X - radiusPoint.X)
                 + (center.Y - radiusPoint.Y) * (center.Y - radiusPoint.Y));
         }
+
+        public override void drawPoints()
+        {
+
+        }
     }
 
     public class Polygon : Shape
     {
         public List<Point> vertices;
+        public bool isOpen;
 
         public Polygon(Point newPoint)
         {
             ID = Variables.lastID + 1;
             Variables.lastID = ID;
             color = Variables.brushColor;
+            isOpen = true;
 
             vertices.Add(newPoint);
         }
@@ -378,6 +655,12 @@ namespace CGPart3
         public void addVertex(Point newPoint)
         {
             vertices.Add(newPoint);
+            //check if close!
+        }
+
+        public override void drawPoints()
+        {
+
         }
     }
 
@@ -387,15 +670,19 @@ namespace CGPart3
         //public static Point mousePosition;
         public static Point downPosition;
         public static int activeElement;
-        public static List<Shape> shapes;
+        public static List<Shape> shapes = new List<Shape>();
+        // public static List<CustomPoint> points = new List<CustomPoint>();
         public static Shape activeShape;
         public static bool isActive = false;
+        public static bool isPointMode = false;
         public static int lastID = 0;
-        public static Color brushColor = Color.Black;
+        public static int brushColor = -16777216; // black
         public static string modeName = "radioButtonAddThinLine";
-        public static uint[,] bitmapArray = new uint[800, 600];
-        public static int[,] shapesArray = new int[800, 600];
-        public static int[,] pointsArray = new int[800, 600];
+        public static int bitmapHeight = 800;
+        public static int bitmapWidth = 600;
+        public static int[,] bitmapArray = new int[bitmapWidth, bitmapHeight];
+        public static int[,] shapesArray = new int[bitmapWidth, bitmapHeight];
+        public static int[,] pointsArray = new int[bitmapWidth, bitmapHeight];
         public static bool[,] pointsKernel = new bool[7, 7]
         {
             { false, false, true, true, true, false, false },

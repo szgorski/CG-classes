@@ -51,6 +51,8 @@ namespace CGPart3
             this.radioButtonAddThickLine = new System.Windows.Forms.RadioButton();
             this.radioButtonAddThinLine = new System.Windows.Forms.RadioButton();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
+            this.checkBoxAntiAliasing = new System.Windows.Forms.CheckBox();
+            this.labelAntiAliasing = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).BeginInit();
             this.groupBoxSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLineThickness)).BeginInit();
@@ -72,6 +74,8 @@ namespace CGPart3
             // 
             // groupBoxSettings
             // 
+            this.groupBoxSettings.Controls.Add(this.labelAntiAliasing);
+            this.groupBoxSettings.Controls.Add(this.checkBoxAntiAliasing);
             this.groupBoxSettings.Controls.Add(this.labelMode);
             this.groupBoxSettings.Controls.Add(this.buttonClearAll);
             this.groupBoxSettings.Controls.Add(this.labelBrush);
@@ -84,7 +88,7 @@ namespace CGPart3
             this.groupBoxSettings.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.groupBoxSettings.Location = new System.Drawing.Point(13, 13);
             this.groupBoxSettings.Name = "groupBoxSettings";
-            this.groupBoxSettings.Size = new System.Drawing.Size(392, 428);
+            this.groupBoxSettings.Size = new System.Drawing.Size(392, 494);
             this.groupBoxSettings.TabIndex = 1;
             this.groupBoxSettings.TabStop = false;
             this.groupBoxSettings.Text = "Settings";
@@ -102,7 +106,7 @@ namespace CGPart3
             // buttonClearAll
             // 
             this.buttonClearAll.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonClearAll.Location = new System.Drawing.Point(85, 378);
+            this.buttonClearAll.Location = new System.Drawing.Point(85, 435);
             this.buttonClearAll.Name = "buttonClearAll";
             this.buttonClearAll.Size = new System.Drawing.Size(222, 32);
             this.buttonClearAll.TabIndex = 0;
@@ -327,6 +331,26 @@ namespace CGPart3
             this.radioButtonAddThinLine.UseVisualStyleBackColor = true;
             this.radioButtonAddThinLine.CheckedChanged += new System.EventHandler(this.mode_CheckedChanged);
             // 
+            // checkBoxAntiAliasing
+            // 
+            this.checkBoxAntiAliasing.AutoSize = true;
+            this.checkBoxAntiAliasing.Location = new System.Drawing.Point(88, 386);
+            this.checkBoxAntiAliasing.Name = "checkBoxAntiAliasing";
+            this.checkBoxAntiAliasing.Size = new System.Drawing.Size(179, 25);
+            this.checkBoxAntiAliasing.TabIndex = 10;
+            this.checkBoxAntiAliasing.Text = "Enable AA (lines only)";
+            this.checkBoxAntiAliasing.UseVisualStyleBackColor = true;
+            // 
+            // labelAntiAliasing
+            // 
+            this.labelAntiAliasing.AutoSize = true;
+            this.labelAntiAliasing.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelAntiAliasing.Location = new System.Drawing.Point(85, 368);
+            this.labelAntiAliasing.Name = "labelAntiAliasing";
+            this.labelAntiAliasing.Size = new System.Drawing.Size(77, 15);
+            this.labelAntiAliasing.TabIndex = 11;
+            this.labelAntiAliasing.Text = "Anti-Aliasing";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -370,6 +394,8 @@ namespace CGPart3
         private System.Windows.Forms.NumericUpDown numericUpDownLineThickness;
         private System.Windows.Forms.Label labelLineThickness;
         private System.Windows.Forms.ColorDialog colorDialog;
+        private System.Windows.Forms.Label labelAntiAliasing;
+        private System.Windows.Forms.CheckBox checkBoxAntiAliasing;
     }
 }
 
