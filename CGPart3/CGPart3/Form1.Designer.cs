@@ -31,6 +31,8 @@ namespace CGPart3
         {
             this.pictureBoxMain = new System.Windows.Forms.PictureBox();
             this.groupBoxSettings = new System.Windows.Forms.GroupBox();
+            this.labelAntiAliasing = new System.Windows.Forms.Label();
+            this.checkBoxAntiAliasing = new System.Windows.Forms.CheckBox();
             this.labelMode = new System.Windows.Forms.Label();
             this.buttonClearAll = new System.Windows.Forms.Button();
             this.labelBrush = new System.Windows.Forms.Label();
@@ -51,8 +53,6 @@ namespace CGPart3
             this.radioButtonAddThickLine = new System.Windows.Forms.RadioButton();
             this.radioButtonAddThinLine = new System.Windows.Forms.RadioButton();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
-            this.checkBoxAntiAliasing = new System.Windows.Forms.CheckBox();
-            this.labelAntiAliasing = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).BeginInit();
             this.groupBoxSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLineThickness)).BeginInit();
@@ -61,7 +61,7 @@ namespace CGPart3
             // 
             // pictureBoxMain
             // 
-            this.pictureBoxMain.Location = new System.Drawing.Point(411, 24);
+            this.pictureBoxMain.Location = new System.Drawing.Point(411, 27);
             this.pictureBoxMain.Name = "pictureBoxMain";
             this.pictureBoxMain.Size = new System.Drawing.Size(600, 800);
             this.pictureBoxMain.TabIndex = 0;
@@ -92,6 +92,27 @@ namespace CGPart3
             this.groupBoxSettings.TabIndex = 1;
             this.groupBoxSettings.TabStop = false;
             this.groupBoxSettings.Text = "Settings";
+            // 
+            // labelAntiAliasing
+            // 
+            this.labelAntiAliasing.AutoSize = true;
+            this.labelAntiAliasing.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelAntiAliasing.Location = new System.Drawing.Point(85, 368);
+            this.labelAntiAliasing.Name = "labelAntiAliasing";
+            this.labelAntiAliasing.Size = new System.Drawing.Size(77, 15);
+            this.labelAntiAliasing.TabIndex = 11;
+            this.labelAntiAliasing.Text = "Anti-Aliasing";
+            // 
+            // checkBoxAntiAliasing
+            // 
+            this.checkBoxAntiAliasing.AutoSize = true;
+            this.checkBoxAntiAliasing.Location = new System.Drawing.Point(88, 386);
+            this.checkBoxAntiAliasing.Name = "checkBoxAntiAliasing";
+            this.checkBoxAntiAliasing.Size = new System.Drawing.Size(179, 25);
+            this.checkBoxAntiAliasing.TabIndex = 10;
+            this.checkBoxAntiAliasing.Text = "Enable AA (lines only)";
+            this.checkBoxAntiAliasing.UseVisualStyleBackColor = true;
+            this.checkBoxAntiAliasing.CheckedChanged += new System.EventHandler(this.checkBoxAntiAliasing_CheckedChanged);
             // 
             // labelMode
             // 
@@ -330,26 +351,6 @@ namespace CGPart3
             this.radioButtonAddThinLine.TabIndex = 0;
             this.radioButtonAddThinLine.UseVisualStyleBackColor = true;
             this.radioButtonAddThinLine.CheckedChanged += new System.EventHandler(this.mode_CheckedChanged);
-            // 
-            // checkBoxAntiAliasing
-            // 
-            this.checkBoxAntiAliasing.AutoSize = true;
-            this.checkBoxAntiAliasing.Location = new System.Drawing.Point(88, 386);
-            this.checkBoxAntiAliasing.Name = "checkBoxAntiAliasing";
-            this.checkBoxAntiAliasing.Size = new System.Drawing.Size(179, 25);
-            this.checkBoxAntiAliasing.TabIndex = 10;
-            this.checkBoxAntiAliasing.Text = "Enable AA (lines only)";
-            this.checkBoxAntiAliasing.UseVisualStyleBackColor = true;
-            // 
-            // labelAntiAliasing
-            // 
-            this.labelAntiAliasing.AutoSize = true;
-            this.labelAntiAliasing.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelAntiAliasing.Location = new System.Drawing.Point(85, 368);
-            this.labelAntiAliasing.Name = "labelAntiAliasing";
-            this.labelAntiAliasing.Size = new System.Drawing.Size(77, 15);
-            this.labelAntiAliasing.TabIndex = 11;
-            this.labelAntiAliasing.Text = "Anti-Aliasing";
             // 
             // Form1
             // 
