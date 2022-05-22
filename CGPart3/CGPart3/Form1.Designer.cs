@@ -47,7 +47,6 @@ namespace CGPart3
             this.labelLineThickness = new System.Windows.Forms.Label();
             this.panelMode = new System.Windows.Forms.Panel();
             this.radioButtonSelectObject = new System.Windows.Forms.RadioButton();
-            this.radioButtonDebug = new System.Windows.Forms.RadioButton();
             this.radioButtonErase = new System.Windows.Forms.RadioButton();
             this.radioButtonBrush = new System.Windows.Forms.RadioButton();
             this.radioButtonResizeCircle = new System.Windows.Forms.RadioButton();
@@ -56,8 +55,7 @@ namespace CGPart3
             this.radioButtonMovePoint = new System.Windows.Forms.RadioButton();
             this.radioButtonAddPolygon = new System.Windows.Forms.RadioButton();
             this.radioButtonAddCircle = new System.Windows.Forms.RadioButton();
-            this.radioButtonAddThickLine = new System.Windows.Forms.RadioButton();
-            this.radioButtonAddThinLine = new System.Windows.Forms.RadioButton();
+            this.radioButtonAddLine = new System.Windows.Forms.RadioButton();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).BeginInit();
             this.groupBoxSettings.SuspendLayout();
@@ -108,7 +106,7 @@ namespace CGPart3
             // 
             this.buttonSaveObject.Enabled = false;
             this.buttonSaveObject.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonSaveObject.Location = new System.Drawing.Point(85, 703);
+            this.buttonSaveObject.Location = new System.Drawing.Point(85, 649);
             this.buttonSaveObject.Name = "buttonSaveObject";
             this.buttonSaveObject.Size = new System.Drawing.Size(222, 32);
             this.buttonSaveObject.TabIndex = 17;
@@ -120,7 +118,7 @@ namespace CGPart3
             // 
             this.labelObjectColor.AutoSize = true;
             this.labelObjectColor.BackColor = System.Drawing.Color.Silver;
-            this.labelObjectColor.Location = new System.Drawing.Point(85, 657);
+            this.labelObjectColor.Location = new System.Drawing.Point(85, 603);
             this.labelObjectColor.MaximumSize = new System.Drawing.Size(30, 30);
             this.labelObjectColor.MinimumSize = new System.Drawing.Size(30, 30);
             this.labelObjectColor.Name = "labelObjectColor";
@@ -131,7 +129,7 @@ namespace CGPart3
             // buttonObjectColor
             // 
             this.buttonObjectColor.Enabled = false;
-            this.buttonObjectColor.Location = new System.Drawing.Point(124, 656);
+            this.buttonObjectColor.Location = new System.Drawing.Point(124, 602);
             this.buttonObjectColor.Name = "buttonObjectColor";
             this.buttonObjectColor.Size = new System.Drawing.Size(183, 32);
             this.buttonObjectColor.TabIndex = 15;
@@ -147,7 +145,7 @@ namespace CGPart3
             0,
             0,
             0});
-            this.numericUpDownObjectThickness.Location = new System.Drawing.Point(214, 612);
+            this.numericUpDownObjectThickness.Location = new System.Drawing.Point(214, 558);
             this.numericUpDownObjectThickness.Maximum = new decimal(new int[] {
             49,
             0,
@@ -171,7 +169,7 @@ namespace CGPart3
             // labelObjectThickness
             // 
             this.labelObjectThickness.AutoSize = true;
-            this.labelObjectThickness.Location = new System.Drawing.Point(85, 614);
+            this.labelObjectThickness.Location = new System.Drawing.Point(85, 560);
             this.labelObjectThickness.Name = "labelObjectThickness";
             this.labelObjectThickness.Size = new System.Drawing.Size(107, 21);
             this.labelObjectThickness.TabIndex = 13;
@@ -181,7 +179,7 @@ namespace CGPart3
             // 
             this.labelObject.AutoSize = true;
             this.labelObject.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelObject.Location = new System.Drawing.Point(85, 587);
+            this.labelObject.Location = new System.Drawing.Point(85, 533);
             this.labelObject.Name = "labelObject";
             this.labelObject.Size = new System.Drawing.Size(91, 15);
             this.labelObject.TabIndex = 12;
@@ -191,7 +189,7 @@ namespace CGPart3
             // 
             this.labelGeneral.AutoSize = true;
             this.labelGeneral.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelGeneral.Location = new System.Drawing.Point(85, 365);
+            this.labelGeneral.Location = new System.Drawing.Point(85, 311);
             this.labelGeneral.Name = "labelGeneral";
             this.labelGeneral.Size = new System.Drawing.Size(98, 15);
             this.labelGeneral.TabIndex = 11;
@@ -200,7 +198,7 @@ namespace CGPart3
             // checkBoxAntiAliasing
             // 
             this.checkBoxAntiAliasing.AutoSize = true;
-            this.checkBoxAntiAliasing.Location = new System.Drawing.Point(88, 392);
+            this.checkBoxAntiAliasing.Location = new System.Drawing.Point(88, 338);
             this.checkBoxAntiAliasing.Name = "checkBoxAntiAliasing";
             this.checkBoxAntiAliasing.Size = new System.Drawing.Size(179, 25);
             this.checkBoxAntiAliasing.TabIndex = 10;
@@ -221,7 +219,7 @@ namespace CGPart3
             // buttonClearAll
             // 
             this.buttonClearAll.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonClearAll.Location = new System.Drawing.Point(85, 514);
+            this.buttonClearAll.Location = new System.Drawing.Point(85, 460);
             this.buttonClearAll.Name = "buttonClearAll";
             this.buttonClearAll.Size = new System.Drawing.Size(222, 32);
             this.buttonClearAll.TabIndex = 0;
@@ -233,7 +231,7 @@ namespace CGPart3
             // 
             this.labelBrushColor.AutoSize = true;
             this.labelBrushColor.BackColor = System.Drawing.Color.Black;
-            this.labelBrushColor.Location = new System.Drawing.Point(85, 468);
+            this.labelBrushColor.Location = new System.Drawing.Point(85, 414);
             this.labelBrushColor.MaximumSize = new System.Drawing.Size(30, 30);
             this.labelBrushColor.MinimumSize = new System.Drawing.Size(30, 30);
             this.labelBrushColor.Name = "labelBrushColor";
@@ -243,7 +241,7 @@ namespace CGPart3
             // 
             // buttonBrushColor
             // 
-            this.buttonBrushColor.Location = new System.Drawing.Point(124, 467);
+            this.buttonBrushColor.Location = new System.Drawing.Point(124, 413);
             this.buttonBrushColor.Name = "buttonBrushColor";
             this.buttonBrushColor.Size = new System.Drawing.Size(183, 32);
             this.buttonBrushColor.TabIndex = 5;
@@ -258,7 +256,7 @@ namespace CGPart3
             0,
             0,
             0});
-            this.numericUpDownLineThickness.Location = new System.Drawing.Point(214, 423);
+            this.numericUpDownLineThickness.Location = new System.Drawing.Point(214, 369);
             this.numericUpDownLineThickness.Maximum = new decimal(new int[] {
             49,
             0,
@@ -282,7 +280,7 @@ namespace CGPart3
             // labelLineThickness
             // 
             this.labelLineThickness.AutoSize = true;
-            this.labelLineThickness.Location = new System.Drawing.Point(85, 425);
+            this.labelLineThickness.Location = new System.Drawing.Point(85, 371);
             this.labelLineThickness.Name = "labelLineThickness";
             this.labelLineThickness.Size = new System.Drawing.Size(107, 21);
             this.labelLineThickness.TabIndex = 2;
@@ -291,7 +289,6 @@ namespace CGPart3
             // panelMode
             // 
             this.panelMode.Controls.Add(this.radioButtonSelectObject);
-            this.panelMode.Controls.Add(this.radioButtonDebug);
             this.panelMode.Controls.Add(this.radioButtonErase);
             this.panelMode.Controls.Add(this.radioButtonBrush);
             this.panelMode.Controls.Add(this.radioButtonResizeCircle);
@@ -300,48 +297,30 @@ namespace CGPart3
             this.panelMode.Controls.Add(this.radioButtonMovePoint);
             this.panelMode.Controls.Add(this.radioButtonAddPolygon);
             this.panelMode.Controls.Add(this.radioButtonAddCircle);
-            this.panelMode.Controls.Add(this.radioButtonAddThickLine);
-            this.panelMode.Controls.Add(this.radioButtonAddThinLine);
+            this.panelMode.Controls.Add(this.radioButtonAddLine);
             this.panelMode.Location = new System.Drawing.Point(6, 52);
             this.panelMode.Name = "panelMode";
-            this.panelMode.Size = new System.Drawing.Size(380, 259);
+            this.panelMode.Size = new System.Drawing.Size(380, 152);
             this.panelMode.TabIndex = 1;
             // 
             // radioButtonSelectObject
             // 
             this.radioButtonSelectObject.Appearance = System.Windows.Forms.Appearance.Button;
             this.radioButtonSelectObject.AutoSize = true;
-            this.radioButtonSelectObject.Location = new System.Drawing.Point(79, 155);
-            this.radioButtonSelectObject.MinimumSize = new System.Drawing.Size(70, 0);
+            this.radioButtonSelectObject.Image = global::CGPart3.Properties.Resources.settings;
+            this.radioButtonSelectObject.Location = new System.Drawing.Point(307, 3);
             this.radioButtonSelectObject.Name = "radioButtonSelectObject";
-            this.radioButtonSelectObject.Size = new System.Drawing.Size(70, 31);
+            this.radioButtonSelectObject.Size = new System.Drawing.Size(70, 70);
             this.radioButtonSelectObject.TabIndex = 11;
             this.radioButtonSelectObject.TabStop = true;
-            this.radioButtonSelectObject.Text = "select";
-            this.radioButtonSelectObject.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.radioButtonSelectObject.UseVisualStyleBackColor = true;
             this.radioButtonSelectObject.CheckedChanged += new System.EventHandler(this.mode_CheckedChanged);
-            // 
-            // radioButtonDebug
-            // 
-            this.radioButtonDebug.Appearance = System.Windows.Forms.Appearance.Button;
-            this.radioButtonDebug.AutoSize = true;
-            this.radioButtonDebug.Location = new System.Drawing.Point(3, 155);
-            this.radioButtonDebug.MinimumSize = new System.Drawing.Size(70, 0);
-            this.radioButtonDebug.Name = "radioButtonDebug";
-            this.radioButtonDebug.Size = new System.Drawing.Size(70, 31);
-            this.radioButtonDebug.TabIndex = 10;
-            this.radioButtonDebug.TabStop = true;
-            this.radioButtonDebug.Text = "debug";
-            this.radioButtonDebug.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.radioButtonDebug.UseVisualStyleBackColor = true;
-            this.radioButtonDebug.CheckedChanged += new System.EventHandler(this.mode_CheckedChanged);
             // 
             // radioButtonErase
             // 
             this.radioButtonErase.Appearance = System.Windows.Forms.Appearance.Button;
             this.radioButtonErase.AutoSize = true;
-            this.radioButtonErase.Image = global::CGPart3.Properties.Resources.erase;
+            this.radioButtonErase.Image = global::CGPart3.Properties.Resources.trash;
             this.radioButtonErase.Location = new System.Drawing.Point(307, 79);
             this.radioButtonErase.Name = "radioButtonErase";
             this.radioButtonErase.Size = new System.Drawing.Size(70, 70);
@@ -367,7 +346,7 @@ namespace CGPart3
             this.radioButtonResizeCircle.Appearance = System.Windows.Forms.Appearance.Button;
             this.radioButtonResizeCircle.AutoSize = true;
             this.radioButtonResizeCircle.Image = global::CGPart3.Properties.Resources.resize_circle;
-            this.radioButtonResizeCircle.Location = new System.Drawing.Point(307, 3);
+            this.radioButtonResizeCircle.Location = new System.Drawing.Point(231, 3);
             this.radioButtonResizeCircle.Name = "radioButtonResizeCircle";
             this.radioButtonResizeCircle.Size = new System.Drawing.Size(70, 70);
             this.radioButtonResizeCircle.TabIndex = 7;
@@ -415,7 +394,7 @@ namespace CGPart3
             this.radioButtonAddPolygon.Appearance = System.Windows.Forms.Appearance.Button;
             this.radioButtonAddPolygon.AutoSize = true;
             this.radioButtonAddPolygon.Image = global::CGPart3.Properties.Resources.add_polygon;
-            this.radioButtonAddPolygon.Location = new System.Drawing.Point(231, 3);
+            this.radioButtonAddPolygon.Location = new System.Drawing.Point(155, 3);
             this.radioButtonAddPolygon.Name = "radioButtonAddPolygon";
             this.radioButtonAddPolygon.Size = new System.Drawing.Size(70, 70);
             this.radioButtonAddPolygon.TabIndex = 3;
@@ -427,36 +406,24 @@ namespace CGPart3
             this.radioButtonAddCircle.Appearance = System.Windows.Forms.Appearance.Button;
             this.radioButtonAddCircle.AutoSize = true;
             this.radioButtonAddCircle.Image = global::CGPart3.Properties.Resources.add_circle;
-            this.radioButtonAddCircle.Location = new System.Drawing.Point(155, 3);
+            this.radioButtonAddCircle.Location = new System.Drawing.Point(79, 3);
             this.radioButtonAddCircle.Name = "radioButtonAddCircle";
             this.radioButtonAddCircle.Size = new System.Drawing.Size(70, 70);
             this.radioButtonAddCircle.TabIndex = 2;
             this.radioButtonAddCircle.UseVisualStyleBackColor = true;
             this.radioButtonAddCircle.CheckedChanged += new System.EventHandler(this.mode_CheckedChanged);
             // 
-            // radioButtonAddThickLine
+            // radioButtonAddLine
             // 
-            this.radioButtonAddThickLine.Appearance = System.Windows.Forms.Appearance.Button;
-            this.radioButtonAddThickLine.AutoSize = true;
-            this.radioButtonAddThickLine.Image = global::CGPart3.Properties.Resources.add_thick_line;
-            this.radioButtonAddThickLine.Location = new System.Drawing.Point(79, 3);
-            this.radioButtonAddThickLine.Name = "radioButtonAddThickLine";
-            this.radioButtonAddThickLine.Size = new System.Drawing.Size(70, 70);
-            this.radioButtonAddThickLine.TabIndex = 1;
-            this.radioButtonAddThickLine.UseVisualStyleBackColor = true;
-            this.radioButtonAddThickLine.CheckedChanged += new System.EventHandler(this.mode_CheckedChanged);
-            // 
-            // radioButtonAddThinLine
-            // 
-            this.radioButtonAddThinLine.Appearance = System.Windows.Forms.Appearance.Button;
-            this.radioButtonAddThinLine.AutoSize = true;
-            this.radioButtonAddThinLine.Image = global::CGPart3.Properties.Resources.add_thin_line;
-            this.radioButtonAddThinLine.Location = new System.Drawing.Point(3, 3);
-            this.radioButtonAddThinLine.Name = "radioButtonAddThinLine";
-            this.radioButtonAddThinLine.Size = new System.Drawing.Size(70, 70);
-            this.radioButtonAddThinLine.TabIndex = 0;
-            this.radioButtonAddThinLine.UseVisualStyleBackColor = true;
-            this.radioButtonAddThinLine.CheckedChanged += new System.EventHandler(this.mode_CheckedChanged);
+            this.radioButtonAddLine.Appearance = System.Windows.Forms.Appearance.Button;
+            this.radioButtonAddLine.AutoSize = true;
+            this.radioButtonAddLine.Image = global::CGPart3.Properties.Resources.add_line;
+            this.radioButtonAddLine.Location = new System.Drawing.Point(3, 3);
+            this.radioButtonAddLine.Name = "radioButtonAddLine";
+            this.radioButtonAddLine.Size = new System.Drawing.Size(70, 70);
+            this.radioButtonAddLine.TabIndex = 0;
+            this.radioButtonAddLine.UseVisualStyleBackColor = true;
+            this.radioButtonAddLine.CheckedChanged += new System.EventHandler(this.mode_CheckedChanged);
             // 
             // Form1
             // 
@@ -484,8 +451,7 @@ namespace CGPart3
         private System.Windows.Forms.GroupBox groupBoxSettings;
         private System.Windows.Forms.Panel panelMode;
         private System.Windows.Forms.RadioButton radioButtonAddCircle;
-        private System.Windows.Forms.RadioButton radioButtonAddThickLine;
-        private System.Windows.Forms.RadioButton radioButtonAddThinLine;
+        private System.Windows.Forms.RadioButton radioButtonAddLine;
         private System.Windows.Forms.Button buttonClearAll;
         private System.Windows.Forms.RadioButton radioButtonBrush;
         private System.Windows.Forms.RadioButton radioButtonResizeCircle;
@@ -508,7 +474,6 @@ namespace CGPart3
         private System.Windows.Forms.Label labelObjectThickness;
         private System.Windows.Forms.Label labelObject;
         private System.Windows.Forms.Label labelGeneral;
-        private System.Windows.Forms.RadioButton radioButtonDebug;
         private System.Windows.Forms.RadioButton radioButtonSelectObject;
     }
 }

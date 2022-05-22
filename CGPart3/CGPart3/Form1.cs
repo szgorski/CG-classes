@@ -35,7 +35,6 @@ namespace CGPart3
             }
         }
 
-        //          (CORRECT THIS FUNCTION!)
         public unsafe static int FastRound(float number)
         {
             int floor = (int)number;
@@ -52,17 +51,7 @@ namespace CGPart3
             else
                 return a;
         }
-// del
-        public unsafe static bool IsClosePoint(Point mouse, Point point)
-        {
-            int diffX = FastAbs(mouse.X - point.X);
-            int diffY = FastAbs(mouse.Y - point.Y);
-            if (diffX < 4 && diffY < 4 && diffX + diffY < 5)
-                return true;
-            else
-                return false;
-        }
-// del
+
         public unsafe static Point CleanLocation(Point mouse)
         {
             if (mouse.X < 0) mouse.X = 0;
@@ -137,112 +126,51 @@ namespace CGPart3
             return (float)Math.Sqrt((point1.X - point2.X) * (point1.X - point2.X)
                     + (point1.Y - point2.Y) * (point1.Y - point2.Y));
         }
-// del
-        public unsafe static int CalculateDistanceSquared(Point point1, Point point2)
+
+        public unsafe static (int, int) GetClosestPoint(Point point)
         {
-            return (point1.X - point2.X) * (point1.X - point2.X)
-                    + (point1.Y - point2.Y) * (point1.Y - point2.Y);
+            int index, bestIndex = 0, bestObject = 0;
+            float distance, bestDistance = float.PositiveInfinity;
+            for (int i = 0; i < Variables.shapes.Count; i++)
+            {
+                (index, distance) = Variables.shapes[i].GetPointDistance(point);
+                if (distance < bestDistance)
+                {
+                    bestIndex = index;
+                    bestObject = Variables.shapes[i].ID;
+                    bestDistance = distance;
+                }
+            }
+
+            if (bestDistance <= 5)
+                return (bestObject, bestIndex);
+            else
+                return (0, 0);
+        }
+
+        public unsafe static (int, int) GetClosestLine(Point point)
+        {
+            int index, bestIndex = 0, bestObject = 0;
+            float distance, bestDistance = float.PositiveInfinity;
+            for (int i = 0; i < Variables.shapes.Count; i++)
+            {
+                (index, distance) = Variables.shapes[i].GetLineDistance(point);
+                if (distance < bestDistance)
+                {
+                    bestIndex = index;
+                    bestObject = Variables.shapes[i].ID;
+                    bestDistance = distance;
+                }
+            }
+
+            if (bestDistance <= 5)
+                return (bestObject, bestIndex);
+            else
+                return (0, 0);
         }
 
         // DRAWING FUNCTIONS
-        //          THIN LINE
-        public unsafe static void MidpointHorizontalLine(int x1, int y1, int x2, int y2, int ID, uint colour, int number)
-        {
-            int dx = x2 - x1;
-            int dy = y2 - y1;
-            int ys = 1;
-            if (dy < 0)
-            {
-                ys = -1;
-                dy = -dy;
-            }
-            int d = 2 * dy - dx;
-            int dI = 2 * dy;            // identity axis
-            int dD = 2 * (dy - dx);     // diagonal axis
-            int x = x1;
-            int y = y1;
-            Variables.bitmapArray[x, y] = colour;
-//            Variables.shapesArray[x, y] = ID;
-//            if (number != 0) 
-//                Variables.linesArray[x, y] = number;
-            while (x < x2)
-            {
-                if (d < 0)
-                {
-                    d += dI;
-                    x++;
-                }
-                else
-                {
-                    d += dD;
-                    y += ys;
-                    x++;
-                }
-                Variables.bitmapArray[x, y] = colour;
-//                Variables.shapesArray[x, y] = ID;
-//                if (number != 0) 
-//                    Variables.linesArray[x, y] = number;
-            }
-        }
-
-        public unsafe static void MidpointVerticalLine(int x1, int y1, int x2, int y2, int ID, uint colour, int number)
-        {
-            int dx = x2 - x1;
-            int dy = y2 - y1;
-            int xs = 1;
-            if (dx < 0)
-            {
-                xs = -1;
-                dx = -dx;
-            }
-            int d = 2 * dx - dy;
-            int dI = 2 * dx;            // identity axis
-            int dD = 2 * (dx - dy);     // diagonal axis
-            int x = x1;
-            int y = y1;
-            Variables.bitmapArray[x, y] = colour;
-//            Variables.shapesArray[x, y] = ID;
-//            if (number != 0) 
-//                Variables.linesArray[x, y] = number;
-            while (y < y2)
-            {
-                if (d < 0)
-                {
-                    d += dI;
-                    y++;
-                }
-                else
-                {
-                    d += dD;
-                    x += xs;
-                    y++;
-                }
-                Variables.bitmapArray[x, y] = colour;
-//                Variables.shapesArray[x, y] = ID;
-//                if (number != 0) 
-//                    Variables.linesArray[x, y] = number;
-            }
-        }
-
-        public unsafe static void MidpointLine(Point point1, Point point2, int ID, uint colour, int number)
-        {
-            if (FastAbs(point2.X - point1.X) > FastAbs(point2.Y - point1.Y))
-            {
-                if (point2.X > point1.X)
-                    MidpointHorizontalLine(point1.X, point1.Y, point2.X, point2.Y, ID, colour, number);
-                else
-                    MidpointHorizontalLine(point2.X, point2.Y, point1.X, point1.Y, ID, colour, number);
-            }
-            else
-            {
-                if (point2.Y > point1.Y)
-                    MidpointVerticalLine(point1.X, point1.Y, point2.X, point2.Y, ID, colour, number);
-                else
-                    MidpointVerticalLine(point2.X, point2.Y, point1.X, point1.Y, ID, colour, number);
-            }
-        }
-
-        //          THICK LINE (BRUSH)
+        //          BRUSH
         public unsafe static bool[,] CreateBrush(int diagonal)
         {   // assuming diagonal is odd
             int radius = diagonal / 2;
@@ -259,7 +187,7 @@ namespace CGPart3
             return circle;
         }
 
-        public unsafe static void ApplyBrush(int x, int y, bool[,] brush, int ID, uint colour, int thickness)
+        public unsafe static void ApplyBrush(int x, int y, bool[,] brush, uint colour, int thickness)
         {
             int radius = thickness / 2;
             for (int i = FastMax(x - radius, 0); i <= FastMin(x + radius, Variables.bitmapWidth - 1); i++)
@@ -267,15 +195,99 @@ namespace CGPart3
                 for (int j = FastMax(y - radius, 0); j <= FastMin(y + radius, Variables.bitmapHeight - 1); j++)
                 {
                     if (brush[i - x + radius, j - y + radius])
-                    {
                         Variables.bitmapArray[i, j] = colour;
-//                        Variables.shapesArray[i, j] = ID;
-                    }
                 }
             }
         }
 
-        public unsafe static void BrushHorizontalLine(int x1, int y1, int x2, int y2, int ID, uint colour, int thickness)
+        //          LINE
+        public unsafe static void MidpointHorizontalLine(int x1, int y1, int x2, int y2, uint colour)
+        {
+            int dx = x2 - x1;
+            int dy = y2 - y1;
+            int ys = 1;
+            if (dy < 0)
+            {
+                ys = -1;
+                dy = -dy;
+            }
+            int d = 2 * dy - dx;
+            int dI = 2 * dy;            // identity axis
+            int dD = 2 * (dy - dx);     // diagonal axis
+            int x = x1;
+            int y = y1;
+            Variables.bitmapArray[x, y] = colour;
+
+            while (x < x2)
+            {
+                if (d < 0)
+                {
+                    d += dI;
+                    x++;
+                }
+                else
+                {
+                    d += dD;
+                    y += ys;
+                    x++;
+                }
+                Variables.bitmapArray[x, y] = colour;
+            }
+        }
+
+        public unsafe static void MidpointVerticalLine(int x1, int y1, int x2, int y2, uint colour)
+        {
+            int dx = x2 - x1;
+            int dy = y2 - y1;
+            int xs = 1;
+            if (dx < 0)
+            {
+                xs = -1;
+                dx = -dx;
+            }
+            int d = 2 * dx - dy;
+            int dI = 2 * dx;            // identity axis
+            int dD = 2 * (dx - dy);     // diagonal axis
+            int x = x1;
+            int y = y1;
+            Variables.bitmapArray[x, y] = colour;
+
+            while (y < y2)
+            {
+                if (d < 0)
+                {
+                    d += dI;
+                    y++;
+                }
+                else
+                {
+                    d += dD;
+                    x += xs;
+                    y++;
+                }
+                Variables.bitmapArray[x, y] = colour;
+            }
+        }
+
+        public unsafe static void MidpointLine(Point point1, Point point2, uint colour)
+        {
+            if (FastAbs(point2.X - point1.X) > FastAbs(point2.Y - point1.Y))
+            {
+                if (point2.X > point1.X)
+                    MidpointHorizontalLine(point1.X, point1.Y, point2.X, point2.Y, colour);
+                else
+                    MidpointHorizontalLine(point2.X, point2.Y, point1.X, point1.Y, colour);
+            }
+            else
+            {
+                if (point2.Y > point1.Y)
+                    MidpointVerticalLine(point1.X, point1.Y, point2.X, point2.Y, colour);
+                else
+                    MidpointVerticalLine(point2.X, point2.Y, point1.X, point1.Y, colour);
+            }
+        }
+
+        public unsafe static void BrushHorizontalLine(int x1, int y1, int x2, int y2, uint colour, int thickness)
         {
             bool[,] brush = CreateBrush(thickness);
             int dx = x2 - x1;
@@ -291,7 +303,7 @@ namespace CGPart3
             int dD = 2 * (dy - dx);     // diagonal axis
             int x = x1;
             int y = y1;
-            ApplyBrush(x, y, brush, ID, colour, thickness);
+            ApplyBrush(x, y, brush, colour, thickness);
             while (x < x2)
             {
                 if (d < 0)
@@ -305,11 +317,11 @@ namespace CGPart3
                     y += ys;
                     x++;
                 }
-                ApplyBrush(x, y, brush, ID, colour, thickness);
+                ApplyBrush(x, y, brush, colour, thickness);
             }
         }
 
-        public unsafe static void BrushVerticalLine(int x1, int y1, int x2, int y2, int ID, uint colour, int thickness)
+        public unsafe static void BrushVerticalLine(int x1, int y1, int x2, int y2, uint colour, int thickness)
         {
             bool[,] brush = CreateBrush(thickness);
             int dx = x2 - x1;
@@ -325,7 +337,7 @@ namespace CGPart3
             int dD = 2 * (dx - dy);     // diagonal axis
             int x = x1;
             int y = y1;
-            ApplyBrush(x, y, brush, ID, colour, thickness);
+            ApplyBrush(x, y, brush, colour, thickness);
             while (y < y2)
             {
                 if (d < 0)
@@ -339,30 +351,30 @@ namespace CGPart3
                     x += xs;
                     y++;
                 }
-                ApplyBrush(x, y, brush, ID, colour, thickness);
+                ApplyBrush(x, y, brush, colour, thickness);
             }
         }
 
-        public unsafe static void BrushLine(Point point1, Point point2, int ID, uint colour, int thickness)
+        public unsafe static void BrushLine(Point point1, Point point2, uint colour, int thickness)
         {
             if (FastAbs(point2.X - point1.X) > FastAbs(point2.Y - point1.Y))
             {
                 if (point2.X > point1.X)
-                    BrushHorizontalLine(point1.X, point1.Y, point2.X, point2.Y, ID, colour, thickness);
+                    BrushHorizontalLine(point1.X, point1.Y, point2.X, point2.Y, colour, thickness);
                 else
-                    BrushHorizontalLine(point2.X, point2.Y, point1.X, point1.Y, ID, colour, thickness);
+                    BrushHorizontalLine(point2.X, point2.Y, point1.X, point1.Y, colour, thickness);
             }
             else
             {
                 if (point2.Y > point1.Y)
-                    BrushVerticalLine(point1.X, point1.Y, point2.X, point2.Y, ID, colour, thickness);
+                    BrushVerticalLine(point1.X, point1.Y, point2.X, point2.Y, colour, thickness);
                 else
-                    BrushVerticalLine(point2.X, point2.Y, point1.X, point1.Y, ID, colour, thickness);
+                    BrushVerticalLine(point2.X, point2.Y, point1.X, point1.Y, colour, thickness);
             }
         }
 
         //          CIRCLE
-        public unsafe static void MidpointCircle(Point point, int radius, int ID, uint colour)
+        public unsafe static void MidpointCircle(Point point, int radius, uint colour)
         {
             int x = point.X;
             int y = point.Y;
@@ -383,45 +395,21 @@ namespace CGPart3
             caseH = false; if (y - yc >= 0 && y - yc < Variables.bitmapHeight) caseH = true;
 
             if (caseA && caseG)
-            {
                 Variables.bitmapArray[x + xc, y + yc] = colour;
-//                Variables.shapesArray[x + xc, y + yc] = ID;
-            }
             if (caseA && caseH)
-            {
                 Variables.bitmapArray[x + xc, y - yc] = colour;
-//                Variables.shapesArray[x + xc, y - yc] = ID;
-            }
             if (caseB && caseG)
-            {
                 Variables.bitmapArray[x - xc, y + yc] = colour;
-//                Variables.shapesArray[x - xc, y + yc] = ID;
-            }
             if (caseB && caseH)
-            {
                 Variables.bitmapArray[x - xc, y - yc] = colour;
-//                Variables.shapesArray[x - xc, y - yc] = ID;
-            }
             if (caseC && caseE)
-            {
                 Variables.bitmapArray[x + yc, y + xc] = colour;
-//                Variables.shapesArray[x + yc, y + xc] = ID;
-            }
             if (caseC && caseF)
-            {
                 Variables.bitmapArray[x + yc, y - xc] = colour;
-//                Variables.shapesArray[x + yc, y - xc] = ID;
-            }
             if (caseD && caseE)
-            {
                 Variables.bitmapArray[x - yc, y + xc] = colour;
-//                Variables.shapesArray[x - yc, y + xc] = ID;
-            }
             if (caseD && caseF)
-            {
                 Variables.bitmapArray[x - yc, y - xc] = colour;
-//                Variables.shapesArray[x - yc, y - xc] = ID;
-            }
             
             while (yc > xc)
             {
@@ -450,49 +438,74 @@ namespace CGPart3
                 caseH = false; if (y - yc >= 0 && y - yc < Variables.bitmapHeight) caseH = true;
 
                 if (caseA && caseG)
-                {
                     Variables.bitmapArray[x + xc, y + yc] = colour;
-//                    Variables.shapesArray[x + xc, y + yc] = ID;
-                }
                 if (caseA && caseH)
-                {
                     Variables.bitmapArray[x + xc, y - yc] = colour;
-//                    Variables.shapesArray[x + xc, y - yc] = ID;
-                }
                 if (caseB && caseG)
-                {
                     Variables.bitmapArray[x - xc, y + yc] = colour;
-//                    Variables.shapesArray[x - xc, y + yc] = ID;
-                }
                 if (caseB && caseH)
-                {
                     Variables.bitmapArray[x - xc, y - yc] = colour;
-//                    Variables.shapesArray[x - xc, y - yc] = ID;
-                }
                 if (caseC && caseE)
-                {
                     Variables.bitmapArray[x + yc, y + xc] = colour;
-//                    Variables.shapesArray[x + yc, y + xc] = ID;
-                }
                 if (caseC && caseF)
-                {
                     Variables.bitmapArray[x + yc, y - xc] = colour;
-//                    Variables.shapesArray[x + yc, y - xc] = ID;
-                }
                 if (caseD && caseE)
-                {
                     Variables.bitmapArray[x - yc, y + xc] = colour;
-//                    Variables.shapesArray[x - yc, y + xc] = ID;
-                }
                 if (caseD && caseF)
-                {
                     Variables.bitmapArray[x - yc, y - xc] = colour;
-//                    Variables.shapesArray[x - yc, y - xc] = ID;
-                }
             }
         }
 
-        //          ANTI-ALIASING
+        public unsafe static void BrushCircle(Point point, int radius, uint colour, int thickness)
+        {
+            bool[,] brush = CreateBrush(thickness);
+
+            int x = point.X;
+            int y = point.Y;
+            int d = 1 - radius;
+            int dI = 3;                  // identity axis
+            int dD = 5 - 2 * radius;     // diagonal axis
+            int xc = 0;         // relative circumference position
+            int yc = radius;    // relative circumference position
+
+            ApplyBrush(x + xc, y + yc, brush, colour, thickness);
+            ApplyBrush(x + xc, y - yc, brush, colour, thickness);
+            ApplyBrush(x - xc, y + yc, brush, colour, thickness);
+            ApplyBrush(x - xc, y - yc, brush, colour, thickness);
+            ApplyBrush(x + yc, y + xc, brush, colour, thickness);
+            ApplyBrush(x + yc, y - xc, brush, colour, thickness);
+            ApplyBrush(x - yc, y + xc, brush, colour, thickness);
+            ApplyBrush(x - yc, y - xc, brush, colour, thickness);
+
+            while (yc > xc)
+            {
+                if (d < 0)
+                {
+                    d += dI;
+                    dI += 2;
+                    dD += 2;
+                }
+                else
+                {
+                    d += dD;
+                    dI += 2;
+                    dD += 4;
+                    yc--;
+                }
+                xc++;
+
+                ApplyBrush(x + xc, y + yc, brush, colour, thickness);
+                ApplyBrush(x + xc, y - yc, brush, colour, thickness);
+                ApplyBrush(x - xc, y + yc, brush, colour, thickness);
+                ApplyBrush(x - xc, y - yc, brush, colour, thickness);
+                ApplyBrush(x + yc, y + xc, brush, colour, thickness);
+                ApplyBrush(x + yc, y - xc, brush, colour, thickness);
+                ApplyBrush(x - yc, y + xc, brush, colour, thickness);
+                ApplyBrush(x - yc, y - xc, brush, colour, thickness);
+            }
+        }
+
+        //          LINE ANTI-ALIASING
         public unsafe static uint InterpolateColour(uint backColour, uint frontColour, float coverage)
         {   // assuming coverage belongs to [0, 1]
             uint backA = (backColour >> 24);
@@ -540,19 +553,16 @@ namespace CGPart3
 
         }
 
-        public unsafe static float AddPixelIntensity(int x, int y, int ID, uint colour, int thickness, float distance, int number)
+        public unsafe static float AddPixelIntensity(int x, int y, uint colour, int thickness, float distance)
         {
             float coverage = CalculateLineCoverage(thickness, distance);
             if (coverage > 0)
-            {
                 Variables.bitmapArray[x, y] = InterpolateColour(Variables.bitmapArray[x, y], colour, coverage);
-//                Variables.shapesArray[x, y] = ID;
-//                if (number != 0) Variables.linesArray[x, y] = number;
-            }
+
             return coverage;
         }
 
-        public unsafe static void AntialiasedHorizontalLine(int x1, int y1, int x2, int y2, int ID, uint colour, int thickness, int number)
+        public unsafe static void AntialiasedHorizontalLine(int x1, int y1, int x2, int y2, uint colour, int thickness)
         {
             int radius = thickness / 2;
             int dx = x2 - x1;
@@ -577,11 +587,11 @@ namespace CGPart3
                 float two_dx_invDenominator = 2 * dx * invDenominator;
                 int x = x1;
                 int y = y1;
-                AddPixelIntensity(x, y, ID, colour, thickness, 0, number);
+                AddPixelIntensity(x, y, colour, thickness, 0);
                 for (int i = 1; y + i < Variables.bitmapHeight && 
-                    AddPixelIntensity(x, y + i, ID, colour, thickness, i * two_dx_invDenominator, number) > 0; ++i);
+                    AddPixelIntensity(x, y + i, colour, thickness, i * two_dx_invDenominator) > 0; ++i);
                 for (int i = 1; y - i >= 0 && 
-                    AddPixelIntensity(x, y - i, ID, colour, thickness, i * two_dx_invDenominator, number) > 0; ++i);
+                    AddPixelIntensity(x, y - i, colour, thickness, i * two_dx_invDenominator) > 0; ++i);
                 if (xs != ys)
                 {
                     while (x < x2)
@@ -598,11 +608,11 @@ namespace CGPart3
                             d += dD;
                             y += ys;
                         }
-                        AddPixelIntensity(x, y, ID, colour, thickness, two_v_dx * invDenominator, number);
-                        for (int i = 1; y + i < Variables.bitmapHeight && AddPixelIntensity(x, y + i, ID, colour, thickness,
-                            i * two_dx_invDenominator + two_v_dx * invDenominator, number) > 0; ++i) ;
-                        for (int i = 1; y - i >= 0 && AddPixelIntensity(x, y - i, ID, colour, thickness,
-                            i * two_dx_invDenominator - two_v_dx * invDenominator, number) > 0; ++i) ;
+                        AddPixelIntensity(x, y, colour, thickness, two_v_dx * invDenominator);
+                        for (int i = 1; y + i < Variables.bitmapHeight && AddPixelIntensity(x, y + i, colour, thickness,
+                            i * two_dx_invDenominator + two_v_dx * invDenominator) > 0; ++i) ;
+                        for (int i = 1; y - i >= 0 && AddPixelIntensity(x, y - i, colour, thickness,
+                            i * two_dx_invDenominator - two_v_dx * invDenominator) > 0; ++i) ;
                     }
 
                     // TODO: brush to array of thickness, change thickness dynamically
@@ -645,18 +655,18 @@ namespace CGPart3
                             d += dD;
                             y += ys;
                         }
-                        AddPixelIntensity(x, y, ID, colour, thickness, two_v_dx * invDenominator, number);
-                        for (int i = 1; y + i < Variables.bitmapHeight && AddPixelIntensity(x, y + i, ID, colour, thickness,
-                            i * two_dx_invDenominator - two_v_dx * invDenominator, number) > 0; ++i) ;
-                        for (int i = 1; y - i >= 0 && AddPixelIntensity(x, y - i, ID, colour, thickness,
-                            i * two_dx_invDenominator + two_v_dx * invDenominator, number) > 0; ++i) ;
+                        AddPixelIntensity(x, y, colour, thickness, two_v_dx * invDenominator);
+                        for (int i = 1; y + i < Variables.bitmapHeight && AddPixelIntensity(x, y + i, colour, thickness,
+                            i * two_dx_invDenominator - two_v_dx * invDenominator) > 0; ++i) ;
+                        for (int i = 1; y - i >= 0 && AddPixelIntensity(x, y - i, colour, thickness,
+                            i * two_dx_invDenominator + two_v_dx * invDenominator) > 0; ++i) ;
                     }
                 }
 
             }
         }
 
-        public unsafe static void AntialiasedVerticalLine(int x1, int y1, int x2, int y2, int ID, uint colour, int thickness, int number)
+        public unsafe static void AntialiasedVerticalLine(int x1, int y1, int x2, int y2, uint colour, int thickness)
         {
             int dx = x2 - x1;
             int dy = y2 - y1;
@@ -680,11 +690,11 @@ namespace CGPart3
                 float two_dy_invDenominator = 2 * dy * invDenominator;
                 int x = x1;
                 int y = y1;
-                AddPixelIntensity(x, y, ID, colour, thickness, 0, number);
+                AddPixelIntensity(x, y, colour, thickness, 0);
                 for (int i = 1; x + i < Variables.bitmapWidth && 
-                    AddPixelIntensity(x + i, y, ID, colour, thickness, i * two_dy_invDenominator, number) > 0; ++i) ;
+                    AddPixelIntensity(x + i, y, colour, thickness, i * two_dy_invDenominator) > 0; ++i) ;
                 for (int i = 1; x - i >= 0 && 
-                    AddPixelIntensity(x - i, y, ID, colour, thickness, i * two_dy_invDenominator, number) > 0; ++i) ;
+                    AddPixelIntensity(x - i, y, colour, thickness, i * two_dy_invDenominator) > 0; ++i) ;
                 if (xs != ys)
                 {
                     while (y < y2)
@@ -701,11 +711,11 @@ namespace CGPart3
                             d += dD;
                             x += xs;
                         }
-                        AddPixelIntensity(x, y, ID, colour, thickness, two_v_dy * invDenominator, number);
-                        for (int i = 1; x + i < Variables.bitmapWidth && AddPixelIntensity(x + i, y, ID, colour, thickness,
-                            i * two_dy_invDenominator + two_v_dy * invDenominator, number) > 0; ++i) ;
-                        for (int i = 1; x - i >= 0 && AddPixelIntensity(x - i, y, ID, colour, thickness,
-                            i * two_dy_invDenominator - two_v_dy * invDenominator, number) > 0; ++i) ;
+                        AddPixelIntensity(x, y, colour, thickness, two_v_dy * invDenominator);
+                        for (int i = 1; x + i < Variables.bitmapWidth && AddPixelIntensity(x + i, y, colour, thickness,
+                            i * two_dy_invDenominator + two_v_dy * invDenominator) > 0; ++i) ;
+                        for (int i = 1; x - i >= 0 && AddPixelIntensity(x - i, y, colour, thickness,
+                            i * two_dy_invDenominator - two_v_dy * invDenominator) > 0; ++i) ;
                     }
                 }
                 else
@@ -724,50 +734,35 @@ namespace CGPart3
                             d += dD;
                             x += xs;
                         }
-                        AddPixelIntensity(x, y, ID, colour, thickness, two_v_dy * invDenominator, number);
-                        for (int i = 1; x + i < Variables.bitmapWidth && AddPixelIntensity(x + i, y, ID, colour, thickness,
-                            i * two_dy_invDenominator - two_v_dy * invDenominator, number) > 0; ++i) ;
-                        for (int i = 1; x - i >= 0 && AddPixelIntensity(x - i, y, ID, colour, thickness,
-                            i * two_dy_invDenominator + two_v_dy * invDenominator, number) > 0; ++i) ;
+                        AddPixelIntensity(x, y, colour, thickness, two_v_dy * invDenominator);
+                        for (int i = 1; x + i < Variables.bitmapWidth && AddPixelIntensity(x + i, y, colour, thickness,
+                            i * two_dy_invDenominator - two_v_dy * invDenominator) > 0; ++i) ;
+                        for (int i = 1; x - i >= 0 && AddPixelIntensity(x - i, y, colour, thickness,
+                            i * two_dy_invDenominator + two_v_dy * invDenominator) > 0; ++i) ;
                     }
                 }
             }
         }
 
-        public unsafe static void AntialiasedLine(Point point1, Point point2, int ID, uint colour, int thickness, int number)
+        public unsafe static void AntialiasedLine(Point point1, Point point2, uint colour, int thickness)
         {
             if (FastAbs(point2.X - point1.X) > FastAbs(point2.Y - point1.Y))
             {
                 if (point2.X > point1.X)
-                    AntialiasedHorizontalLine(point1.X, point1.Y, point2.X, point2.Y, ID, colour, thickness, number);
+                    AntialiasedHorizontalLine(point1.X, point1.Y, point2.X, point2.Y, colour, thickness);
                 else
-                    AntialiasedHorizontalLine(point2.X, point2.Y, point1.X, point1.Y, ID, colour, thickness, number);
+                    AntialiasedHorizontalLine(point2.X, point2.Y, point1.X, point1.Y, colour, thickness);
             }
             else
             {
                 if (point2.Y > point1.Y)
-                    AntialiasedVerticalLine(point1.X, point1.Y, point2.X, point2.Y, ID, colour, thickness, number);
+                    AntialiasedVerticalLine(point1.X, point1.Y, point2.X, point2.Y, colour, thickness);
                 else
-                    AntialiasedVerticalLine(point2.X, point2.Y, point1.X, point1.Y, ID, colour, thickness, number);
+                    AntialiasedVerticalLine(point2.X, point2.Y, point1.X, point1.Y, colour, thickness);
             }
         }
 
         //          POINT
-// del
-//        public unsafe static void AddPoint(Point point, int ID)
-//        {
-//            for (int i = FastMax(point.X - 5, 0); i <= FastMin(point.X + 5, Variables.bitmapWidth - 1); i++)
-//            {
-//                for (int j = FastMax(point.Y - 5, 0); j <= FastMin(point.Y + 5, Variables.bitmapHeight - 1); j++)
-//                {
-//                    if (Variables.pointsKernel[i - point.X + 5, j - point.Y + 5])
-//                    {
-//                        Variables.pointsArray[i, j] = ID;
-//                    }
-//                }
-//            }
-//        }
-
         public unsafe static void DrawPoint(Point point)
         {
             for (int i = FastMax(point.X - 4, 0); i <= FastMin(point.X + 4, Variables.bitmapWidth - 1); i++)
@@ -780,48 +775,6 @@ namespace CGPart3
                     }
                 }
             }
-        }
-
-        public unsafe static (int, int) GetClosestPoint(Point point)
-        {
-            int index, bestIndex = 0, bestObject = 0;
-            float distance, bestDistance = float.PositiveInfinity;
-            for (int i = 0; i < Variables.shapes.Count; i++)
-            {
-                (index, distance) = Variables.shapes[i].GetPointDistance(point);
-                if (distance < bestDistance)
-                {
-                    bestIndex = index;
-                    bestObject = Variables.shapes[i].ID;
-                    bestDistance = distance;
-                }
-            }
-
-            if (bestDistance <= 5)
-                return (bestObject, bestIndex);
-            else
-                return (0, 0);
-        }
-
-        public unsafe static (int, int) GetClosestLine(Point point)
-        {
-            int index, bestIndex = 0, bestObject = 0;
-            float distance, bestDistance = float.PositiveInfinity;
-            for (int i = 0; i < Variables.shapes.Count; i++)
-            {
-                (index, distance) = Variables.shapes[i].GetLineDistance(point);
-                if (distance < bestDistance)
-                {
-                    bestIndex = index;
-                    bestObject = Variables.shapes[i].ID;
-                    bestDistance = distance;
-                }
-            }
-
-            if (bestDistance <= 5)
-                return (bestObject, bestIndex);
-            else
-                return (0, 0);
         }
 
         //          BITMAP & GUI
@@ -840,9 +793,6 @@ namespace CGPart3
                     {
                         row[j] = -1;
                         Variables.bitmapArray[j, i] = 4294967295;   // white
-//                        Variables.shapesArray[j, i] = 0;
-//                        Variables.pointsArray[j, i] = 0;
-//                        Variables.linesArray[j, i] = 0;
                     }
                 }
             }
@@ -864,9 +814,6 @@ namespace CGPart3
                     for (int j = 0; j < Variables.bitmapWidth; j++)
                     {
                         Variables.bitmapArray[j, i] = 4294967295;   // white
-//                        Variables.shapesArray[j, i] = 0;
-//                        Variables.pointsArray[j, i] = 0;
-//                        Variables.linesArray[j, i] = 0;
                     }
                 }
 
@@ -977,7 +924,7 @@ namespace CGPart3
         {
             switch (Variables.modeName)
             {
-                case "radioButtonAddThinLine":
+                case "radioButtonAddLine":
                     if (Variables.isActive)
                     {
                         ((Line)Variables.activeShape).end2 = e.Location;
@@ -987,22 +934,7 @@ namespace CGPart3
                     }
                     else
                     {
-                        Variables.activeShape = new Line(e.Location, 1);
-                        Variables.isActive = true;
-                    }
-                    break;
-
-                case "radioButtonAddThickLine":
-                    if (Variables.isActive)
-                    {
-                        ((Line)Variables.activeShape).end2 = e.Location;
-                        Variables.shapes.Add(Variables.activeShape);
-                        Variables.isActive = false;
-                        UpdateBitmap();
-                    }
-                    else
-                    {
-                        Variables.activeShape = new Line(e.Location, 
+                        Variables.activeShape = new Line(e.Location,
                             (int)numericUpDownLineThickness.Value);
                         Variables.isActive = true;
                     }
@@ -1019,7 +951,7 @@ namespace CGPart3
                     }
                     else
                     {
-                        Variables.activeShape = new Circle(e.Location, 1);
+                        Variables.activeShape = new Circle(e.Location, (int)numericUpDownLineThickness.Value);
                         Variables.isActive = true;
                     }
                     break;
@@ -1027,7 +959,7 @@ namespace CGPart3
                 case "radioButtonAddPolygon":
                     if (Variables.isActive)
                     {
-                        if (IsClosePoint(((Polygon)Variables.activeShape).vertices[0], e.Location))
+                        if (CalculatePointToPointDistance(((Polygon)Variables.activeShape).vertices[0], e.Location) <= 5)
                         {
                             Variables.shapes.Add(Variables.activeShape);
                             Variables.isActive = false;
@@ -1044,7 +976,7 @@ namespace CGPart3
                     break;
 
                 case "radioButtonBrush":
-                    (int brushShapeID, _ ) = GetClosestLine(e.Location); //Variables.shapesArray[e.X, e.Y];
+                    (int brushShapeID, _ ) = GetClosestLine(e.Location);
                     Shape brushShape = Variables.shapes.Find(x => x.ID == brushShapeID);
                     if (brushShape is not null)
                     {
@@ -1054,7 +986,7 @@ namespace CGPart3
                     break;
 
                 case "radioButtonErase":
-                    (int eraseShapeID, _ ) = GetClosestLine(e.Location); //Variables.shapesArray[e.X, e.Y];
+                    (int eraseShapeID, _ ) = GetClosestLine(e.Location);
                     Shape eraseShape = Variables.shapes.Find(x => x.ID == eraseShapeID);
                     if (eraseShape is not null)
                     {
@@ -1070,24 +1002,12 @@ namespace CGPart3
                     {
                         enableObjectSettings(changeShape);
                         Variables.activeElement = changeShapeID;
-                        //Variables.isActive = true;
                     }
                     else
                     {
                         disableObjectSettings();
                         Variables.activeElement = 0;
-                        //Variables.isActive = false;
                     }
-                    break;
-
-                case "radioButtonDebug":
-                    //Line line = (Line)Variables.shapes.Last();
-                    //float dist = CalculatePointToSegmentDistance(e.Location, line.end1, line.end2, line.thickness);
-                    //float dist = CalculatePointToPointDistance(e.Location, line.end1);
-
-                    //Circle circle = (Circle)Variables.shapes.Last();
-                    //float dist = CalculatePointToCircleDistance(e.Location, circle);
-                    //labelObject.Text = dist.ToString();
                     break;
 
                 default:
@@ -1140,7 +1060,6 @@ namespace CGPart3
                     break;
 
                 case "radioButtonMoveLine":
-                    //shapeID = Variables.shapesArray[e.X, e.Y];
                     (shapeID, index) = GetClosestLine(e.Location);
                     shape = Variables.shapes.Find(x => x.ID == shapeID);
                     if (shape is not null)
@@ -1155,7 +1074,7 @@ namespace CGPart3
                         else if (shape.GetType().Equals(typeof(Polygon)))
                         {
                             Variables.activeShape = shape;
-                            Variables.activeElement = index; //Variables.linesArray[e.X, e.Y];
+                            Variables.activeElement = index;
                             Variables.shapes.Remove(shape);
                             Variables.isActive = true;
                             UpdateBitmap();
@@ -1175,8 +1094,7 @@ namespace CGPart3
                 Variables.positionNow = CleanLocation(e.Location);
                 switch (Variables.modeName)
                 {
-                    case "radioButtonAddThinLine":
-                    case "radioButtonAddThickLine":
+                    case "radioButtonAddLine":
                     case "radioButtonAddCircle":
                     case "radioButtonAddPolygon":
                     case "radioButtonResizeCircle":
@@ -1304,9 +1222,8 @@ namespace CGPart3
 
         public abstract unsafe void DrawShape();
         public abstract unsafe void DrawActiveShape();
+
         public abstract unsafe void DrawPoints();
-// del
-        public abstract unsafe int GetPointIndex(Point point);
         public abstract unsafe void UpdatePoint(Point point);
 
         public abstract unsafe (int, float) GetPointDistance(Point point);
@@ -1326,13 +1243,11 @@ namespace CGPart3
         public override unsafe void DrawShape()
         {
             if (Variables.isAntiAliased)
-                Form1.AntialiasedLine(end1, end2, ID, color, thickness, 0);
+                Form1.AntialiasedLine(end1, end2, color, thickness);
             else if (thickness == 1)
-                Form1.MidpointLine(end1, end2, ID, color, 0);
+                Form1.MidpointLine(end1, end2, color);
             else
-                Form1.BrushLine(end1, end2, ID, color, thickness);
-//            Form1.AddPoint(end1, ID);
-//            Form1.AddPoint(end2, ID);
+                Form1.BrushLine(end1, end2, color, thickness);
         }
 
         public override unsafe void DrawActiveShape()
@@ -1341,20 +1256,20 @@ namespace CGPart3
                 || Variables.modeName == "radioButtonMoveLine")
             {
                 if (Variables.isAntiAliased)
-                    Form1.AntialiasedLine(end1, end2, ID, color, thickness, 0);
+                    Form1.AntialiasedLine(end1, end2, color, thickness);
                 else if (thickness == 1)
-                    Form1.MidpointLine(end1, end2, ID, color, 0);
+                    Form1.MidpointLine(end1, end2, color);
                 else
-                    Form1.BrushLine(end1, end2, ID, color, thickness);
+                    Form1.BrushLine(end1, end2, color, thickness);
             }
             else
             {
                 if (Variables.isAntiAliased)
-                    Form1.AntialiasedLine(end1, Variables.positionNow, ID, color, thickness, 0);
+                    Form1.AntialiasedLine(end1, Variables.positionNow, color, thickness);
                 else if (thickness == 1)
-                    Form1.MidpointLine(end1, Variables.positionNow, ID, color, 0);
+                    Form1.MidpointLine(end1, Variables.positionNow, color);
                 else
-                    Form1.BrushLine(end1, Variables.positionNow, ID, color, thickness);
+                    Form1.BrushLine(end1, Variables.positionNow, color, thickness);
             }
         }
 
@@ -1362,14 +1277,6 @@ namespace CGPart3
         {
             Form1.DrawPoint(end1);
             Form1.DrawPoint(end2);
-        }
-//del
-        public override unsafe int GetPointIndex(Point point)
-        {
-            if (Form1.IsClosePoint(point, end1))
-                return 1;
-            else
-                return 2;
         }
 
         public override unsafe void UpdatePoint(Point point)
@@ -1440,29 +1347,34 @@ namespace CGPart3
 
         public override unsafe void DrawShape()
         {
-            Form1.MidpointCircle(center, radius, ID, color);
-//            Form1.AddPoint(center, ID);
+            if (thickness == 1)
+                Form1.MidpointCircle(center, radius, color);
+            else
+                Form1.BrushCircle(center, radius, color, thickness);
         }
 
         public override unsafe void DrawActiveShape()
         {
             if (Variables.modeName == "radioButtonMovePoint")
-                Form1.MidpointCircle(center, radius, ID, color);
+            {
+                if (thickness == 1)
+                    Form1.MidpointCircle(center, radius, color);
+                else
+                    Form1.BrushCircle(center, radius, color, thickness);
+            }
             else
             {
                 int currentRadius = CalculateRadius(Variables.positionNow);
-                Form1.MidpointCircle(center, currentRadius, ID, color);
+                if (thickness == 1)
+                    Form1.MidpointCircle(center, currentRadius, color);
+                else
+                    Form1.BrushCircle(center, currentRadius, color, thickness);
             }
         }
 
         public override unsafe void DrawPoints()
         {
             Form1.DrawPoint(center);
-        }
-// del
-        public override unsafe int GetPointIndex(Point point)
-        {
-            return 1;
         }
 
         public override unsafe void UpdatePoint(Point point)
@@ -1480,12 +1392,6 @@ namespace CGPart3
             return (1, Form1.CalculatePointToCircleDistance(point, this));
         }
     }
-
-    //public class Rectangle
-    //{
-    //    Point LUp;
-    //    Point RDown;
-    //}
 
     public class Polygon : Shape
     {
@@ -1507,28 +1413,25 @@ namespace CGPart3
             if (Variables.isAntiAliased)
             {
                 for (int i = 0; i < vertices.Count() - 1; i++)
-                    Form1.AntialiasedLine(vertices[i], vertices[i + 1], ID, color, thickness, i);
+                    Form1.AntialiasedLine(vertices[i], vertices[i + 1], color, thickness);
             }
             else if (thickness == 1)
             {
                 for (int i = 0; i < vertices.Count() - 1; i++)
-                    Form1.MidpointLine(vertices[i], vertices[i + 1], ID, color, i);
+                    Form1.MidpointLine(vertices[i], vertices[i + 1], color);
             }
             else
             {
                 for (int i = 0; i < vertices.Count() - 1; i++)
-                    Form1.BrushLine(vertices[i], vertices[i + 1], ID, color, thickness); // no i
+                    Form1.BrushLine(vertices[i], vertices[i + 1], color, thickness);
             }
 
             if (Variables.isAntiAliased)
-                Form1.AntialiasedLine(vertices[vertices.Count() - 1], vertices[0], ID, color, thickness, vertices.Count() - 1);
+                Form1.AntialiasedLine(vertices[vertices.Count() - 1], vertices[0], color, thickness);
             else if (thickness == 1)
-                Form1.MidpointLine(vertices[vertices.Count() - 1], vertices[0], ID, color, vertices.Count() - 1);
+                Form1.MidpointLine(vertices[vertices.Count() - 1], vertices[0], color);
             else
-                Form1.BrushLine(vertices[vertices.Count() - 1], vertices[0], ID, color, thickness); // no vertices.Count() - 1
-
-//            for (int i = 0; i < vertices.Count(); i++)
-//                Form1.AddPoint(vertices[i], ID);
+                Form1.BrushLine(vertices[vertices.Count() - 1], vertices[0], color, thickness);
         }
 
         public override unsafe void DrawActiveShape()
@@ -1536,17 +1439,17 @@ namespace CGPart3
             if (Variables.isAntiAliased)
             {
                 for (int i = 0; i < vertices.Count() - 1; i++)
-                    Form1.AntialiasedLine(vertices[i], vertices[i + 1], ID, color, thickness, 0);
+                    Form1.AntialiasedLine(vertices[i], vertices[i + 1], color, thickness);
             } 
             else if (thickness == 1)
             {
                 for (int i = 0; i < vertices.Count() - 1; i++)
-                    Form1.MidpointLine(vertices[i], vertices[i + 1], ID, color, 0);
+                    Form1.MidpointLine(vertices[i], vertices[i + 1], color);
             }
             else
             {
                 for (int i = 0; i < vertices.Count() - 1; i++)
-                    Form1.BrushLine(vertices[i], vertices[i + 1], ID, color, thickness); // no 0
+                    Form1.BrushLine(vertices[i], vertices[i + 1], color, thickness);
             }
 
             if (Variables.modeName == "radioButtonMovePoint" 
@@ -1554,20 +1457,20 @@ namespace CGPart3
                 || Variables.modeName == "radioButtonMovePolygon")
             {
                 if (Variables.isAntiAliased)
-                    Form1.AntialiasedLine(vertices[vertices.Count() - 1], vertices[0], ID, color, thickness, 0);
+                    Form1.AntialiasedLine(vertices[vertices.Count() - 1], vertices[0], color, thickness);
                 else if (thickness == 1)
-                    Form1.MidpointLine(vertices[vertices.Count() - 1], vertices[0], ID, color, 0);
+                    Form1.MidpointLine(vertices[vertices.Count() - 1], vertices[0], color);
                 else
-                    Form1.BrushLine(vertices[vertices.Count() - 1], vertices[0], ID, color, thickness); // no 0
+                    Form1.BrushLine(vertices[vertices.Count() - 1], vertices[0], color, thickness);
             }
             else
             {
                 if (Variables.isAntiAliased)
-                    Form1.AntialiasedLine(vertices[vertices.Count() - 1], Variables.positionNow, ID, color, thickness, 0);
+                    Form1.AntialiasedLine(vertices[vertices.Count() - 1], Variables.positionNow, color, thickness);
                 else if (thickness == 1)
-                    Form1.MidpointLine(vertices[vertices.Count() - 1], Variables.positionNow, ID, color, 0);
+                    Form1.MidpointLine(vertices[vertices.Count() - 1], Variables.positionNow, color);
                 else
-                    Form1.BrushLine(vertices[vertices.Count() - 1], Variables.positionNow, ID, color, thickness); // no 0
+                    Form1.BrushLine(vertices[vertices.Count() - 1], Variables.positionNow, color, thickness);
 
                 Form1.DrawPoint(vertices[0]);
             }
@@ -1579,17 +1482,6 @@ namespace CGPart3
             {
                 Form1.DrawPoint(vertices[i]);
             }
-        }
-// del
-        public override unsafe int GetPointIndex(Point point)
-        {
-            int i;
-            for (i = 0; i < vertices.Count(); i++)
-            {
-                if (Form1.IsClosePoint(point, vertices[i]))
-                    break;
-            }
-            return i;
         }
 
         public override unsafe void UpdatePoint(Point point)
@@ -1688,19 +1580,13 @@ namespace CGPart3
         }
     }
 
-    //public class ClippedPolygon
-    //{
-    //    Rectangle rectangle;
-    //    Polygon polygon;
-    //}
-
     public unsafe static class Variables
     {
         public unsafe static Bitmap bitmap;
         public unsafe static Point positionDown;
         public unsafe static Point positionNow;
         public unsafe static uint brushColor = 4278190080;     // black
-        public unsafe static string modeName = "radioButtonAddThinLine";
+        public unsafe static string modeName = "radioButtonAddLine";
         public unsafe static bool isAntiAliased = false;
         public unsafe static bool isActive = false;
         public unsafe static int lastID = 0;
@@ -1712,12 +1598,6 @@ namespace CGPart3
         public unsafe static int bitmapHeight = 800;
         public unsafe static int bitmapWidth = 600;
         public unsafe static uint[,] bitmapArray = new uint[bitmapWidth, bitmapHeight];
-// del
-        // public unsafe static int[,] shapesArray = new int[bitmapWidth, bitmapHeight];
-// del
-        // public unsafe static int[,] pointsArray = new int[bitmapWidth, bitmapHeight];
-// del
-        // public unsafe static int[,] linesArray = new int[bitmapWidth, bitmapHeight];
         public unsafe static bool[,] pointsKernel = new bool[9, 9]
          {
             { false, false, true, true, true, true, true, false, false },
