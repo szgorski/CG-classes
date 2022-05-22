@@ -31,17 +31,23 @@ namespace CGPart3
         {
             this.pictureBoxMain = new System.Windows.Forms.PictureBox();
             this.groupBoxSettings = new System.Windows.Forms.GroupBox();
-            this.labelAntiAliasing = new System.Windows.Forms.Label();
+            this.buttonSaveObject = new System.Windows.Forms.Button();
+            this.labelObjectColor = new System.Windows.Forms.Label();
+            this.buttonObjectColor = new System.Windows.Forms.Button();
+            this.numericUpDownObjectThickness = new System.Windows.Forms.NumericUpDown();
+            this.labelObjectThickness = new System.Windows.Forms.Label();
+            this.labelObject = new System.Windows.Forms.Label();
+            this.labelGeneral = new System.Windows.Forms.Label();
             this.checkBoxAntiAliasing = new System.Windows.Forms.CheckBox();
             this.labelMode = new System.Windows.Forms.Label();
             this.buttonClearAll = new System.Windows.Forms.Button();
-            this.labelBrush = new System.Windows.Forms.Label();
-            this.labelThickLine = new System.Windows.Forms.Label();
             this.labelBrushColor = new System.Windows.Forms.Label();
             this.buttonBrushColor = new System.Windows.Forms.Button();
             this.numericUpDownLineThickness = new System.Windows.Forms.NumericUpDown();
             this.labelLineThickness = new System.Windows.Forms.Label();
             this.panelMode = new System.Windows.Forms.Panel();
+            this.radioButtonSelectObject = new System.Windows.Forms.RadioButton();
+            this.radioButtonDebug = new System.Windows.Forms.RadioButton();
             this.radioButtonErase = new System.Windows.Forms.RadioButton();
             this.radioButtonBrush = new System.Windows.Forms.RadioButton();
             this.radioButtonResizeCircle = new System.Windows.Forms.RadioButton();
@@ -55,6 +61,7 @@ namespace CGPart3
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).BeginInit();
             this.groupBoxSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownObjectThickness)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLineThickness)).BeginInit();
             this.panelMode.SuspendLayout();
             this.SuspendLayout();
@@ -74,39 +81,126 @@ namespace CGPart3
             // 
             // groupBoxSettings
             // 
-            this.groupBoxSettings.Controls.Add(this.labelAntiAliasing);
+            this.groupBoxSettings.Controls.Add(this.buttonSaveObject);
+            this.groupBoxSettings.Controls.Add(this.labelObjectColor);
+            this.groupBoxSettings.Controls.Add(this.buttonObjectColor);
+            this.groupBoxSettings.Controls.Add(this.numericUpDownObjectThickness);
+            this.groupBoxSettings.Controls.Add(this.labelObjectThickness);
+            this.groupBoxSettings.Controls.Add(this.labelObject);
+            this.groupBoxSettings.Controls.Add(this.labelGeneral);
             this.groupBoxSettings.Controls.Add(this.checkBoxAntiAliasing);
             this.groupBoxSettings.Controls.Add(this.labelMode);
             this.groupBoxSettings.Controls.Add(this.buttonClearAll);
-            this.groupBoxSettings.Controls.Add(this.labelBrush);
-            this.groupBoxSettings.Controls.Add(this.labelThickLine);
             this.groupBoxSettings.Controls.Add(this.labelBrushColor);
             this.groupBoxSettings.Controls.Add(this.buttonBrushColor);
             this.groupBoxSettings.Controls.Add(this.numericUpDownLineThickness);
             this.groupBoxSettings.Controls.Add(this.labelLineThickness);
             this.groupBoxSettings.Controls.Add(this.panelMode);
             this.groupBoxSettings.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.groupBoxSettings.Location = new System.Drawing.Point(13, 13);
+            this.groupBoxSettings.Location = new System.Drawing.Point(13, 16);
             this.groupBoxSettings.Name = "groupBoxSettings";
-            this.groupBoxSettings.Size = new System.Drawing.Size(392, 494);
+            this.groupBoxSettings.Size = new System.Drawing.Size(392, 811);
             this.groupBoxSettings.TabIndex = 1;
             this.groupBoxSettings.TabStop = false;
             this.groupBoxSettings.Text = "Settings";
             // 
-            // labelAntiAliasing
+            // buttonSaveObject
             // 
-            this.labelAntiAliasing.AutoSize = true;
-            this.labelAntiAliasing.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelAntiAliasing.Location = new System.Drawing.Point(85, 368);
-            this.labelAntiAliasing.Name = "labelAntiAliasing";
-            this.labelAntiAliasing.Size = new System.Drawing.Size(77, 15);
-            this.labelAntiAliasing.TabIndex = 11;
-            this.labelAntiAliasing.Text = "Anti-Aliasing";
+            this.buttonSaveObject.Enabled = false;
+            this.buttonSaveObject.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.buttonSaveObject.Location = new System.Drawing.Point(85, 703);
+            this.buttonSaveObject.Name = "buttonSaveObject";
+            this.buttonSaveObject.Size = new System.Drawing.Size(222, 32);
+            this.buttonSaveObject.TabIndex = 17;
+            this.buttonSaveObject.Text = "Save changes";
+            this.buttonSaveObject.UseVisualStyleBackColor = true;
+            this.buttonSaveObject.Click += new System.EventHandler(this.buttonSaveObject_Click);
+            // 
+            // labelObjectColor
+            // 
+            this.labelObjectColor.AutoSize = true;
+            this.labelObjectColor.BackColor = System.Drawing.Color.Silver;
+            this.labelObjectColor.Location = new System.Drawing.Point(85, 657);
+            this.labelObjectColor.MaximumSize = new System.Drawing.Size(30, 30);
+            this.labelObjectColor.MinimumSize = new System.Drawing.Size(30, 30);
+            this.labelObjectColor.Name = "labelObjectColor";
+            this.labelObjectColor.Size = new System.Drawing.Size(30, 30);
+            this.labelObjectColor.TabIndex = 16;
+            this.labelObjectColor.Text = "   ";
+            // 
+            // buttonObjectColor
+            // 
+            this.buttonObjectColor.Enabled = false;
+            this.buttonObjectColor.Location = new System.Drawing.Point(124, 656);
+            this.buttonObjectColor.Name = "buttonObjectColor";
+            this.buttonObjectColor.Size = new System.Drawing.Size(183, 32);
+            this.buttonObjectColor.TabIndex = 15;
+            this.buttonObjectColor.Text = "Set brush colour";
+            this.buttonObjectColor.UseVisualStyleBackColor = true;
+            this.buttonObjectColor.Click += new System.EventHandler(this.buttonObjectColor_Click);
+            // 
+            // numericUpDownObjectThickness
+            // 
+            this.numericUpDownObjectThickness.Enabled = false;
+            this.numericUpDownObjectThickness.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericUpDownObjectThickness.Location = new System.Drawing.Point(214, 612);
+            this.numericUpDownObjectThickness.Maximum = new decimal(new int[] {
+            49,
+            0,
+            0,
+            0});
+            this.numericUpDownObjectThickness.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownObjectThickness.Name = "numericUpDownObjectThickness";
+            this.numericUpDownObjectThickness.Size = new System.Drawing.Size(93, 29);
+            this.numericUpDownObjectThickness.TabIndex = 14;
+            this.numericUpDownObjectThickness.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownObjectThickness.ValueChanged += new System.EventHandler(this.numericUpDownObjectThickness_ValueChanged);
+            // 
+            // labelObjectThickness
+            // 
+            this.labelObjectThickness.AutoSize = true;
+            this.labelObjectThickness.Location = new System.Drawing.Point(85, 614);
+            this.labelObjectThickness.Name = "labelObjectThickness";
+            this.labelObjectThickness.Size = new System.Drawing.Size(107, 21);
+            this.labelObjectThickness.TabIndex = 13;
+            this.labelObjectThickness.Text = "Line thickness";
+            // 
+            // labelObject
+            // 
+            this.labelObject.AutoSize = true;
+            this.labelObject.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelObject.Location = new System.Drawing.Point(85, 587);
+            this.labelObject.Name = "labelObject";
+            this.labelObject.Size = new System.Drawing.Size(91, 15);
+            this.labelObject.TabIndex = 12;
+            this.labelObject.Text = "Object settings";
+            // 
+            // labelGeneral
+            // 
+            this.labelGeneral.AutoSize = true;
+            this.labelGeneral.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelGeneral.Location = new System.Drawing.Point(85, 365);
+            this.labelGeneral.Name = "labelGeneral";
+            this.labelGeneral.Size = new System.Drawing.Size(98, 15);
+            this.labelGeneral.TabIndex = 11;
+            this.labelGeneral.Text = "General settings";
             // 
             // checkBoxAntiAliasing
             // 
             this.checkBoxAntiAliasing.AutoSize = true;
-            this.checkBoxAntiAliasing.Location = new System.Drawing.Point(88, 386);
+            this.checkBoxAntiAliasing.Location = new System.Drawing.Point(88, 392);
             this.checkBoxAntiAliasing.Name = "checkBoxAntiAliasing";
             this.checkBoxAntiAliasing.Size = new System.Drawing.Size(179, 25);
             this.checkBoxAntiAliasing.TabIndex = 10;
@@ -127,7 +221,7 @@ namespace CGPart3
             // buttonClearAll
             // 
             this.buttonClearAll.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonClearAll.Location = new System.Drawing.Point(85, 435);
+            this.buttonClearAll.Location = new System.Drawing.Point(85, 514);
             this.buttonClearAll.Name = "buttonClearAll";
             this.buttonClearAll.Size = new System.Drawing.Size(222, 32);
             this.buttonClearAll.TabIndex = 0;
@@ -135,31 +229,11 @@ namespace CGPart3
             this.buttonClearAll.UseVisualStyleBackColor = true;
             this.buttonClearAll.Click += new System.EventHandler(this.buttonClearAll_Click);
             // 
-            // labelBrush
-            // 
-            this.labelBrush.AutoSize = true;
-            this.labelBrush.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelBrush.Location = new System.Drawing.Point(85, 296);
-            this.labelBrush.Name = "labelBrush";
-            this.labelBrush.Size = new System.Drawing.Size(39, 15);
-            this.labelBrush.TabIndex = 8;
-            this.labelBrush.Text = "Brush";
-            // 
-            // labelThickLine
-            // 
-            this.labelThickLine.AutoSize = true;
-            this.labelThickLine.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelThickLine.Location = new System.Drawing.Point(85, 240);
-            this.labelThickLine.Name = "labelThickLine";
-            this.labelThickLine.Size = new System.Drawing.Size(60, 15);
-            this.labelThickLine.TabIndex = 7;
-            this.labelThickLine.Text = "Thick line";
-            // 
             // labelBrushColor
             // 
             this.labelBrushColor.AutoSize = true;
             this.labelBrushColor.BackColor = System.Drawing.Color.Black;
-            this.labelBrushColor.Location = new System.Drawing.Point(88, 315);
+            this.labelBrushColor.Location = new System.Drawing.Point(85, 468);
             this.labelBrushColor.MaximumSize = new System.Drawing.Size(30, 30);
             this.labelBrushColor.MinimumSize = new System.Drawing.Size(30, 30);
             this.labelBrushColor.Name = "labelBrushColor";
@@ -169,7 +243,7 @@ namespace CGPart3
             // 
             // buttonBrushColor
             // 
-            this.buttonBrushColor.Location = new System.Drawing.Point(124, 314);
+            this.buttonBrushColor.Location = new System.Drawing.Point(124, 467);
             this.buttonBrushColor.Name = "buttonBrushColor";
             this.buttonBrushColor.Size = new System.Drawing.Size(183, 32);
             this.buttonBrushColor.TabIndex = 5;
@@ -184,14 +258,14 @@ namespace CGPart3
             0,
             0,
             0});
-            this.numericUpDownLineThickness.Location = new System.Drawing.Point(214, 253);
+            this.numericUpDownLineThickness.Location = new System.Drawing.Point(214, 423);
             this.numericUpDownLineThickness.Maximum = new decimal(new int[] {
             49,
             0,
             0,
             0});
             this.numericUpDownLineThickness.Minimum = new decimal(new int[] {
-            3,
+            1,
             0,
             0,
             0});
@@ -199,7 +273,7 @@ namespace CGPart3
             this.numericUpDownLineThickness.Size = new System.Drawing.Size(93, 29);
             this.numericUpDownLineThickness.TabIndex = 3;
             this.numericUpDownLineThickness.Value = new decimal(new int[] {
-            3,
+            1,
             0,
             0,
             0});
@@ -208,7 +282,7 @@ namespace CGPart3
             // labelLineThickness
             // 
             this.labelLineThickness.AutoSize = true;
-            this.labelLineThickness.Location = new System.Drawing.Point(85, 255);
+            this.labelLineThickness.Location = new System.Drawing.Point(85, 425);
             this.labelLineThickness.Name = "labelLineThickness";
             this.labelLineThickness.Size = new System.Drawing.Size(107, 21);
             this.labelLineThickness.TabIndex = 2;
@@ -216,6 +290,8 @@ namespace CGPart3
             // 
             // panelMode
             // 
+            this.panelMode.Controls.Add(this.radioButtonSelectObject);
+            this.panelMode.Controls.Add(this.radioButtonDebug);
             this.panelMode.Controls.Add(this.radioButtonErase);
             this.panelMode.Controls.Add(this.radioButtonBrush);
             this.panelMode.Controls.Add(this.radioButtonResizeCircle);
@@ -228,8 +304,38 @@ namespace CGPart3
             this.panelMode.Controls.Add(this.radioButtonAddThinLine);
             this.panelMode.Location = new System.Drawing.Point(6, 52);
             this.panelMode.Name = "panelMode";
-            this.panelMode.Size = new System.Drawing.Size(380, 153);
+            this.panelMode.Size = new System.Drawing.Size(380, 259);
             this.panelMode.TabIndex = 1;
+            // 
+            // radioButtonSelectObject
+            // 
+            this.radioButtonSelectObject.Appearance = System.Windows.Forms.Appearance.Button;
+            this.radioButtonSelectObject.AutoSize = true;
+            this.radioButtonSelectObject.Location = new System.Drawing.Point(79, 155);
+            this.radioButtonSelectObject.MinimumSize = new System.Drawing.Size(70, 0);
+            this.radioButtonSelectObject.Name = "radioButtonSelectObject";
+            this.radioButtonSelectObject.Size = new System.Drawing.Size(70, 31);
+            this.radioButtonSelectObject.TabIndex = 11;
+            this.radioButtonSelectObject.TabStop = true;
+            this.radioButtonSelectObject.Text = "select";
+            this.radioButtonSelectObject.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.radioButtonSelectObject.UseVisualStyleBackColor = true;
+            this.radioButtonSelectObject.CheckedChanged += new System.EventHandler(this.mode_CheckedChanged);
+            // 
+            // radioButtonDebug
+            // 
+            this.radioButtonDebug.Appearance = System.Windows.Forms.Appearance.Button;
+            this.radioButtonDebug.AutoSize = true;
+            this.radioButtonDebug.Location = new System.Drawing.Point(3, 155);
+            this.radioButtonDebug.MinimumSize = new System.Drawing.Size(70, 0);
+            this.radioButtonDebug.Name = "radioButtonDebug";
+            this.radioButtonDebug.Size = new System.Drawing.Size(70, 31);
+            this.radioButtonDebug.TabIndex = 10;
+            this.radioButtonDebug.TabStop = true;
+            this.radioButtonDebug.Text = "debug";
+            this.radioButtonDebug.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.radioButtonDebug.UseVisualStyleBackColor = true;
+            this.radioButtonDebug.CheckedChanged += new System.EventHandler(this.mode_CheckedChanged);
             // 
             // radioButtonErase
             // 
@@ -364,6 +470,7 @@ namespace CGPart3
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).EndInit();
             this.groupBoxSettings.ResumeLayout(false);
             this.groupBoxSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownObjectThickness)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLineThickness)).EndInit();
             this.panelMode.ResumeLayout(false);
             this.panelMode.PerformLayout();
@@ -388,15 +495,21 @@ namespace CGPart3
         private System.Windows.Forms.RadioButton radioButtonAddPolygon;
         private System.Windows.Forms.RadioButton radioButtonErase;
         private System.Windows.Forms.Label labelMode;
-        private System.Windows.Forms.Label labelBrush;
-        private System.Windows.Forms.Label labelThickLine;
         private System.Windows.Forms.Label labelBrushColor;
         private System.Windows.Forms.Button buttonBrushColor;
         private System.Windows.Forms.NumericUpDown numericUpDownLineThickness;
         private System.Windows.Forms.Label labelLineThickness;
         private System.Windows.Forms.ColorDialog colorDialog;
-        private System.Windows.Forms.Label labelAntiAliasing;
         private System.Windows.Forms.CheckBox checkBoxAntiAliasing;
+        private System.Windows.Forms.Button buttonSaveObject;
+        private System.Windows.Forms.Label labelObjectColor;
+        private System.Windows.Forms.Button buttonObjectColor;
+        private System.Windows.Forms.NumericUpDown numericUpDownObjectThickness;
+        private System.Windows.Forms.Label labelObjectThickness;
+        private System.Windows.Forms.Label labelObject;
+        private System.Windows.Forms.Label labelGeneral;
+        private System.Windows.Forms.RadioButton radioButtonDebug;
+        private System.Windows.Forms.RadioButton radioButtonSelectObject;
     }
 }
 

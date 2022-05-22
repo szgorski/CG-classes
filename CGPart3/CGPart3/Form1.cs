@@ -52,7 +52,7 @@ namespace CGPart3
             else
                 return a;
         }
-
+// del
         public unsafe static bool IsClosePoint(Point mouse, Point point)
         {
             int diffX = FastAbs(mouse.X - point.X);
@@ -62,7 +62,7 @@ namespace CGPart3
             else
                 return false;
         }
-
+// del
         public unsafe static Point CleanLocation(Point mouse)
         {
             if (mouse.X < 0) mouse.X = 0;
@@ -76,6 +76,68 @@ namespace CGPart3
             return mouse;
         }
 
+        public unsafe static float CalculatePointToSegmentDistance(Point point, Point seg1, Point seg2, int thickness)
+        {
+            float thick = 0;
+            int ps1x = point.X - seg1.X;
+            int ps1y = point.Y - seg1.Y;
+            int dx = seg2.X - seg1.X;
+            int dy = seg2.Y - seg1.Y;
+
+            int dot = ps1x * dx + ps1y * dy;
+            int len2 = dx * dx + dy * dy;
+            float param = -1;
+
+            if (len2 != 0)
+                param = (float)dot / len2;
+
+            float projx, projy;
+            if (param < 0)
+            {
+                projx = seg1.X;
+                projy = seg1.Y;
+            }
+            else if (param > 1)
+            {
+                projx = seg2.X;
+                projy = seg2.Y;
+            }
+            else
+            {
+                projx = param * dx + seg1.X;
+                projy = param * dy + seg1.Y;
+                thick = (float)thickness / 2;
+            }
+
+            float distx = point.X - projx;
+            float disty = point.Y - projy;
+            float dist = (float)Math.Sqrt(distx * distx + disty * disty) - thick;
+            if (dist < 0)
+                dist = 0;
+
+            return dist;
+        }
+
+        public unsafe static float CalculatePointToCircleDistance(Point point, Circle circle)
+        {
+            float rad = CalculatePointToPointDistance(point, circle.center);
+            float dist = (float)circle.radius - rad;
+
+            if (dist < 0)
+                dist = -dist;
+            dist -= (float)circle.thickness / 2;
+
+            if (dist < 0)
+                dist = 0;
+            return dist;
+        }
+
+        public unsafe static float CalculatePointToPointDistance(Point point1, Point point2)
+        {
+            return (float)Math.Sqrt((point1.X - point2.X) * (point1.X - point2.X)
+                    + (point1.Y - point2.Y) * (point1.Y - point2.Y));
+        }
+// del
         public unsafe static int CalculateDistanceSquared(Point point1, Point point2)
         {
             return (point1.X - point2.X) * (point1.X - point2.X)
@@ -100,9 +162,9 @@ namespace CGPart3
             int x = x1;
             int y = y1;
             Variables.bitmapArray[x, y] = colour;
-            Variables.shapesArray[x, y] = ID;
-            if (number != 0) 
-                Variables.linesArray[x, y] = number;
+//            Variables.shapesArray[x, y] = ID;
+//            if (number != 0) 
+//                Variables.linesArray[x, y] = number;
             while (x < x2)
             {
                 if (d < 0)
@@ -117,9 +179,9 @@ namespace CGPart3
                     x++;
                 }
                 Variables.bitmapArray[x, y] = colour;
-                Variables.shapesArray[x, y] = ID;
-                if (number != 0) 
-                    Variables.linesArray[x, y] = number;
+//                Variables.shapesArray[x, y] = ID;
+//                if (number != 0) 
+//                    Variables.linesArray[x, y] = number;
             }
         }
 
@@ -139,9 +201,9 @@ namespace CGPart3
             int x = x1;
             int y = y1;
             Variables.bitmapArray[x, y] = colour;
-            Variables.shapesArray[x, y] = ID;
-            if (number != 0) 
-                Variables.linesArray[x, y] = number;
+//            Variables.shapesArray[x, y] = ID;
+//            if (number != 0) 
+//                Variables.linesArray[x, y] = number;
             while (y < y2)
             {
                 if (d < 0)
@@ -156,9 +218,9 @@ namespace CGPart3
                     y++;
                 }
                 Variables.bitmapArray[x, y] = colour;
-                Variables.shapesArray[x, y] = ID;
-                if (number != 0) 
-                    Variables.linesArray[x, y] = number;
+//                Variables.shapesArray[x, y] = ID;
+//                if (number != 0) 
+//                    Variables.linesArray[x, y] = number;
             }
         }
 
@@ -207,7 +269,7 @@ namespace CGPart3
                     if (brush[i - x + radius, j - y + radius])
                     {
                         Variables.bitmapArray[i, j] = colour;
-                        Variables.shapesArray[i, j] = ID;
+//                        Variables.shapesArray[i, j] = ID;
                     }
                 }
             }
@@ -323,42 +385,42 @@ namespace CGPart3
             if (caseA && caseG)
             {
                 Variables.bitmapArray[x + xc, y + yc] = colour;
-                Variables.shapesArray[x + xc, y + yc] = ID;
+//                Variables.shapesArray[x + xc, y + yc] = ID;
             }
             if (caseA && caseH)
             {
                 Variables.bitmapArray[x + xc, y - yc] = colour;
-                Variables.shapesArray[x + xc, y - yc] = ID;
+//                Variables.shapesArray[x + xc, y - yc] = ID;
             }
             if (caseB && caseG)
             {
                 Variables.bitmapArray[x - xc, y + yc] = colour;
-                Variables.shapesArray[x - xc, y + yc] = ID;
+//                Variables.shapesArray[x - xc, y + yc] = ID;
             }
             if (caseB && caseH)
             {
                 Variables.bitmapArray[x - xc, y - yc] = colour;
-                Variables.shapesArray[x - xc, y - yc] = ID;
+//                Variables.shapesArray[x - xc, y - yc] = ID;
             }
             if (caseC && caseE)
             {
                 Variables.bitmapArray[x + yc, y + xc] = colour;
-                Variables.shapesArray[x + yc, y + xc] = ID;
+//                Variables.shapesArray[x + yc, y + xc] = ID;
             }
             if (caseC && caseF)
             {
                 Variables.bitmapArray[x + yc, y - xc] = colour;
-                Variables.shapesArray[x + yc, y - xc] = ID;
+//                Variables.shapesArray[x + yc, y - xc] = ID;
             }
             if (caseD && caseE)
             {
                 Variables.bitmapArray[x - yc, y + xc] = colour;
-                Variables.shapesArray[x - yc, y + xc] = ID;
+//                Variables.shapesArray[x - yc, y + xc] = ID;
             }
             if (caseD && caseF)
             {
                 Variables.bitmapArray[x - yc, y - xc] = colour;
-                Variables.shapesArray[x - yc, y - xc] = ID;
+//                Variables.shapesArray[x - yc, y - xc] = ID;
             }
             
             while (yc > xc)
@@ -390,42 +452,42 @@ namespace CGPart3
                 if (caseA && caseG)
                 {
                     Variables.bitmapArray[x + xc, y + yc] = colour;
-                    Variables.shapesArray[x + xc, y + yc] = ID;
+//                    Variables.shapesArray[x + xc, y + yc] = ID;
                 }
                 if (caseA && caseH)
                 {
                     Variables.bitmapArray[x + xc, y - yc] = colour;
-                    Variables.shapesArray[x + xc, y - yc] = ID;
+//                    Variables.shapesArray[x + xc, y - yc] = ID;
                 }
                 if (caseB && caseG)
                 {
                     Variables.bitmapArray[x - xc, y + yc] = colour;
-                    Variables.shapesArray[x - xc, y + yc] = ID;
+//                    Variables.shapesArray[x - xc, y + yc] = ID;
                 }
                 if (caseB && caseH)
                 {
                     Variables.bitmapArray[x - xc, y - yc] = colour;
-                    Variables.shapesArray[x - xc, y - yc] = ID;
+//                    Variables.shapesArray[x - xc, y - yc] = ID;
                 }
                 if (caseC && caseE)
                 {
                     Variables.bitmapArray[x + yc, y + xc] = colour;
-                    Variables.shapesArray[x + yc, y + xc] = ID;
+//                    Variables.shapesArray[x + yc, y + xc] = ID;
                 }
                 if (caseC && caseF)
                 {
                     Variables.bitmapArray[x + yc, y - xc] = colour;
-                    Variables.shapesArray[x + yc, y - xc] = ID;
+//                    Variables.shapesArray[x + yc, y - xc] = ID;
                 }
                 if (caseD && caseE)
                 {
                     Variables.bitmapArray[x - yc, y + xc] = colour;
-                    Variables.shapesArray[x - yc, y + xc] = ID;
+//                    Variables.shapesArray[x - yc, y + xc] = ID;
                 }
                 if (caseD && caseF)
                 {
                     Variables.bitmapArray[x - yc, y - xc] = colour;
-                    Variables.shapesArray[x - yc, y - xc] = ID;
+//                    Variables.shapesArray[x - yc, y - xc] = ID;
                 }
             }
         }
@@ -484,8 +546,8 @@ namespace CGPart3
             if (coverage > 0)
             {
                 Variables.bitmapArray[x, y] = InterpolateColour(Variables.bitmapArray[x, y], colour, coverage);
-                Variables.shapesArray[x, y] = ID;
-                if (number != 0) Variables.linesArray[x, y] = number;
+//                Variables.shapesArray[x, y] = ID;
+//                if (number != 0) Variables.linesArray[x, y] = number;
             }
             return coverage;
         }
@@ -691,27 +753,28 @@ namespace CGPart3
         }
 
         //          POINT
-        public unsafe static void AddPoint(Point point, int ID)
-        {
-            for (int i = FastMax(point.X - 3, 0); i <= FastMin(point.X + 3, Variables.bitmapWidth - 1); i++)
-            {
-                for (int j = FastMax(point.Y - 3, 0); j <= FastMin(point.Y + 3, Variables.bitmapHeight - 1); j++)
-                {
-                    if (Variables.pointsKernel[i - point.X + 3, j - point.Y + 3])
-                    {
-                        Variables.pointsArray[i, j] = ID;
-                    }
-                }
-            }
-        }
+// del
+//        public unsafe static void AddPoint(Point point, int ID)
+//        {
+//            for (int i = FastMax(point.X - 5, 0); i <= FastMin(point.X + 5, Variables.bitmapWidth - 1); i++)
+//            {
+//                for (int j = FastMax(point.Y - 5, 0); j <= FastMin(point.Y + 5, Variables.bitmapHeight - 1); j++)
+//                {
+//                    if (Variables.pointsKernel[i - point.X + 5, j - point.Y + 5])
+//                    {
+//                        Variables.pointsArray[i, j] = ID;
+//                    }
+//                }
+//            }
+//        }
 
         public unsafe static void DrawPoint(Point point)
         {
-            for (int i = FastMax(point.X - 3, 0); i <= FastMin(point.X + 3, Variables.bitmapWidth - 1); i++)
+            for (int i = FastMax(point.X - 4, 0); i <= FastMin(point.X + 4, Variables.bitmapWidth - 1); i++)
             {
-                for (int j = FastMax(point.Y - 3, 0); j <= FastMin(point.Y + 3, Variables.bitmapHeight - 1); j++)
+                for (int j = FastMax(point.Y - 4, 0); j <= FastMin(point.Y + 4, Variables.bitmapHeight - 1); j++)
                 {
-                    if (Variables.pointsKernel[i - point.X + 3, j - point.Y + 3])
+                    if (Variables.pointsKernel[i - point.X + 4, j - point.Y + 4])
                     {
                         Variables.bitmapArray[i, j] = 4294901760;   // red
                     }
@@ -719,7 +782,49 @@ namespace CGPart3
             }
         }
 
-        //          BITMAP
+        public unsafe static (int, int) GetClosestPoint(Point point)
+        {
+            int index, bestIndex = 0, bestObject = 0;
+            float distance, bestDistance = float.PositiveInfinity;
+            for (int i = 0; i < Variables.shapes.Count; i++)
+            {
+                (index, distance) = Variables.shapes[i].GetPointDistance(point);
+                if (distance < bestDistance)
+                {
+                    bestIndex = index;
+                    bestObject = Variables.shapes[i].ID;
+                    bestDistance = distance;
+                }
+            }
+
+            if (bestDistance <= 5)
+                return (bestObject, bestIndex);
+            else
+                return (0, 0);
+        }
+
+        public unsafe static (int, int) GetClosestLine(Point point)
+        {
+            int index, bestIndex = 0, bestObject = 0;
+            float distance, bestDistance = float.PositiveInfinity;
+            for (int i = 0; i < Variables.shapes.Count; i++)
+            {
+                (index, distance) = Variables.shapes[i].GetLineDistance(point);
+                if (distance < bestDistance)
+                {
+                    bestIndex = index;
+                    bestObject = Variables.shapes[i].ID;
+                    bestDistance = distance;
+                }
+            }
+
+            if (bestDistance <= 5)
+                return (bestObject, bestIndex);
+            else
+                return (0, 0);
+        }
+
+        //          BITMAP & GUI
         public void InitializeBitmap()
         {
             Bitmap bmp = new Bitmap(Variables.bitmapWidth, Variables.bitmapHeight, PixelFormat.Format32bppArgb);
@@ -735,9 +840,9 @@ namespace CGPart3
                     {
                         row[j] = -1;
                         Variables.bitmapArray[j, i] = 4294967295;   // white
-                        Variables.shapesArray[j, i] = 0;
-                        Variables.pointsArray[j, i] = 0;
-                        Variables.linesArray[j, i] = 0;
+//                        Variables.shapesArray[j, i] = 0;
+//                        Variables.pointsArray[j, i] = 0;
+//                        Variables.linesArray[j, i] = 0;
                     }
                 }
             }
@@ -759,9 +864,9 @@ namespace CGPart3
                     for (int j = 0; j < Variables.bitmapWidth; j++)
                     {
                         Variables.bitmapArray[j, i] = 4294967295;   // white
-                        Variables.shapesArray[j, i] = 0;
-                        Variables.pointsArray[j, i] = 0;
-                        Variables.linesArray[j, i] = 0;
+//                        Variables.shapesArray[j, i] = 0;
+//                        Variables.pointsArray[j, i] = 0;
+//                        Variables.linesArray[j, i] = 0;
                     }
                 }
 
@@ -794,11 +899,35 @@ namespace CGPart3
             pictureBoxMain.Image = Variables.bitmap;
         }
 
+        private void disableObjectSettings()
+        {
+            numericUpDownObjectThickness.Enabled = false;
+            buttonObjectColor.Enabled = false;
+            buttonSaveObject.Enabled = false;
+            labelObjectColor.BackColor = Color.Silver;
+        }
+
+        private void enableObjectSettings(Shape shape)
+        {
+            numericUpDownObjectThickness.Value = shape.thickness;
+            labelObjectColor.BackColor = Color.FromArgb((int)shape.color);
+
+            numericUpDownObjectThickness.Enabled = true;
+            buttonObjectColor.Enabled = true;
+            buttonSaveObject.Enabled = true;
+        }
+
         // NAVIGATION LOGIC
         private void numericUpDownLineThickness_ValueChanged(object sender, EventArgs e)
         {
             if (numericUpDownLineThickness.Value % 2 == 0)
                 numericUpDownLineThickness.Value -= 1;
+        }
+
+        private void numericUpDownObjectThickness_ValueChanged(object sender, EventArgs e)
+        {
+            if (numericUpDownObjectThickness.Value % 2 == 0)
+                numericUpDownObjectThickness.Value -= 1;
         }
 
         private void checkBoxAntiAliasing_CheckedChanged(object sender, EventArgs e)
@@ -816,8 +945,23 @@ namespace CGPart3
             {
                 labelBrushColor.BackColor = colorDialog.Color;
                 Variables.brushColor = ((uint)colorDialog.Color.A << 24) + ((uint)colorDialog.Color.R << 16) 
-                    + ((uint)colorDialog.Color.G << 8) + (uint)colorDialog.Color.B;
+                                     + ((uint)colorDialog.Color.G << 8) + (uint)colorDialog.Color.B;
             }
+        }
+
+        private void buttonObjectColor_Click(object sender, EventArgs e)
+        {
+            if (colorDialog.ShowDialog() == DialogResult.OK)
+                labelObjectColor.BackColor = colorDialog.Color;
+        }
+
+        private void buttonSaveObject_Click(object sender, EventArgs e)
+        {
+            Shape shape = Variables.shapes.Find(x => x.ID == Variables.activeElement);
+            shape.thickness = (int)numericUpDownObjectThickness.Value;
+            shape.color = ((uint)labelObjectColor.BackColor.A << 24) + ((uint)labelObjectColor.BackColor.R << 16)
+                        + ((uint)labelObjectColor.BackColor.G << 8) + (uint)labelObjectColor.BackColor.B;
+            UpdateBitmap();
         }
 
         private void buttonClearAll_Click(object sender, EventArgs e)
@@ -843,7 +987,7 @@ namespace CGPart3
                     }
                     else
                     {
-                        Variables.activeShape = new Line(e.Location);
+                        Variables.activeShape = new Line(e.Location, 1);
                         Variables.isActive = true;
                     }
                     break;
@@ -875,7 +1019,7 @@ namespace CGPart3
                     }
                     else
                     {
-                        Variables.activeShape = new Circle(e.Location);
+                        Variables.activeShape = new Circle(e.Location, 1);
                         Variables.isActive = true;
                     }
                     break;
@@ -894,13 +1038,13 @@ namespace CGPart3
                     }
                     else
                     {
-                        Variables.activeShape = new Polygon(e.Location);
+                        Variables.activeShape = new Polygon(e.Location, (int)numericUpDownLineThickness.Value);
                         Variables.isActive = true;
                     }
                     break;
 
                 case "radioButtonBrush":
-                    int brushShapeID = Variables.shapesArray[e.X, e.Y];
+                    (int brushShapeID, _ ) = GetClosestLine(e.Location); //Variables.shapesArray[e.X, e.Y];
                     Shape brushShape = Variables.shapes.Find(x => x.ID == brushShapeID);
                     if (brushShape is not null)
                     {
@@ -910,13 +1054,40 @@ namespace CGPart3
                     break;
 
                 case "radioButtonErase":
-                    int eraseShapeID = Variables.shapesArray[e.X, e.Y];
+                    (int eraseShapeID, _ ) = GetClosestLine(e.Location); //Variables.shapesArray[e.X, e.Y];
                     Shape eraseShape = Variables.shapes.Find(x => x.ID == eraseShapeID);
                     if (eraseShape is not null)
                     {
                         Variables.shapes.Remove(eraseShape);
                         UpdateBitmap();
                     }
+                    break;
+
+                case "radioButtonSelectObject":
+                    (int changeShapeID, _ ) = GetClosestLine(e.Location);
+                    Shape changeShape = Variables.shapes.Find(x => x.ID == changeShapeID);
+                    if (changeShape is not null)
+                    {
+                        enableObjectSettings(changeShape);
+                        Variables.activeElement = changeShapeID;
+                        //Variables.isActive = true;
+                    }
+                    else
+                    {
+                        disableObjectSettings();
+                        Variables.activeElement = 0;
+                        //Variables.isActive = false;
+                    }
+                    break;
+
+                case "radioButtonDebug":
+                    //Line line = (Line)Variables.shapes.Last();
+                    //float dist = CalculatePointToSegmentDistance(e.Location, line.end1, line.end2, line.thickness);
+                    //float dist = CalculatePointToPointDistance(e.Location, line.end1);
+
+                    //Circle circle = (Circle)Variables.shapes.Last();
+                    //float dist = CalculatePointToCircleDistance(e.Location, circle);
+                    //labelObject.Text = dist.ToString();
                     break;
 
                 default:
@@ -926,13 +1097,13 @@ namespace CGPart3
 
         private void pictureBoxMain_MouseDown(object sender, MouseEventArgs e)
         {
-            int shapeID;
+            int index, shapeID;
             Shape shape;
             Variables.positionDown = CleanLocation(e.Location);
             switch (Variables.modeName)
             {
                 case "radioButtonResizeCircle":
-                    shapeID = Variables.shapesArray[e.X, e.Y];
+                    (shapeID, index) = GetClosestLine(e.Location);
                     shape = Variables.shapes.Find(x => x.ID == shapeID);
                     if (shape is not null && shape.GetType().Equals(typeof(Circle)))
                     {
@@ -944,11 +1115,11 @@ namespace CGPart3
                     break;
 
                 case "radioButtonMovePoint":
-                    shapeID = Variables.pointsArray[e.X, e.Y];
+                    (shapeID, index) = GetClosestPoint(e.Location);
                     shape = Variables.shapes.Find(x => x.ID == shapeID);
                     if (shape is not null)
                     {
-                        Variables.activeElement = shape.GetPointIndex(Variables.positionDown);
+                        Variables.activeElement = index;
                         Variables.activeShape = shape;
                         Variables.shapes.Remove(shape);
                         Variables.isActive = true;
@@ -957,7 +1128,7 @@ namespace CGPart3
                     break;
 
                 case "radioButtonMovePolygon":
-                    shapeID = Variables.shapesArray[e.X, e.Y];
+                    (shapeID, index) = GetClosestLine(e.Location);
                     shape = Variables.shapes.Find(x => x.ID == shapeID);
                     if (shape is not null && shape.GetType().Equals(typeof(Polygon)))
                     {
@@ -969,7 +1140,8 @@ namespace CGPart3
                     break;
 
                 case "radioButtonMoveLine":
-                    shapeID = Variables.shapesArray[e.X, e.Y];
+                    //shapeID = Variables.shapesArray[e.X, e.Y];
+                    (shapeID, index) = GetClosestLine(e.Location);
                     shape = Variables.shapes.Find(x => x.ID == shapeID);
                     if (shape is not null)
                     {
@@ -983,7 +1155,7 @@ namespace CGPart3
                         else if (shape.GetType().Equals(typeof(Polygon)))
                         {
                             Variables.activeShape = shape;
-                            Variables.activeElement = Variables.linesArray[e.X, e.Y];
+                            Variables.activeElement = index; //Variables.linesArray[e.X, e.Y];
                             Variables.shapes.Remove(shape);
                             Variables.isActive = true;
                             UpdateBitmap();
@@ -1105,6 +1277,7 @@ namespace CGPart3
         {
             Variables.modeName = ((RadioButton)sender).Name;
             Variables.isActive = false;
+            disableObjectSettings();
             UpdateBitmap();
         }
     }
@@ -1114,12 +1287,14 @@ namespace CGPart3
     {
         public int ID;
         public uint color;
+        public int thickness;
 
-        public Shape()
+        public Shape(int newThickness)
         {
             ID = Variables.lastID + 1;
             Variables.lastID = ID;
             color = Variables.brushColor;
+            thickness = newThickness;
         }
 
         public Shape Clone()
@@ -1130,20 +1305,22 @@ namespace CGPart3
         public abstract unsafe void DrawShape();
         public abstract unsafe void DrawActiveShape();
         public abstract unsafe void DrawPoints();
+// del
         public abstract unsafe int GetPointIndex(Point point);
         public abstract unsafe void UpdatePoint(Point point);
+
+        public abstract unsafe (int, float) GetPointDistance(Point point);
+        public abstract unsafe (int, float) GetLineDistance(Point point);
     }
 
     public class Line : Shape
     {
         public Point end1;
         public Point end2;
-        public int thickness;
 
-        public Line(Point newEnd, int newThickness = 1) : base()
+        public Line(Point newEnd, int newThickness) : base(newThickness)
         {
             end1 = newEnd;
-            thickness = newThickness;
         }
 
         public override unsafe void DrawShape()
@@ -1154,8 +1331,8 @@ namespace CGPart3
                 Form1.MidpointLine(end1, end2, ID, color, 0);
             else
                 Form1.BrushLine(end1, end2, ID, color, thickness);
-            Form1.AddPoint(end1, ID);
-            Form1.AddPoint(end2, ID);
+//            Form1.AddPoint(end1, ID);
+//            Form1.AddPoint(end2, ID);
         }
 
         public override unsafe void DrawActiveShape()
@@ -1186,7 +1363,7 @@ namespace CGPart3
             Form1.DrawPoint(end1);
             Form1.DrawPoint(end2);
         }
-
+//del
         public override unsafe int GetPointIndex(Point point)
         {
             if (Form1.IsClosePoint(point, end1))
@@ -1201,6 +1378,21 @@ namespace CGPart3
                 end1 = point;
             else 
                 end2 = point;
+        }
+
+        public override unsafe (int, float) GetPointDistance(Point point)
+        {
+            float distance1 = Form1.CalculatePointToPointDistance(point, end1);
+            float distance2 = Form1.CalculatePointToPointDistance(point, end2);
+            if (distance1 < distance2)
+                return (1, distance1);
+            else
+                return (2, distance2);
+        }
+
+        public override unsafe (int, float) GetLineDistance(Point point)
+        {
+            return (1, Form1.CalculatePointToSegmentDistance(point, end1, end2, thickness));
         }
 
         public unsafe void MoveLine()
@@ -1229,12 +1421,12 @@ namespace CGPart3
         public Point center;
         public int radius;
 
-        public Circle(Point newCenter) : base()
+        public Circle(Point newCenter, int newThickness) : base(newThickness)
         {
             center = newCenter;
         }
 
-        public Circle(Point newCenter, Point radiusPoint) : base()
+        public Circle(Point newCenter, Point radiusPoint, int newThickness) : base(newThickness)
         {
             center = newCenter;
             radius = CalculateRadius(radiusPoint);
@@ -1249,7 +1441,7 @@ namespace CGPart3
         public override unsafe void DrawShape()
         {
             Form1.MidpointCircle(center, radius, ID, color);
-            Form1.AddPoint(center, ID);
+//            Form1.AddPoint(center, ID);
         }
 
         public override unsafe void DrawActiveShape()
@@ -1267,7 +1459,7 @@ namespace CGPart3
         {
             Form1.DrawPoint(center);
         }
-
+// del
         public override unsafe int GetPointIndex(Point point)
         {
             return 1;
@@ -1277,13 +1469,29 @@ namespace CGPart3
         {
             center = point;
         }
+
+        public override unsafe (int, float) GetPointDistance(Point point)
+        {
+            return (1, Form1.CalculatePointToPointDistance(point, center));
+        }
+
+        public override unsafe (int, float) GetLineDistance(Point point)
+        {
+            return (1, Form1.CalculatePointToCircleDistance(point, this));
+        }
     }
+
+    //public class Rectangle
+    //{
+    //    Point LUp;
+    //    Point RDown;
+    //}
 
     public class Polygon : Shape
     {
         public List<Point> vertices;
 
-        public Polygon(Point newPoint) : base()
+        public Polygon(Point newPoint, int newThickness) : base(newThickness)
         {
             vertices = new List<Point>();
             vertices.Add(newPoint);
@@ -1299,19 +1507,28 @@ namespace CGPart3
             if (Variables.isAntiAliased)
             {
                 for (int i = 0; i < vertices.Count() - 1; i++)
-                    Form1.AntialiasedLine(vertices[i], vertices[i + 1], ID, color, 1, i);
+                    Form1.AntialiasedLine(vertices[i], vertices[i + 1], ID, color, thickness, i);
             }
-            else
+            else if (thickness == 1)
             {
                 for (int i = 0; i < vertices.Count() - 1; i++)
                     Form1.MidpointLine(vertices[i], vertices[i + 1], ID, color, i);
             }
-            if (Variables.isAntiAliased)
-                Form1.AntialiasedLine(vertices[vertices.Count() - 1], vertices[0], ID, color, 1, vertices.Count() - 1);
             else
+            {
+                for (int i = 0; i < vertices.Count() - 1; i++)
+                    Form1.BrushLine(vertices[i], vertices[i + 1], ID, color, thickness); // no i
+            }
+
+            if (Variables.isAntiAliased)
+                Form1.AntialiasedLine(vertices[vertices.Count() - 1], vertices[0], ID, color, thickness, vertices.Count() - 1);
+            else if (thickness == 1)
                 Form1.MidpointLine(vertices[vertices.Count() - 1], vertices[0], ID, color, vertices.Count() - 1);
-            for (int i = 0; i < vertices.Count(); i++)
-                Form1.AddPoint(vertices[i], ID);
+            else
+                Form1.BrushLine(vertices[vertices.Count() - 1], vertices[0], ID, color, thickness); // no vertices.Count() - 1
+
+//            for (int i = 0; i < vertices.Count(); i++)
+//                Form1.AddPoint(vertices[i], ID);
         }
 
         public override unsafe void DrawActiveShape()
@@ -1319,28 +1536,39 @@ namespace CGPart3
             if (Variables.isAntiAliased)
             {
                 for (int i = 0; i < vertices.Count() - 1; i++)
-                    Form1.AntialiasedLine(vertices[i], vertices[i + 1], ID, color, 1, 0);
+                    Form1.AntialiasedLine(vertices[i], vertices[i + 1], ID, color, thickness, 0);
             } 
-            else
+            else if (thickness == 1)
             {
                 for (int i = 0; i < vertices.Count() - 1; i++)
                     Form1.MidpointLine(vertices[i], vertices[i + 1], ID, color, 0);
             }
+            else
+            {
+                for (int i = 0; i < vertices.Count() - 1; i++)
+                    Form1.BrushLine(vertices[i], vertices[i + 1], ID, color, thickness); // no 0
+            }
+
             if (Variables.modeName == "radioButtonMovePoint" 
                 || Variables.modeName == "radioButtonMoveLine"
                 || Variables.modeName == "radioButtonMovePolygon")
             {
                 if (Variables.isAntiAliased)
-                    Form1.AntialiasedLine(vertices[vertices.Count() - 1], vertices[0], ID, color, 1, 0);
-                else
+                    Form1.AntialiasedLine(vertices[vertices.Count() - 1], vertices[0], ID, color, thickness, 0);
+                else if (thickness == 1)
                     Form1.MidpointLine(vertices[vertices.Count() - 1], vertices[0], ID, color, 0);
+                else
+                    Form1.BrushLine(vertices[vertices.Count() - 1], vertices[0], ID, color, thickness); // no 0
             }
             else
             {
                 if (Variables.isAntiAliased)
-                    Form1.AntialiasedLine(vertices[vertices.Count() - 1], Variables.positionNow, ID, color, 1, 0);
-                else
+                    Form1.AntialiasedLine(vertices[vertices.Count() - 1], Variables.positionNow, ID, color, thickness, 0);
+                else if (thickness == 1)
                     Form1.MidpointLine(vertices[vertices.Count() - 1], Variables.positionNow, ID, color, 0);
+                else
+                    Form1.BrushLine(vertices[vertices.Count() - 1], Variables.positionNow, ID, color, thickness); // no 0
+
                 Form1.DrawPoint(vertices[0]);
             }
         }
@@ -1352,7 +1580,7 @@ namespace CGPart3
                 Form1.DrawPoint(vertices[i]);
             }
         }
-
+// del
         public override unsafe int GetPointIndex(Point point)
         {
             int i;
@@ -1367,6 +1595,47 @@ namespace CGPart3
         public override unsafe void UpdatePoint(Point point)
         {
             vertices[Variables.activeElement] = point;
+        }
+
+        public override unsafe (int, float) GetPointDistance(Point point)
+        {
+            int bestVertex = 0;
+            float distance;
+            float bestDistance = float.PositiveInfinity;
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                distance = Form1.CalculatePointToPointDistance(point, vertices[i]);
+                if (distance < bestDistance)
+                {
+                    bestVertex = i;
+                    bestDistance = distance;
+                }
+            }
+            return (bestVertex, bestDistance);
+        }
+
+        public override unsafe (int, float) GetLineDistance(Point point)
+        {
+            int bestVertex = 0;
+            float distance;
+            float bestDistance = float.PositiveInfinity;
+            for (int i = 0; i < vertices.Count - 1; i++)
+            {
+                distance = Form1.CalculatePointToSegmentDistance(point, vertices[i], vertices[i + 1], thickness);
+                if (distance < bestDistance)
+                {
+                    bestVertex = i;
+                    bestDistance = distance;
+                }
+            }
+
+            distance = Form1.CalculatePointToSegmentDistance(point, vertices[vertices.Count - 1], vertices[0], thickness);
+            if (distance < bestDistance)
+            {
+                bestVertex = vertices.Count - 1;
+                bestDistance = distance;
+            }
+            return (bestVertex, bestDistance);
         }
 
         public unsafe void MoveLine()
@@ -1419,12 +1688,18 @@ namespace CGPart3
         }
     }
 
+    //public class ClippedPolygon
+    //{
+    //    Rectangle rectangle;
+    //    Polygon polygon;
+    //}
+
     public unsafe static class Variables
     {
         public unsafe static Bitmap bitmap;
         public unsafe static Point positionDown;
         public unsafe static Point positionNow;
-        public unsafe static uint brushColor = 4278190080;       // black
+        public unsafe static uint brushColor = 4278190080;     // black
         public unsafe static string modeName = "radioButtonAddThinLine";
         public unsafe static bool isAntiAliased = false;
         public unsafe static bool isActive = false;
@@ -1437,18 +1712,23 @@ namespace CGPart3
         public unsafe static int bitmapHeight = 800;
         public unsafe static int bitmapWidth = 600;
         public unsafe static uint[,] bitmapArray = new uint[bitmapWidth, bitmapHeight];
-        public unsafe static int[,] shapesArray = new int[bitmapWidth, bitmapHeight];
-        public unsafe static int[,] pointsArray = new int[bitmapWidth, bitmapHeight];
-        public unsafe static int[,] linesArray = new int[bitmapWidth, bitmapHeight];
-        public unsafe static bool[,] pointsKernel = new bool[7, 7]
+// del
+        // public unsafe static int[,] shapesArray = new int[bitmapWidth, bitmapHeight];
+// del
+        // public unsafe static int[,] pointsArray = new int[bitmapWidth, bitmapHeight];
+// del
+        // public unsafe static int[,] linesArray = new int[bitmapWidth, bitmapHeight];
+        public unsafe static bool[,] pointsKernel = new bool[9, 9]
          {
-             { false, false, true, true, true, false, false },
-             { false, true, true, true, true, true, false },
-             { true, true, true, true, true, true, true },
-             { true, true, true, true, true, true, true },
-             { true, true, true, true, true, true, true },
-             { false, true, true, true, true, true, false },
-             { false, false, true, true, true, false, false }
+            { false, false, true, true, true, true, true, false, false },
+            { false, true, true, true, true, true, true, true, false },
+            { true, true, true, true, true, true, true, true, true },
+            { true, true, true, true, true, true, true, true, true },
+            { true, true, true, true, true, true, true, true, true },
+            { true, true, true, true, true, true, true, true, true },
+            { true, true, true, true, true, true, true, true, true },
+            { false, true, true, true, true, true, true, true, false },
+            { false, false, true, true, true, true, true, false, false }
          };
     }
 }
